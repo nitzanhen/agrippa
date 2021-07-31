@@ -21,8 +21,9 @@ export interface Config {
   /** Relevant for `css` or `scss` styling. Generates a scoped `module` stylesheet. Defaults to `true` (if relevant). */
   stylingModule: boolean;
 
-  memo: boolean;
-  forwardRef: boolean;
+  /** @todo */
+  // memo: boolean;
+  // forwardRef: boolean;
 
   /** Whether to import React. Defaults to `true` @todo check versions. */
   importReact: boolean
