@@ -66,7 +66,8 @@ async function main() {
     flat: argv.flat,
     styling: argv.styling,
     stylingModule: argv.stylingModule,
-    importReact: argv.importReact
+    importReact: argv.importReact,
+    debug: argv.debug
   }
 
   run(config);

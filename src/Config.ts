@@ -26,6 +26,7 @@ export interface Config {
   // forwardRef: boolean;
 
   /** Whether to import React. Defaults to `true` @todo check versions. */
-  importReact: boolean
+  importReact: boolean;
 
+  debug: boolean;
 }
