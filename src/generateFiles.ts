@@ -4,15 +4,16 @@ import fsp from 'fs/promises';
 
 import { Config } from './Config';
 import { kebabCase, pascalCase } from './utils';
+import { Logger } from './logger';
 
 /**
  * Generates the files required by the CLI - in a folder or flat.
  */
-export async function generateFiles(config: Config, componentCode: string) {
+export async function generateFiles(config: Config, componentCode: string, logger: Logger) {
   const { name, flat, typescript, styling, stylingModule, overwrite } = config;
   const cwd = process.cwd();
 
-  const folder = flat ? cwd : path.join(cwd, name);
+  const folder = flat ? cwd : path.join(cwd, pascalCase(name));
 
   if (!flat) {
     try {
@@ -20,8 +21,8 @@ export async function generateFiles(config: Config, componentCode: string) {
       await fsp.mkdir(folder)
     }
     catch (e) {
-      if (e.code === 'EEXISTS') {
-        console.log(`Directory ${folder} already exists. Writing into it...`)
+      if (e.code === 'EEXIST') {
+        logger.debug(`Directory ${folder} already exists. Writing into it...`)
       }
       else {
         throw e;
@@ -38,8 +39,8 @@ export async function generateFiles(config: Config, componentCode: string) {
 
   const createStylesFile = styling === 'css' || styling === 'scss';
 
-  if (!overwrite && (fs.existsSync(componentFilePath) || (createStylesFile && fs.existsSync(stylesFilePath)))) {
-    console.log('Running this command would overwrite existing files. To allow this, pass --overwrite to the command.')
+  if (!overwrite && ((fs.existsSync(componentFilePath) || (createStylesFile && fs.existsSync(stylesFilePath))))) {
+    logger.error('Existing files would be overwritten by this command, leading to data loss. To allow overwriting, pass --overwrite to the command.')
     process.exit(1);
   }
 

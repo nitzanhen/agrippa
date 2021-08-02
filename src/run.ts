@@ -1,16 +1,17 @@
 import { Config } from './Config';
 import { generateFiles } from './generateFiles';
 import { generateReactCode } from './generateReactCode';
+import { Logger } from './logger';
 
-export async function run(config: Config) {
+export async function run(config: Config, logger: Logger) {
   const componentCode = generateReactCode(config);
   try {
-    await generateFiles(config, componentCode);
+    await generateFiles(config, componentCode, logger);
 
-    console.log('Success!')
+    logger.debug('Success')
   }
   catch(e) {
-    console.error('Unexpected error', e);
+    logger.error(e);
     process.exit(1);
   }
 }

@@ -4,6 +4,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { Config } from './Config';
+import { Logger } from './logger';
 import { run } from './run';
 
 async function main() {
@@ -51,8 +52,7 @@ async function main() {
       },
       debug: {
         type: 'boolean',
-        default: true,
-
+        default: false,
       },
       overwrite: {
         type: 'boolean',
@@ -76,7 +76,10 @@ async function main() {
     overwrite: argv.overwrite
   }
 
-  run(config);
+  const logger = new Logger(config);
+  logger.debug(config)
+
+  run(config, logger);
 }
 
 main();
