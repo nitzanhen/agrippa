@@ -1,17 +1,37 @@
 {
-  "name": "rcli",
-  "version": "1.0.0",
-  "main": "build/index.js",
-  "repository": "https://github.com/NitzanHen/react-cli.git",
-  "author": "NitzanHen <58311807+NitzanHen@users.noreply.github.com>",
+  "name": "agrippa",
+  "version": "1.0.0-beta.1",
+  "main": "bin/index.js",
+  "author": {
+    "name": "NitzanHen",
+    "email": "nitzan.alpha@gmail.com",
+    "url": "https://github.com/NitzanHen"
+  },
   "license": "MIT",
   "scripts": {
     "dev": "tsc -w",
+    "prebuild": "rimraf bin",
     "build": "tsc",
     "lint": "eslint src --ext .ts --color",
-    "prettier": "prettier --check \"packages/*/src/**/*.ts\"",
-    "prettier:fix": "prettier --write \"packages/*/src/**/*.ts\""
+    "prettier": "prettier --check \"src/*.ts\"",
+    "prettier:fix": "prettier --write \"src/*.ts\"",
+    "prepublishOnly": "yarn lint && yarn build",
+    "preversion": "yarn lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NitzanHen/agrippa.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NitzanHen/agrippa/issues"
+  },
+  "files": [
+    "bin"
+  ],
+  "bin": {
+    "agrippa": "bin/index.js"
+  },
+  "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
     "@types/node": "^16.4.7",
     "@types/yargs": "^17.0.2",
@@ -21,13 +41,17 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.24.0",
-    "eslint-plugin-react-hooks": "^4.2.0",
+    "rimraf": "^3.0.2",
     "typescript": "^4.3.5"
   },
   "dependencies": {
     "colors": "^1.4.0",
     "yargs": "^17.0.1"
-  }
+  },
+  "keywords": [
+    "react",
+    "cli",
+    "component",
+    "typescript"
+  ]
 }

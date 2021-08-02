@@ -142,3 +142,5 @@ dist
 
 .devcontainer
 build
+
+bin

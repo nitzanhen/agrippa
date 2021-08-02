@@ -8,23 +8,17 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "prettier",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
     "ecmaVersion": 12,
     "sourceType": "module"
   },
   "plugins": [
     "import",
-    "react",
     "@typescript-eslint"
   ],
   "rules": {
@@ -80,43 +74,22 @@
     "lines-between-class-members": "off",
     "no-else-return": "off",
     "consistent-return": "off",
-    "react/prop-types": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react/react-in-jsx-scope": "off",
-    "jsx-a11y/click-events-have-key-events": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-a11y/no-noninteractive-element-interactions": "off",
     "no-plusplus": "off",
     "radix": [
       "error",
       "as-needed"
     ],
     "no-underscore-dangle": "off",
-    "react/jsx-filename-extension": [
-      "error",
-      {
-        "extensions": [
-          ".jsx",
-          ".tsx"
-        ]
-      }
-    ],
     "no-restricted-globals": "off"
   },
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [
-        ".ts",
-        ".tsx"
+        ".ts"
       ]
     },
     "import/resolver": {
-      "typescript": {
-        "project": [
-          "tsconfig.json",
-          "packages/**/tsconfig.json"
-        ]
-      }
+      "typescript": {}
     }
   }
 }

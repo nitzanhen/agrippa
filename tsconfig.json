@@ -5,7 +5,7 @@
       "ESNext"
     ],
     "rootDir": "src",
-    "outDir": "build",
+    "outDir": "bin",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
