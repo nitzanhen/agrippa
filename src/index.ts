@@ -53,6 +53,10 @@ async function main() {
         type: 'boolean',
         default: true,
 
+      },
+      overwrite: {
+        type: 'boolean',
+        default: false
       }
     } as const)
     .recommendCommands()
@@ -68,7 +72,8 @@ async function main() {
     styling: argv.styling,
     stylingModule: argv.stylingModule,
     importReact: argv.importReact,
-    debug: argv.debug
+    debug: argv.debug,
+    overwrite: argv.overwrite
   }
 
   run(config);

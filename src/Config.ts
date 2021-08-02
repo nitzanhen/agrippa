@@ -29,4 +29,5 @@ export interface Config {
   importReact: boolean;
 
   debug: boolean;
+  overwrite: boolean;
 }
