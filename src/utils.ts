@@ -15,13 +15,11 @@ export const isLowerCase = (str: string) => str === str.toLocaleLowerCase();
  */
 export const capitalize = (str: string) => str[0].toLocaleUpperCase() + str.slice(1)
 
-export const isKebabCase = (str: string) => str.split('-').every(isLowerCase)
+export const isKebabCase = (str: string) => str.split('-').every(isLowerCase);
 
-const camelCaseRegex = /^[a-z][A-Za-z]+$/;
-export const isCamelCase = (str: string) => camelCaseRegex.test(str);
+export const isCamelCase = (str: string) => /^[a-z][A-Za-z]+$/.test(str);
 
-const pascalCaseRegex = /^[A-Z][A-Za-z]+$/;
-export const isPascalCase = (str: string) => pascalCaseRegex.test(str);
+export const isPascalCase = (str: string) => /^[A-Z][A-Za-z]+$/.test(str);
 
 export const pascalCase = (str: string) => {
   if(isPascalCase(str)) {
@@ -32,9 +30,21 @@ export const pascalCase = (str: string) => {
   }
   else if(isKebabCase(str)) {
     return str.split('-')
-      .map(capitalize)
-      .join('');
+    .map(capitalize)
+    .join('');;
   }
 
   throw RangeError('Improper string formatting')
+}
+
+export const kebabCase = (str: string) => {
+  if(isPascalCase(str) || isCamelCase(str)) {
+    return str.split(/(?=[A-Z])/);
+  }
+  else if(isKebabCase(str)) {
+    return str;
+  }
+
+  throw RangeError('Improper string formatting')
+
 }

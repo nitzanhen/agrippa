@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs/promises';
 
 import { Config } from './Config';
-import { cstr } from './utils';
+import { kebabCase, pascalCase } from './utils';
 
 /**
  * Generates the files required by the CLI - in a folder or flat.
@@ -29,11 +29,11 @@ export async function generateFiles(config: Config, componentCode: string) {
   }
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx'
-  const componentFileName = `${flat ? name : 'index'}.${componentFileExtension}`;
+  const componentFileName = `${flat ? pascalCase(name) : 'index'}.${componentFileExtension}`;
   await fs.writeFile(path.join(folder, componentFileName), componentCode);
 
   if (styling === 'css' || styling === 'scss') {
-    const stylesFileName = `${name}${cstr(stylingModule,'.module')}.${styling}`
+    const stylesFileName = `${kebabCase(name)}${stylingModule ? '.module' : ''}.${styling}`
     await fs.open(path.join(folder, stylesFileName), 'w')
   }
 }
