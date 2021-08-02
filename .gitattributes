@@ -1,1 +1,1 @@
-src/index.ts linguist-language=Typescript
+*.ts linguist-language=Typescript
