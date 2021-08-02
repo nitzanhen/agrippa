@@ -2,6 +2,7 @@
 
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+
 import { Config } from './Config';
 import { run } from './run';
 

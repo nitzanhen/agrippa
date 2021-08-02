@@ -1,6 +1,7 @@
-import { Config } from './Config';
 import path from 'path';
 import fs from 'fs/promises';
+
+import { Config } from './Config';
 import { cstr } from './utils';
 
 /**

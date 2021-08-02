@@ -1,0 +1,122 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "prettier",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "import",
+    "react",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "linebreak-style": "off",
+    "no-console": "off",
+    "import/extensions": "off",
+    "no-use-before-define": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "(^_+)|(this)"
+      }
+    ],
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true
+      }
+    ],
+    "quotes": [
+      "warn",
+      "single",
+      {
+        "avoidEscape": true
+      }
+    ],
+    "comma-dangle": "off",
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "newlines-between": "always-and-inside-groups"
+      }
+    ],
+    "import/no-cycle": "off",
+    "import/prefer-default-export": "off",
+    "func-names": "off",
+    "no-restricted-syntax": "off",
+    "dot-notation": "off",
+    "spaced-comment": "off",
+    "no-shadow": "off",
+    "lines-between-class-members": "off",
+    "no-else-return": "off",
+    "consistent-return": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "no-plusplus": "off",
+    "radix": [
+      "error",
+      "as-needed"
+    ],
+    "no-underscore-dangle": "off",
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [
+          ".jsx",
+          ".tsx"
+        ]
+      }
+    ],
+    "no-restricted-globals": "off"
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "project": [
+          "tsconfig.json",
+          "packages/**/tsconfig.json"
+        ]
+      }
+    }
+  }
+}
