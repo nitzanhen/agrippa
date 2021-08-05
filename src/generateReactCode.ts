@@ -12,12 +12,12 @@ export function generateReactCode({ importReact, name, typescript, children, sty
   const typeClass = children ? 'FC' : 'VFC';
   const componentType = ostr(typescript, `React.${typeClass}<${interfaceName}>`)
 
-  const createStylingModule = stylingModule && (styling === 'css' || styling === 'scss');
+  const createStylesFile = (styling === 'css' || styling === 'scss');
 
   return [
     line(0, ostr(importReact, "import React from 'react';")),
-    line(0, ostr(createStylingModule, `import classes from './${kcName}.module.${styling}'`)),
-    line(0, ostr(!createStylingModule, `import './${kcName}.${styling}'`)),
+    line(0, ostr(createStylesFile && stylingModule, `import classes from './${kcName}.module.${styling}'`)),
+    line(0, ostr(createStylesFile && !stylingModule, `import './${kcName}.${styling}'`)),
     line(0, ostr(styling === 'jss', "import { createUseStyles } from 'react-jss';")),
     line(0, ostr(styling === 'mui', "import { makeStyles } from '@material-ui/core';")),
     '',

@@ -39,7 +39,7 @@ async function main() {
     .catch(e => {
       logger.error(
         'An unexpected error occured while parsing tsconfig.json.\n'
-        + 'Please ensure that agripparc.json is valid, and has no trailing commas.\n'
+        + 'Please ensure that tsconfig.json is valid, and has no trailing commas.\n'
         + 'Error:', e
       );
       process.exit(1)
