@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { pick } from 'rhax';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';

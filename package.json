@@ -11,7 +11,7 @@
   "scripts": {
     "dev": "tsc -w",
     "prebuild": "rimraf bin",
-    "build": "rollup -c rollup.config.ts",
+    "build": "tsc",
     "lint": "eslint src --ext .ts --color",
     "prettier": "prettier --check \"src/*.ts\"",
     "prettier:fix": "prettier --write \"src/*.ts\"",
@@ -33,20 +33,15 @@
   },
   "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
     "@types/node": "^16.4.7",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
-    "esbuild": "^0.12.18",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.56.0",
-    "rollup-plugin-esbuild": "^4.5.0",
     "typescript": "^4.3.5"
   },
   "dependencies": {
