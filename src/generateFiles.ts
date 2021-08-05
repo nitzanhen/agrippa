@@ -3,7 +3,7 @@ import fs from 'fs';
 import fsp from 'fs/promises';
 
 import { Config } from './Config';
-import { kebabCase, pascalCase } from './utils';
+import { cstr, kebabCase, pascalCase } from './utils';
 import { Logger } from './logger';
 
 /**
@@ -34,7 +34,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
   const componentFileName = `${flat ? pascalCase(name) : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(folder, componentFileName);
 
-  const stylesFileName = `${kebabCase(name)}${stylingModule ? '.module' : ''}.${styling}`;
+  const stylesFileName = `${kebabCase(name)}${cstr(stylingModule, '.module')}.${styling}`;
   const stylesFilePath = path.join(folder, stylesFileName)
 
   const createStylesFile = styling === 'css' || styling === 'scss';
