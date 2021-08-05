@@ -1,7 +1,12 @@
 
-/** Simple util to render a string conditionally */
-export const cstr = (condition: boolean, string: string) => {
+/** Simple util to render a string conditionally, or null if it is not met */
+export const ostr = (condition: boolean, string: string) => {
   return condition ? string : null
+}
+
+/** Simple util to render a string conditionally, or an empty string if it is not met */
+export const cstr = (condition: boolean, string: string) => {
+  return condition ? string : ''
 }
 
 export const line = (index: number, str: string | null) => {
@@ -22,26 +27,28 @@ export const isCamelCase = (str: string) => /^[a-z][A-Za-z]+$/.test(str);
 export const isPascalCase = (str: string) => /^[A-Z][A-Za-z]+$/.test(str);
 
 export const pascalCase = (str: string) => {
-  if(isPascalCase(str)) {
+  if (isPascalCase(str)) {
     return str;
   }
-  else if(isCamelCase(str)) {
+  else if (isCamelCase(str)) {
     return capitalize(str);
   }
-  else if(isKebabCase(str)) {
+  else if (isKebabCase(str)) {
     return str.split('-')
-    .map(capitalize)
-    .join('');;
+      .map(capitalize)
+      .join('');
   }
 
   throw RangeError('Improper string formatting')
 }
 
 export const kebabCase = (str: string) => {
-  if(isPascalCase(str) || isCamelCase(str)) {
-    return str.split(/(?=[A-Z])/);
+  if (isPascalCase(str) || isCamelCase(str)) {
+    return str.split(/(?=[A-Z])/)
+      .map(segment => segment.toLocaleLowerCase())
+      .join('-');
   }
-  else if(isKebabCase(str)) {
+  else if (isKebabCase(str)) {
     return str;
   }
 

@@ -1,31 +1,35 @@
 import { Config } from './Config';
-import { cstr, line, pascalCase } from './utils';
+import { ostr, line, pascalCase, cstr, kebabCase } from './utils';
 
 /**
  * Generates the contents of a React component.
  */
 export function generateReactCode({ importReact, name, typescript, children, styling, stylingModule }: Config): string {
   const pcName = pascalCase(name);
+  const kcName = kebabCase(name);
 
   const interfaceName = `${pcName}Props`
   const typeClass = children ? 'FC' : 'VFC';
-  const componentType = cstr(typescript, `React.${typeClass}<${interfaceName}>`)
+  const componentType = ostr(typescript, `React.${typeClass}<${interfaceName}>`)
+
+  const createStylingModule = stylingModule && (styling === 'css' || styling === 'scss');
 
   return [
-    line(0, cstr(importReact, "import React from 'react';")),
-    line(0, cstr(styling === 'css' || styling === 'scss', `import './${name}${cstr(stylingModule, '.module')}.${styling}'`)),
-    line(0, cstr(styling === 'jss', "import { createUseStyles } from 'react-jss';")),
-    line(0, cstr(styling === 'mui', "import { makeStyles } from '@material-ui/core';")),
+    line(0, ostr(importReact, "import React from 'react';")),
+    line(0, ostr(createStylingModule, `import classes from './${kcName}.module.${styling}'`)),
+    line(0, ostr(!createStylingModule, `import './${kcName}.${styling}'`)),
+    line(0, ostr(styling === 'jss', "import { createUseStyles } from 'react-jss';")),
+    line(0, ostr(styling === 'mui', "import { makeStyles } from '@material-ui/core';")),
     '',
-    line(0, cstr(styling === 'jss', 'const useStyles = createUseStyles({});')),
-    line(0, cstr(styling === 'mui', `const useStyles = makeStyles((theme${cstr(typescript, ': Theme')}) => {});`)),
-    line(0, cstr(styling === 'jss' || styling === 'mui', '')),
-    line(0, cstr(typescript, `export interface ${pcName}Props {};`)),
+    line(0, ostr(styling === 'jss', 'const useStyles = createUseStyles({});')),
+    line(0, ostr(styling === 'mui', `const useStyles = makeStyles((theme${cstr(typescript, ': Theme')}) => {});`)),
+    line(0, ostr(styling === 'jss' || styling === 'mui', '')),
+    line(0, ostr(typescript, `export interface ${pcName}Props {};`)),
     '',
-    line(0, `export const ${pcName}${cstr(!!componentType, ': ')}${componentType} = ({ ${children ? 'children' : ''} }) => {`),
+    line(0, `export const ${pcName}${cstr(!!componentType, `: ${componentType}`)} = (${cstr(children, '{ children }')}) => {`),
     '',
-    line(1, cstr(styling === 'jss' || styling === 'mui', 'const classes = useStyles();')),
-    line(1, cstr(styling === 'jss' || styling === 'mui', '')),
+    line(1, ostr(styling === 'jss' || styling === 'mui', 'const classes = useStyles();')),
+    line(1, ostr(styling === 'jss' || styling === 'mui', '')),
 
     line(1, 'return ('),
     line(2, `${children ? '<div>{children}</div>' : '<div />'}`),
