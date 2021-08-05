@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 
-import { pick } from 'rhax';
+import fsp from 'fs/promises';
+
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+import findUp from 'find-up';
+import { pick } from 'rhax';
 
 import { Config } from './Config';
 import { Logger } from './logger';
 import { run } from './run';
 
 async function main() {
+  const configPath = await findUp('.agripparc.json');
+  const rc = configPath ? JSON.parse((await fsp.readFile(configPath, 'utf-8'))) : {}
+
   const argv = await yargs(hideBin(process.argv))
     .command('$0 <name> [options]', 'Generate a component', (yargs) => {
       yargs.positional('name', {
@@ -17,6 +23,7 @@ async function main() {
         demandOption: true
       })
     })
+    .config(rc)
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
@@ -70,7 +77,8 @@ async function main() {
   }
 
   const logger = new Logger(config);
-  logger.debug(config)
+  logger.debug(rc);
+  logger.debug(config);
 
   run(config, logger);
 }
