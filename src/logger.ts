@@ -1,16 +1,14 @@
 import { red, cyan } from 'colors/safe'
 
-import { Config } from './Config';
-
 export class Logger {
-  constructor(private config: Config) {}
+  constructor(public isDebug: boolean) {}
 
-  error(err: unknown) {
-    console.error(`[${red('ERROR')}]:`, err);
+  error(...errs: unknown[]) {
+    console.error(`[${red('ERROR')}]:`, ...errs);
   } 
-  debug(message: unknown) {
-    if(this.config.debug) {
-      console.log(`[${cyan('DEBUG')}]:`, message)
+  debug(...messages: unknown[]) {
+    if(this.isDebug) {
+      console.log(`[${cyan('DEBUG')}]:`, messages)
     }
   }
 }

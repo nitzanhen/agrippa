@@ -6,14 +6,46 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import findUp from 'find-up';
 import { pick } from 'rhax';
+import { load as loadTSConfig, LoadResult } from 'tsconfig';
 
 import { Config } from './Config';
 import { Logger } from './logger';
 import { run } from './run';
 
+const logger = new Logger(false);
+
 async function main() {
-  const configPath = await findUp('.agripparc.json');
-  const rc = configPath ? JSON.parse((await fsp.readFile(configPath, 'utf-8'))) : {}
+
+  // Attempt to read an agrippa config file
+
+  const rcPath = await findUp('.agripparc.json');
+  const rc = rcPath ? JSON.parse(
+    (
+      await fsp.readFile(rcPath, 'utf-8').catch(e => {
+        logger.error(
+          'An unexpected error occured while parsing agripparc.json.\n'
+          + 'Please ensure that agripparc.json is valid, and has no trailing commas.\n'
+          + 'Error:', e
+        );
+        process.exit(1)
+      })
+    ) as string
+  ) : {}
+
+
+  // Attempt to read a tsconfig file
+
+  const tsConfig = (await loadTSConfig(process.cwd())
+    .catch(e => {
+      logger.error(
+        'An unexpected error occured while parsing tsconfig.json.\n'
+        + 'Please ensure that agripparc.json is valid, and has no trailing commas.\n'
+        + 'Error:', e
+      );
+      process.exit(1)
+    })) as LoadResult;
+
+  // Parse args
 
   const argv = await yargs(hideBin(process.argv))
     .command('$0 <name> [options]', 'Generate a component', (yargs) => {
@@ -36,7 +68,8 @@ async function main() {
       typescript: {
         type: 'boolean',
         alias: 'ts',
-        default: true
+        desc: 'Whether to use Typescript',
+        default: !!tsConfig
       },
       flat: {
         type: 'boolean',
@@ -55,7 +88,7 @@ async function main() {
       },
       importReact: {
         type: 'boolean',
-        default: true,
+        default: !/^react-jsx/.test(tsConfig.config?.compilerOptions?.jsx) ?? true,
         desc: 'Whether to import React.'
       },
       debug: {
@@ -76,8 +109,10 @@ async function main() {
     props: (argv.props ?? 'ts') /** @todo */,
   }
 
-  const logger = new Logger(config);
-  logger.debug(rc);
+  logger.isDebug = config.debug;
+
+  logger.debug(rcPath, rc);
+  logger.debug(tsConfig.path, tsConfig.config);
   logger.debug(config);
 
   run(config, logger);
