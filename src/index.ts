@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { pick } from 'rhax';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -62,18 +63,10 @@ async function main() {
     .recommendCommands()
     .argv;
 
-  /** @todo refactor to Rhax code */
   const config: Config = {
+    ...pick(['children', 'typescript', 'flat', 'styling', 'stylingModule', 'importReact', 'debug', 'overwrite'], argv),
     name: argv.name as string,
     props: (argv.props ?? 'ts') /** @todo */,
-    children: argv.children,
-    typescript: argv.typescript,
-    flat: argv.flat,
-    styling: argv.styling,
-    stylingModule: argv.stylingModule,
-    importReact: argv.importReact,
-    debug: argv.debug,
-    overwrite: argv.overwrite
   }
 
   const logger = new Logger(config);

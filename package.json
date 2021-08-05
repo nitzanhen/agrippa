@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "colors": "^1.4.0",
+    "rhax": "^1.0.0-unstable.13",
     "yargs": "^17.0.1"
   },
   "keywords": [
