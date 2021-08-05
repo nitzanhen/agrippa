@@ -2,8 +2,11 @@ import esbuild from 'rollup-plugin-esbuild';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonJs from '@rollup/plugin-commonjs';
 
+import packageJson from './package.json';
+
 export default [
   {
+    external: Object.keys(packageJson.dependencies),
     input: 'src/index.ts',
     plugins: [
       nodeResolve(),
