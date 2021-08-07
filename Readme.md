@@ -1,4 +1,6 @@
 # Agrippa
+[![npm](https://img.shields.io/npm/v/agrippa?logo=npm&color=CB3837)](https://www.npmjs.com/package/agrippa)
+[![license](https://img.shields.io/github/license/nitzanhen/agrippa?color=yellow)](https://choosealicense.com/licenses/mit/)
 
 Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilderplate.
 It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different enviroments. 
@@ -19,16 +21,27 @@ yarn global add agrippa
 
 ## Usage
 
-Agrippa consists of two commands: `create` and `init`:
+Agrippa consists of two commands: `generate` (or `gen`) and `init`:
 
-### Create
-`agrippa create <name> [options]` is the core of the CLI - this command generates a new React component, based on the `name` and `options` passed to it.
+### Generate
+`agrippa generate <name> [options]` is the core of the CLI - this command generates a new React component, based on the `name` and `options` passed to it.
 
-#### Options:
+`agrippa gen` is an alias of `generate`.
 
+#### Options
+| option             | aliases             | type    | description                                                                                  | default                                                                                                                                                        |
+|--------------------|---------------------|---------|----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `--props`          |                     |         | Which prop declaration/validation to generate                                                | `ts` if the CLI manages to find a `tsconfig.json` file,  `none` otherwise.                                                                                     |
+| `--children`       |                     | boolean | Whether the component is meant to have children or not                                       | `false`                                                                                                                                                        |
+| `--typescript`     |  `--ts`             | boolean | Whether to use Typescript                                                                    | `true` if the CLI manages to find a `tsconfig.json` file,  false otherwise.                                                                                    |
+| `--flat`           |                     | boolean | Whether to generate files in the current directory (true)  or create a new directory (false) | `false`                                                                                                                                                        |
+| `--styling`        |                     |         | Which styling boilerplate to generate                                                        | `none`                                                                                                                                                         |
+| `--styling-module` |  `--stylingModule`  | boolean | Relevant for `css` or `scss` styling. If true, generates a scoped `module` stylesheet        | `true`                                                                                                                                                         |
+| `--import-react`   |  `--importReact`    | boolean | Whether to import `React` at the top of the generate component                               | `true` if the CLI manages to find a `tsconfig.json` file and it has a `jsx` field under `compilerOptions` with `react-jsx` or `react-jsxdev`. False otherwise. |
+| `--overwrite`      |                     | boolean | Whether to overwrite existing files when generating, if any are found                        | `false`.                                                                                                                                                       |
 
 ### Init
-`agrippa init` generates a basic `.agripparc.json` file, with some default values for options that agrippa accepts. 
+`agrippa init` generates a basic `.agripparc.json` file, with some default values for options that agrippa accepts.  
 
 ## Using a config
 In most projects, some options repeat themselves on most, if not all, components of the app. For example, if the codebase uses CSS modules as a styling solution, then the majority of component would be generated with `--styling css`. 
