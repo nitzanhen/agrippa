@@ -1,5 +1,6 @@
 {
   "name": "agrippa",
+  "description": "A React CLI for component generation",
   "version": "1.0.0-rc.2",
   "main": "bin/index.js",
   "author": {
