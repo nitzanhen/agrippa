@@ -4,16 +4,21 @@ import { pick } from 'rhax';
 import { logger } from '../logger';
 import { Config } from '../Config';
 import { CommonConfig } from '../utils/types';
+import { getTSConfig } from '../utils/getTSConfig';
+import { getRC } from '../utils/getRC';
 
 import { run } from './run';
 
-const builder = (yargs: yargs.Argv<CommonConfig>) =>
-  yargs.positional('name', {
+const builder = async (yargs: yargs.Argv<CommonConfig>) => {
+  const tsConfig = await getTSConfig();
+  const rc = await getRC() ?? {};
+
+  return yargs.positional('name', {
     desc: 'The name of the component to be generated',
     type: 'string',
     demandOption: true
   })
-    .config({} /* rc */)
+    .config(rc)
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
@@ -27,7 +32,7 @@ const builder = (yargs: yargs.Argv<CommonConfig>) =>
         type: 'boolean',
         alias: 'ts',
         desc: 'Whether to use Typescript',
-        default: true //!!tsConfig
+        default: !!tsConfig
       },
       flat: {
         type: 'boolean',
@@ -39,14 +44,16 @@ const builder = (yargs: yargs.Argv<CommonConfig>) =>
         desc: 'Which styling to generate',
         default: 'none'
       },
-      stylingModule: {
+      'styling-module': {
+        alias: 'stylingModule',
         type: 'boolean',
         default: true,
         desc: 'Relevant for `css` or `scss` styling. If true, generates a scoped `module` stylesheet'
       },
-      importReact: {
+      'import-react': {
+        alias: 'importReact',
         type: 'boolean',
-        default: true, //!/^react-jsx/.test(tsConfig.config?.compilerOptions?.jsx) ?? true,
+        default: !/^react-jsx/.test(tsConfig.config?.compilerOptions?.jsx) ?? true,
         desc: 'Whether to import React.'
       },
 
@@ -55,6 +62,8 @@ const builder = (yargs: yargs.Argv<CommonConfig>) =>
         default: false
       }
     } as const);
+}
+
 
 type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
 
@@ -66,7 +75,9 @@ export const generateCommand: GenerateCommand = {
   handler: async (argv) => {
 
     const config: Config = {
-      ...pick(['children', 'typescript', 'flat', 'styling', 'stylingModule', 'importReact', 'debug', 'overwrite'], argv),
+      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite'], argv),
+      stylingModule: argv['styling-module'],
+      importReact: argv['import-react'],
       name: argv.name as string,
       props: (argv.props ?? 'ts') /** @todo */,
     }
