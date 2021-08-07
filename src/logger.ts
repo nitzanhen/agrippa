@@ -1,16 +1,24 @@
 import { red, cyan } from 'colors/safe'
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 export class Logger {
-  constructor(public isDebug: boolean) {}
+  constructor(public isDebug: boolean) { }
 
   error(...errs: unknown[]) {
     console.error(`[${red('ERROR')}]:`, ...errs);
-  } 
+  }
   debug(...messages: unknown[]) {
-    if(this.isDebug) {
+    if (this.isDebug) {
       console.log(`[${cyan('DEBUG')}]:`, ...messages)
     }
   }
 }
 
-export const logger = new Logger(false);
+const DEBUG = yargs(hideBin(process.argv))
+  .option('debug', {
+    type: 'boolean',
+    default: false
+  }).parseSync().debug
+
+export const logger = new Logger(DEBUG);
