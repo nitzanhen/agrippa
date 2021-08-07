@@ -25,7 +25,7 @@ export function generateReactCode({ importReact, name, typescript, children, sty
     line(0, ostr(styling === 'mui', `const useStyles = makeStyles((theme${cstr(typescript, ': Theme')}) => {});`)),
     line(0, ostr(styling === 'jss' || styling === 'mui', '')),
     line(0, ostr(typescript, `export interface ${pcName}Props {};`)),
-    '',
+    line(0, ostr(typescript, '')),
     line(0, `export const ${pcName}${cstr(!!componentType, `: ${componentType}`)} = (${cstr(children, '{ children }')}) => {`),
     '',
     line(1, ostr(styling === 'jss' || styling === 'mui', 'const classes = useStyles();')),
