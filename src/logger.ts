@@ -8,7 +8,9 @@ export class Logger {
   } 
   debug(...messages: unknown[]) {
     if(this.isDebug) {
-      console.log(`[${cyan('DEBUG')}]:`, messages)
+      console.log(`[${cyan('DEBUG')}]:`, ...messages)
     }
   }
 }
+
+export const logger = new Logger(false);

@@ -2,9 +2,9 @@ import path from 'path';
 import fs from 'fs';
 import fsp from 'fs/promises';
 
-import { Config } from './Config';
-import { cstr, kebabCase, pascalCase } from './utils';
-import { Logger } from './logger';
+import { cstr, kebabCase, pascalCase } from '../utils/strings';
+import { Logger } from '../logger';
+import { Config } from '../Config';
 
 /**
  * Generates the files required by the CLI - in a folder or flat.

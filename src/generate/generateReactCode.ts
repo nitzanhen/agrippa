@@ -1,5 +1,5 @@
-import { Config } from './Config';
-import { ostr, line, pascalCase, cstr, kebabCase } from './utils';
+import { ostr, line, pascalCase, cstr, kebabCase } from '../utils/strings';
+import { Config } from '../Config';
 
 /**
  * Generates the contents of a React component.
