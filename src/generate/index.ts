@@ -22,7 +22,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
-        default: !tsConfig ? 'ts' : 'none'
+        default: tsConfig ? 'ts' : 'none'
       },
       children: {
         type: 'boolean',
