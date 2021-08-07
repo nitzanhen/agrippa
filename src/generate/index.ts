@@ -22,6 +22,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
+        default: !tsConfig ? 'ts' : 'none'
       },
       children: {
         type: 'boolean',
@@ -56,7 +57,6 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         default: !/^react-jsx/.test(tsConfig.config?.compilerOptions?.jsx) ?? true,
         desc: 'Whether to import React.'
       },
-
       overwrite: {
         type: 'boolean',
         default: false
@@ -75,11 +75,10 @@ export const generateCommand: GenerateCommand = {
   handler: async (argv) => {
 
     const config: Config = {
-      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite'], argv),
+      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite'], argv),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       name: argv.name as string,
-      props: (argv.props ?? 'ts') /** @todo */,
     }
 
     logger.debug('Generating component...')
