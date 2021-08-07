@@ -35,6 +35,7 @@ let rc: Partial<Config> | null = null;
 
 export async function getRC() {
   if (!rc) {
+    logger.debug('Looking for .agripparc.json...')
     rc = await loadRC();
   }
   return rc;

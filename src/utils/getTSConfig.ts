@@ -27,6 +27,7 @@ let tsConfig: LoadResult | null = null;
 
 export async function getTSConfig() {
   if (!tsConfig) {
+    logger.debug('Looking for tsconfig.json...')
     tsConfig = await loadTSConfig();
   }
 
