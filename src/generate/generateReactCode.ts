@@ -4,13 +4,15 @@ import { Config } from '../Config';
 /**
  * Generates the contents of a React component.
  */
-export function generateReactCode({ importReact, name, typescript, children, styling, stylingModule }: Config): string {
+export function generateReactCode({ props, importReact, name, typescript, children, styling, stylingModule }: Config): string {
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
   const interfaceName = `${pcName}Props`
   const typeClass = children ? 'FC' : 'VFC';
-  const componentType = ostr(typescript, `React.${typeClass}<${interfaceName}>`)
+  const TSProps = typescript && props === 'ts'
+
+  const componentType = ostr(TSProps, `React.${typeClass}<${interfaceName}>`)
 
   const createStylesFile = (styling === 'css' || styling === 'scss');
 
@@ -24,8 +26,8 @@ export function generateReactCode({ importReact, name, typescript, children, sty
     line(0, ostr(styling === 'jss', 'const useStyles = createUseStyles({});')),
     line(0, ostr(styling === 'mui', `const useStyles = makeStyles((theme${cstr(typescript, ': Theme')}) => {});`)),
     line(0, ostr(styling === 'jss' || styling === 'mui', '')),
-    line(0, ostr(typescript, `export interface ${pcName}Props {};`)),
-    line(0, ostr(typescript, '')),
+    line(0, ostr(TSProps, `export interface ${pcName}Props {};`)),
+    line(0, ostr(TSProps, '')),
     line(0, `export const ${pcName}${cstr(!!componentType, `: ${componentType}`)} = (${cstr(children, '{ children }')}) => {`),
     '',
     line(1, ostr(styling === 'jss' || styling === 'mui', 'const classes = useStyles();')),
