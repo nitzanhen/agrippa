@@ -48,7 +48,7 @@
   "dependencies": {
     "colors": "^1.4.0",
     "find-up": "^5.0.0",
-    "rhax": "^1.0.0-unstable.13",
+    "rhax": "^2.0.0-alpha.1",
     "tsconfig": "^7.0.0",
     "yargs": "^17.0.1"
   },

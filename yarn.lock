@@ -1353,10 +1353,10 @@ reusify@^1.0.4:
   resolved "https://registry.yarnpkg.com/reusify/-/reusify-1.0.4.tgz#90da382b1e126efc02146e90845a88db12925d76"
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
-rhax@^1.0.0-unstable.13:
-  version "1.0.0-unstable.13"
-  resolved "https://registry.yarnpkg.com/rhax/-/rhax-1.0.0-unstable.13.tgz#50713d9b5af869c8431650a69bcbb5b12e78b0f2"
-  integrity sha512-AJBO2ZsI8jr/xi/0HRpAywDZGf+rez7qqdotuiNNB/3S0F4GyBxBuO+K5VunS/9jJgvL4oviH8D8xsKNFBOHqw==
+rhax@^2.0.0-alpha.1:
+  version "2.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/rhax/-/rhax-2.0.0-alpha.1.tgz#231cac6d3854ede73132c0581265980e8b4b3541"
+  integrity sha512-Zs/lWuytFoR1Fc/E6H9zbwXyDFNYZTThBipVXbPlt6jUzw9XDDtY/6u5GsQV5gyQu2BsRxajW0UvLLez3bl7kA==
 
 rimraf@^3.0.2:
   version "3.0.2"
