@@ -19,17 +19,17 @@ export function generateReactCode({ props, importReact, name, typescript, childr
   return [
     line(0, ostr(props === 'jsdoc', '//@ts-check')),
     line(0, ostr(importReact, "import React from 'react';")),
-    line(0, ostr(createStylesFile && stylingModule, `import classes from './${kcName}.module.${styling}'`)),
-    line(0, ostr(createStylesFile && !stylingModule, `import './${kcName}.${styling}'`)),
+    line(0, ostr(createStylesFile && stylingModule, `import classes from './${kcName}.module.${styling}';`)),
+    line(0, ostr(createStylesFile && !stylingModule, `import './${kcName}.${styling}';`)),
     line(0, ostr(styling === 'jss', "import { createUseStyles } from 'react-jss';")),
     line(0, ostr(styling === 'mui', "import { makeStyles } from '@material-ui/core';")),
-    line(0, ostr(props === 'prop-types', "import PropTypes from 'prop-types'")),
+    line(0, ostr(props === 'prop-types', "import PropTypes from 'prop-types';")),
     '',
     line(0, ostr(styling === 'jss', 'const useStyles = createUseStyles({});')),
     line(0, ostr(styling === 'mui', `const useStyles = makeStyles((theme${cstr(typescript, ': Theme')}) => {});`)),
     line(0, ostr(styling === 'jss' || styling === 'mui', '')),
 
-    line(0, ostr(TSProps, `export interface ${pcName}Props {};`)),
+    line(0, ostr(TSProps, `export interface ${pcName}Props {}`)),
     line(0, ostr(TSProps, '')),
 
     line(0, ostr(props === 'jsdoc', '/**')),
