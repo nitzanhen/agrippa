@@ -2,8 +2,8 @@
 [![npm](https://img.shields.io/npm/v/agrippa?logo=npm&color=CB3837)](https://www.npmjs.com/package/agrippa)
 [![license](https://img.shields.io/github/license/nitzanhen/agrippa?color=yellow)](https://choosealicense.com/licenses/mit/)
 
-Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilderplate.
-It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different enviroments. 
+Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilerplate.
+It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different environments. 
 
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
@@ -45,7 +45,7 @@ Agrippa consists of two commands: `generate` (or `gen`) and `init`:
 ## Using a config
 In most projects, some options repeat themselves on most, if not all, components of the app. For example, if the codebase uses CSS modules as a styling solution, then the majority of component would be generated with `--styling css`. 
 
-To avoid this unnecessary boilerplate, an `.agripparc.json` config file can be used. It's dead simple! simply call `agrippa init` at the root of your project, or create an empty `.agripparc.json` file, and edit its contents to match the desired defaults. <br/>
+To avoid this unnecessary boilerplate, an `.agripparc.json` config file can be used. It's dead simple to set up! simply call `agrippa init` at the root of your project, or create an empty `.agripparc.json` file, and edit its contents to match the desired defaults. <br/>
 The config file's options are the same as the CLI's. The latter's options take precedence over the former's, which is useful for overriding the project's defaults when needed.
 
 ## License
