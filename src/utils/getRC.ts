@@ -27,6 +27,10 @@ async function loadRC() {
     logger.debug(`path: ${rcPath}`);
     logger.debug('config: ', rc)
   }
+  else {
+    logger.debug('No .agripparc.json found.')
+  }
+
 
   return rc;
 }

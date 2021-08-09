@@ -54,7 +54,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       'import-react': {
         alias: 'importReact',
         type: 'boolean',
-        default: !/^react-jsx/.test(tsConfig.config?.compilerOptions?.jsx) ?? true,
+        default: !/^react-jsx/.test(tsConfig?.compilerOptions?.jsx) ?? true,
         desc: 'Whether to import React.'
       },
       overwrite: {
