@@ -60,6 +60,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       overwrite: {
         type: 'boolean',
         default: false
+      },
+      'post-command': {
+        alias: 'postCommand',
+        type: 'string',
+        desc: 'A command to run after a component was successfully generated.'
       }
     } as const);
 }
@@ -75,10 +80,11 @@ export const generateCommand: GenerateCommand = {
   handler: async (argv) => {
 
     const config: Config = {
+      name: argv.name as string,
       ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite'], argv),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
-      name: argv.name as string,
+      postCommand: argv['post-command']
     }
 
     logger.debug('Generating component...')

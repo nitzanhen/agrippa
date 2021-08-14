@@ -7,10 +7,17 @@ import { Logger } from '../logger';
 
 import { Config } from './Config';
 
+// Mapping of created file paths by file type
+interface GeneratedPaths {
+  component: string;
+  styles?: string;
+  dir: string
+}
+
 /**
  * Generates the files required by the CLI - in a folder or flat.
  */
-export async function generateFiles(config: Config, componentCode: string, logger: Logger) {
+export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
   const { name, flat, typescript, styling, stylingModule, overwrite } = config;
   const cwd = process.cwd();
 
@@ -45,10 +52,18 @@ export async function generateFiles(config: Config, componentCode: string, logge
     process.exit(1);
   }
 
+
   await fsp.writeFile(componentFilePath, componentCode);
+
+  const generatedPaths: GeneratedPaths = {
+    component: componentFilePath,
+    dir: folder
+  };
 
   if (createStylesFile) {
     await fsp.open(stylesFilePath, 'w')
+    generatedPaths.styles = stylesFilePath;
   }
 
+  return generatedPaths;
 }

@@ -1,4 +1,4 @@
-import { red, cyan } from 'colors/safe'
+import { red, cyan, blue } from 'colors/safe'
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -12,6 +12,9 @@ export class Logger {
     if (this.isDebug) {
       console.log(`[${cyan('DEBUG')}]:`, ...messages)
     }
+  }
+  info(...messages: unknown[]) {
+    console.info(`[${blue('INFO')}]:`, ...messages)
   }
 }
 
