@@ -3,7 +3,7 @@ import fsp from 'fs/promises';
 import findUp from 'find-up'
 
 import { logger } from '../logger';
-import { Config } from '../Config';
+import { Config } from '../generate/Config';
 
 async function loadRC() {
   logger.debug('Loading .agripparc.json...')

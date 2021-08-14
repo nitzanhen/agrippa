@@ -2,11 +2,11 @@ import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { pick } from 'rhax';
 
 import { logger } from '../logger';
-import { Config } from '../Config';
 import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
 import { getRC } from '../utils/getRC';
 
+import { Config } from './Config';
 import { run } from './run';
 
 const builder = async (yargs: yargs.Argv<CommonConfig>) => {

@@ -4,7 +4,8 @@ import fsp from 'fs/promises';
 
 import { cstr, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
-import { Config } from '../Config';
+
+import { Config } from './Config';
 
 /**
  * Generates the files required by the CLI - in a folder or flat.

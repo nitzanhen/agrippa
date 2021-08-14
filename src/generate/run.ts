@@ -1,6 +1,6 @@
 import { Logger } from '../logger';
-import { Config } from '../Config'
 
+import { Config } from './Config'
 import { generateFiles } from './generateFiles';
 import { generateReactCode } from './generateReactCode';
 
