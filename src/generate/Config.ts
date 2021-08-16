@@ -11,10 +11,11 @@ export interface Config {
   stylingModule: boolean;
   /** @todo */
   // memo: boolean;
-  // forwardRef: boolean;
   importReact: boolean;
   debug: boolean;
   overwrite: boolean;
 
+  baseDir: string;
+  destination: string;
   postCommand?: string;
 }

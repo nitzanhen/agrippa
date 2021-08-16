@@ -5,10 +5,12 @@ import findUp from 'find-up'
 import { logger } from '../logger';
 import { Config } from '../generate/Config';
 
-async function loadRC() {
-  logger.debug('Loading .agripparc.json...')
+type RCData = { rcPath: string, rc: Partial<Config> } | { rcPath: null, rc: null }; 
 
-  const rcPath = await findUp('.agripparc.json');
+async function loadRC(): Promise<RCData> {
+  logger.debug('Looking for .agripparc.json...')
+
+  const rcPath = await findUp('.agripparc.json') ?? null;
   const rc = rcPath ? JSON.parse(
     (
       await fsp.readFile(rcPath, 'utf-8').catch(e => {
@@ -31,17 +33,15 @@ async function loadRC() {
     logger.debug('No .agripparc.json found.')
   }
 
-
-  return rc;
+  return { rcPath, rc };
 }
 
-let rc: Partial<Config> | null = null;
+let rcData: RCData | undefined = undefined;
 
 export async function getRC() {
-  if (!rc) {
-    logger.debug('Looking for .agripparc.json...')
-    rc = await loadRC();
+  if(!rcData) {
+    rcData = await loadRC()
   }
-  return rc;
+  return rcData;
 }
 

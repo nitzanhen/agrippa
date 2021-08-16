@@ -18,19 +18,18 @@ interface GeneratedPaths {
  * Generates the files required by the CLI - in a folder or flat.
  */
 export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
-  const { name, flat, typescript, styling, stylingModule, overwrite } = config;
-  const cwd = process.cwd();
+  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination } = config;
 
-  const folder = flat ? cwd : path.join(cwd, pascalCase(name));
+  const dirPath = path.join(baseDir, destination, flat ? pascalCase(name) : '.');
 
   if (!flat) {
     try {
       //Create the needed folder
-      await fsp.mkdir(folder)
+      await fsp.mkdir(dirPath, { recursive: true })
     }
     catch (e) {
       if (e.code === 'EEXIST') {
-        logger.debug(`Directory ${folder} already exists. Writing into it...`)
+        logger.debug(`Directory ${dirPath} already exists. Writing into it...`)
       }
       else {
         throw e;
@@ -40,10 +39,10 @@ export async function generateFiles(config: Config, componentCode: string, logge
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx'
   const componentFileName = `${flat ? pascalCase(name) : 'index'}.${componentFileExtension}`;
-  const componentFilePath = path.join(folder, componentFileName);
+  const componentFilePath = path.join(dirPath, componentFileName);
 
   const stylesFileName = `${kebabCase(name)}${cstr(stylingModule, '.module')}.${styling}`;
-  const stylesFilePath = path.join(folder, stylesFileName)
+  const stylesFilePath = path.join(dirPath, stylesFileName)
 
   const createStylesFile = styling === 'css' || styling === 'scss';
 
@@ -57,7 +56,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
 
   const generatedPaths: GeneratedPaths = {
     component: componentFilePath,
-    dir: folder
+    dir: dirPath
   };
 
   if (createStylesFile) {

@@ -2,7 +2,11 @@ import { load } from 'tsconfig';
 
 import { logger } from '../logger';
 
-async function loadTSConfig() {
+type TSConfigData = { tsConfigPath: string, tsConfig: any } | { tsConfigPath: null, tsConfig: null };
+
+async function loadTSConfig(): Promise<TSConfigData> {
+  logger.debug('Looking for tsconfig.json...')
+
   const tsConfig = await load(process.cwd())
     .catch(e => {
       logger.error(
@@ -17,23 +21,24 @@ async function loadTSConfig() {
     logger.debug('tsconfig.json found!')
     logger.debug(`path: ${tsConfig.path}`);
     logger.debug('config:', tsConfig.config)
-
-    return tsConfig.config;
   }
   else {
     logger.debug('No tsconfig.js found.')
+  }
 
-    return null;
+  return {
+    tsConfigPath: tsConfig.path ?? null,
+    tsConfig: tsConfig.config
   }
 }
 
-let tsConfig: any = null;
+let tsConfigData: TSConfigData | undefined = undefined;
+
 
 export async function getTSConfig() {
-  if (!tsConfig) {
-    logger.debug('Looking for tsconfig.json...')
-    tsConfig = await loadTSConfig();
+  if (!tsConfigData) {
+    tsConfigData = await loadTSConfig();
   }
 
-  return tsConfig;
+  return tsConfigData;
 }
