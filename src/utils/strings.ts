@@ -1,3 +1,4 @@
+import { formatWithOptions } from 'util'
 
 /** Simple util to render a string conditionally, or null if it is not met */
 export const ostr = (condition: boolean, string: string) => {
@@ -53,5 +54,11 @@ export const kebabCase = (str: string) => {
   }
 
   throw RangeError('Improper string formatting')
-
 }
+
+/**
+ * Format a string for printing.
+ * This does little more than Node's default printing behaviour,
+ * but allows embedding objects into string without them turning into `[Object object]`.
+ */
+export const format = (...args: unknown[]) => formatWithOptions({ colors: true }, ...args)

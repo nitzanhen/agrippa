@@ -1,7 +1,7 @@
 import { exec as execCB } from 'child_process';
 import { promisify } from 'util';
 
-import { grey } from 'colors/safe';
+import { gray } from 'chalk';
 
 import { Logger } from '../logger';
 import { substitutePaths, VariablePaths } from '../utils/substitutePaths';
@@ -14,11 +14,11 @@ export async function runPostCommand(variablePaths: VariablePaths, config: Confi
   const { postCommand: rawPostCommand } = config;
 
   if (rawPostCommand) {
-    logger.debug('Raw post command (before filling in actual paths):', rawPostCommand)
+    logger.debug(`Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`)
 
     const postCommand = substitutePaths(rawPostCommand, variablePaths);
 
-    logger.info(`Running post command: ${grey(postCommand)}`);
+    logger.info(`Running post command: ${gray(postCommand)}`);
     const { stdout, stderr } = await exec(postCommand);
 
     if (stdout) {

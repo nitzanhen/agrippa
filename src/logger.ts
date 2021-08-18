@@ -1,20 +1,25 @@
-import { red, cyan, blue } from 'colors/safe'
+import { red, cyan, blue } from 'chalk'
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+
+import { format } from './utils/strings';
 
 export class Logger {
   constructor(public isDebug: boolean) { }
 
   error(...errs: unknown[]) {
-    console.error(`[${red('ERROR')}]:`, ...errs);
+    const prefixedErrs = errs.map(err => `[${red('ERROR')}]: ${format(err)}`).join('\n')
+    console.error(prefixedErrs);
   }
   debug(...messages: unknown[]) {
     if (this.isDebug) {
-      console.log(`[${cyan('DEBUG')}]:`, ...messages)
+      const prefixedMesssages = messages.map(msg => `[${cyan('DEBUG')}]: ${format(msg)}`).join('\n')
+      console.log(prefixedMesssages)
     }
   }
   info(...messages: unknown[]) {
-    console.info(`[${blue('INFO')}]:`, ...messages)
+    const prefixedMesssages = messages.map(msg => `[${blue('INFO')}]: ${format(msg)}`).join('\n')
+    console.info(prefixedMesssages)
   }
 }
 

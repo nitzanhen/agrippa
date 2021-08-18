@@ -18,4 +18,5 @@ export interface Config {
   baseDir: string;
   destination: string;
   postCommand?: string;
+  allowOutsideBase: boolean;
 }

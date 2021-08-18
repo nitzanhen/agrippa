@@ -2,8 +2,11 @@ import { constants } from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
 
-import { logger } from '../logger';
+import { green } from 'chalk';
 
+import { logger } from '../logger';
+import { format } from '../utils/strings';
+import { panic } from '../utils/panic';
 
 export async function generateRC() {
   const templatePath = path.join(__dirname, 'rc-template.json');
@@ -11,17 +14,19 @@ export async function generateRC() {
 
   try {
     await fsp.copyFile(templatePath, destinationPath, constants.COPYFILE_EXCL)
+    logger.info(
+      `Creation successful. Path: ${green(destinationPath)}`,
+    )
   }
-  catch(e) {
-    if(e.code === 'EEXIST') {
-      logger.error('An .agripparc.json config file already exists in the current working directory.')
+  catch (e) {
+    if (e.code === 'EEXIST') {
+      panic('An .agripparc.json config file already exists in the current working directory.')
     }
     else {
-      logger.error(
-        'An unexpected error occured while creating agripparc.json\n',
-        + 'Error:', e
+      panic(
+        'An unexpected error occured while creating agripparc.json',
+        `Error: ${format(e)}`
       )
     }
-    process.exit(1);
   }
 }

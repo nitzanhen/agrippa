@@ -46,7 +46,7 @@
     "typescript": "^4.3.5"
   },
   "dependencies": {
-    "colors": "^1.4.0",
+    "chalk": "^4.1.2",
     "find-up": "^5.0.0",
     "rhax": "^2.0.0-alpha.1",
     "tsconfig": "^7.0.0",

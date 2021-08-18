@@ -1,4 +1,5 @@
 import { Logger } from '../logger';
+import { panic } from '../utils/panic';
 
 import { Config } from './Config'
 import { generateFiles } from './generateFiles';
@@ -11,9 +12,11 @@ export async function run(config: Config, logger: Logger) {
   try {
     const generatedPaths = await generateFiles(config, componentCode, logger);
 
-    logger.info('Generation successful.')
-    logger.info('Generated files:')
-    Object.values(generatedPaths).forEach(path => logger.info(path))
+    logger.info(
+      'Generation successful.',
+      'Generated files:',
+      ...Object.values(generatedPaths)
+    )
 
     const variablePaths = {
       '<componentPath>': generatedPaths.component,
@@ -23,7 +26,6 @@ export async function run(config: Config, logger: Logger) {
     await runPostCommand(variablePaths, config, logger);
   }
   catch (e) {
-    logger.error(e);
-    process.exit(1);
+    panic(e);
   }
 }

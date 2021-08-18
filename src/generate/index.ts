@@ -8,6 +8,8 @@ import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
 import { getRC } from '../utils/getRC';
 import { getPkg } from '../utils/getPkg';
+import { format } from '../utils/strings';
+import { panic } from '../utils/panic';
 
 import { Config } from './Config';
 import { run } from './run';
@@ -80,9 +82,15 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'string',
         desc: 'The path in which the component folder/files should be generated, relative to baseDir.',
         default: '.'
+      },
+      'allow-outside-base': {
+        alias: 'allowOutsideBase',
+        type: 'boolean',
+        desc: 'If true, allows components to be generated outside the resolved baseDir.',
+        default: false
       }
     } as const)
-    .coerce('base-dir', function (baseDir: string | undefined) {
+    .coerce('base-dir', (baseDir: string | undefined) => {
       logger.debug(`baseDir option, before resolving, is ${baseDir}`)
 
       if (!baseDir) {
@@ -100,8 +108,10 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         return resolvedPath;
       }
 
-      logger.error('Error resolving baseDir.');
-      process.exit(1);
+      panic(
+        'An error occured while resolving baseDir.',
+
+      );
     });
 }
 
@@ -122,10 +132,13 @@ export const generateCommand: GenerateCommand = {
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
       baseDir: argv['base-dir']!,
+      allowOutsideBase: argv['allow-outside-base']
     }
 
-    logger.debug('Generating component...')
-    logger.debug('config:', config)
+    logger.debug(
+      'Generating component...',
+      `config: ${format(config)}`
+    )
     run(config, logger);
   }
 }

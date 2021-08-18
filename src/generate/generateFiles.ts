@@ -2,8 +2,13 @@ import path from 'path';
 import fs from 'fs';
 import fsp from 'fs/promises';
 
+import { gray, green } from 'chalk';
+
 import { cstr, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
+import { isSubDirectory } from '../utils/isSubDirectory';
+
+import { panic } from '../utils/panic';
 
 import { Config } from './Config';
 
@@ -20,7 +25,18 @@ interface GeneratedPaths {
 export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
   const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination } = config;
 
-  const dirPath = path.join(baseDir, destination, flat ? pascalCase(name) : '.');
+  const pcName = pascalCase(name);
+  const kcName = kebabCase(name);
+
+  const dirPath = path.resolve(baseDir, destination, flat ? '.' : pcName);
+  if (!isSubDirectory(baseDir, dirPath)) {
+    panic(
+      `The resolved directory for the component "${pcName}" falls outside the base directory:`,
+      `Base directory: ${gray(baseDir)}`,
+      `Resolved directory: ${gray(dirPath)}`,
+      `If this is the desired behaviour, pass the ${green('--allow-outside-base')} flag or set ${green('allowOutsideBase: true')} in .agripparc.json`
+    );
+  }
 
   if (!flat) {
     try {
@@ -29,7 +45,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
     }
     catch (e) {
       if (e.code === 'EEXIST') {
-        logger.debug(`Directory ${dirPath} already exists. Writing into it...`)
+        logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
       }
       else {
         throw e;
@@ -38,17 +54,19 @@ export async function generateFiles(config: Config, componentCode: string, logge
   }
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx'
-  const componentFileName = `${flat ? pascalCase(name) : 'index'}.${componentFileExtension}`;
+  const componentFileName = `${flat ? pcName : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(dirPath, componentFileName);
 
-  const stylesFileName = `${kebabCase(name)}${cstr(stylingModule, '.module')}.${styling}`;
+  const stylesFileName = `${kcName} ${cstr(stylingModule, '.module')}.${styling}`;
   const stylesFilePath = path.join(dirPath, stylesFileName)
 
   const createStylesFile = styling === 'css' || styling === 'scss';
 
   if (!overwrite && ((fs.existsSync(componentFilePath) || (createStylesFile && fs.existsSync(stylesFilePath))))) {
-    logger.error('Existing files would be overwritten by this command, leading to data loss. To allow overwriting, pass --overwrite to the command.')
-    process.exit(1);
+    panic(
+      'Existing files would be overwritten by this command, leading to data loss.',
+      `To allow overwriting, pass ${green('--overwrite')} to the command.`
+    )
   }
 
 
