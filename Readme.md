@@ -8,7 +8,7 @@ It can easily generate templates for React components of different compositions 
 ## v1.1.0
 
 **The first RC of Agrippa v1.1.0 is now out!** 
-It introduces two new major features: *base component directories* and *post commands*. Read all about it in the release page.
+It introduces two new major features: *base component directories* and *post commands*. Read all about [it in the release page](https://github.com/NitzanHen/agrippa/releases/tag/1.1.0-rc.1).
 
 The official release will take place in a few days. To try it out now, install with `npm i -g agrippa@next`.
 You can check the code out [in the v1.1.0 branch](https://github.com/NitzanHen/agrippa/tree/v1.1.0).
