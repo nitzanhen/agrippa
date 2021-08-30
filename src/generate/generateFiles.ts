@@ -57,7 +57,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
   const componentFileName = `${flat ? pcName : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(dirPath, componentFileName);
 
-  const stylesFileName = `${kcName} ${cstr(stylingModule, '.module')}.${styling}`;
+  const stylesFileName = `${kcName}${cstr(stylingModule, '.module')}.${styling}`;
   const stylesFilePath = path.join(dirPath, stylesFileName)
 
   const createStylesFile = styling === 'css' || styling === 'scss';
