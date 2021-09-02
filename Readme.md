@@ -5,6 +5,15 @@
 Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilerplate.
 It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different environments. 
 
+## v1.1.0
+
+**Agrippa v1.1.0 is now out!** 
+It introduces two new major features: *base component directories* and *post commands*. Read all about [it in the release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.1.0).
+
+To update, call `npx agrippa [...]` (with the usual commands and options), or install it with `npm i -g agrippa@next`.
+
+Also, we have a wiki now! The home page is still not complete, but [check the wiki out anyway](https://github.com/NitzanHen/agrippa/wiki).
+
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
 🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
@@ -13,11 +22,23 @@ It can easily generate templates for React components of different compositions 
 
 ## Installation
 
+Recommended use:
+```bash
+npx agrippa [...]
+# e.g.
+npx agrippa gen top-bar 
+```
+using `npx`, the latest version is always used.
+
+Alterntively, install Agrippa globally:
+
 ```bash
 npm install -g agrippa
 # Or:
 yarn global add agrippa
 ```
+
+then use normally.
 
 ## Usage
 
