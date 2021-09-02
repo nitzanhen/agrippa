@@ -1,18 +1,31 @@
 import { Logger } from '../logger';
-import { Config } from '../Config'
+import { panic } from '../utils/panic';
 
+import { Config } from './Config'
 import { generateFiles } from './generateFiles';
 import { generateReactCode } from './generateReactCode';
+import { runPostCommand } from './runPostCommand';
+
 
 export async function run(config: Config, logger: Logger) {
   const componentCode = generateReactCode(config);
   try {
-    await generateFiles(config, componentCode, logger);
+    const generatedPaths = await generateFiles(config, componentCode, logger);
 
-    logger.debug('Success')
+    logger.info(
+      'Generation successful.',
+      'Generated files:',
+      ...Object.values(generatedPaths)
+    )
+
+    const variablePaths = {
+      '<componentPath>': generatedPaths.component,
+      '<stylesPath>': generatedPaths.styles,
+      '<dirPath>': generatedPaths.dir
+    }
+    await runPostCommand(variablePaths, config, logger);
   }
-  catch(e) {
-    logger.error(e);
-    process.exit(1);
+  catch (e) {
+    panic(e);
   }
 }

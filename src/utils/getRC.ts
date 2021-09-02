@@ -3,45 +3,48 @@ import fsp from 'fs/promises';
 import findUp from 'find-up'
 
 import { logger } from '../logger';
-import { Config } from '../Config';
+import { Config } from '../generate/Config';
 
-async function loadRC() {
-  logger.debug('Loading .agripparc.json...')
+import { format } from './strings';
+import { panic } from './panic';
 
-  const rcPath = await findUp('.agripparc.json');
+type RCData = { rcPath: string, rc: Partial<Config> } | { rcPath: null, rc: null };
+
+async function loadRC(): Promise<RCData> {
+  logger.debug('Looking for .agripparc.json...')
+
+  const rcPath = await findUp('.agripparc.json') ?? null;
   const rc = rcPath ? JSON.parse(
     (
-      await fsp.readFile(rcPath, 'utf-8').catch(e => {
-        logger.error(
-          'An unexpected error occured while parsing agripparc.json.\n'
-          + 'Please ensure that agripparc.json is valid, and has no trailing commas.\n'
-          + 'Error:', e
-        );
-        process.exit(1)
-      })
+      await fsp.readFile(rcPath, 'utf-8').catch(e =>
+        panic(
+          'An unexpected error occured while parsing agripparc.json.',
+          'Please ensure that agripparc.json is valid, and has no trailing commas.',
+          `Error:', ${format(e)}`
+        ))
     ) as string
   ) : null
 
   if (rc) {
-    logger.debug('.agripparc.json found!')
-    logger.debug(`path: ${rcPath}`);
-    logger.debug('config: ', rc)
+    logger.debug(
+      '.agripparc.json found!',
+      `path: ${format(rcPath)}`,
+      `config: ${format(rc)}`
+    )
   }
   else {
     logger.debug('No .agripparc.json found.')
   }
 
-
-  return rc;
+  return { rcPath, rc };
 }
 
-let rc: Partial<Config> | null = null;
+let rcData: RCData | undefined = undefined;
 
 export async function getRC() {
-  if (!rc) {
-    logger.debug('Looking for .agripparc.json...')
-    rc = await loadRC();
+  if (!rcData) {
+    rcData = await loadRC()
   }
-  return rc;
+  return rcData;
 }
 
