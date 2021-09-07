@@ -10,8 +10,7 @@ It can easily generate templates for React components of different compositions 
 **Agrippa v1.1.0 is now out!** <br/>
 It introduces two new major features: *base component directories* and *post commands*. Read all about [it in the release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.1.0).
 
-To use the new version, simply call `npx agrippa [...]` with the usual commands and options! <br/>
-Or, to update a local installation, call `npm i -g agrippa@next`.
+To use the new version, simply call `npm i -g agrippa`.
 
 Also, [we have a wiki now!](https://github.com/NitzanHen/agrippa/wiki)
 
@@ -23,23 +22,19 @@ Also, [we have a wiki now!](https://github.com/NitzanHen/agrippa/wiki)
 
 ## Installation
 
-Recommended use:
-```bash
-npx agrippa [...]
-# e.g.
-npx agrippa gen top-bar 
-```
-using `npx`, the latest version is always used.
-
-Alterntively, install Agrippa globally:
-
 ```bash
 npm install -g agrippa
 # Or:
 yarn global add agrippa
 ```
 
-then use normally.
+Alterntively, use:
+```bash
+npx agrippa [...]
+# e.g.
+npx agrippa gen top-bar 
+```
+using `npx`, the latest version is always used.
 
 ## Usage
 
