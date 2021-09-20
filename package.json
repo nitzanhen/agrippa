@@ -1,7 +1,7 @@
 {
   "name": "agrippa",
   "description": "A React CLI for component generation",
-  "version": "v1.1.1-beta.1",
+  "version": "1.1.1-beta.2",
   "main": "bin/index.js",
   "author": {
     "name": "Nitzan Hen",
