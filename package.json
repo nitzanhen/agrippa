@@ -48,6 +48,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "find-up": "^5.0.0",
+    "json5": "^2.2.0",
     "rhax": "^2.0.0-alpha.1",
     "yargs": "^17.0.1"
   },

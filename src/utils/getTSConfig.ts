@@ -2,11 +2,11 @@ import fsp from 'fs/promises';
 
 
 import findUp from 'find-up';
+import { parse as parseJson } from 'json5';
 
 import { logger } from '../logger';
 
 import { panic } from './panic';
-
 import { format } from './strings';
 
 type TSConfigData = { tsConfigPath: string, tsConfig: any } | { tsConfigPath: null, tsConfig: null };
@@ -16,7 +16,7 @@ async function loadTSConfig(): Promise<TSConfigData> {
 
   const tsConfigPath = await findUp('./tsconfig.json') ?? null;
 
-  const tsConfig = tsConfigPath ? JSON.parse(
+  const tsConfig = tsConfigPath ? parseJson(
     (
       await fsp.readFile(tsConfigPath, 'utf-8').catch(e =>
         panic(

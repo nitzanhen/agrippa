@@ -1,6 +1,7 @@
 import fsp from 'fs/promises';
 
 import findUp from 'find-up'
+import { parse as parseJson } from 'json5';
 
 import { logger } from '../logger';
 
@@ -13,7 +14,7 @@ async function loadPkg(): Promise<PkgData> {
   logger.debug('Looking for .package.json...')
 
   const pkgPath = await findUp('package.json') ?? null;
-  const pkg = pkgPath ? JSON.parse(
+  const pkg = pkgPath ? parseJson(
     (
       await fsp.readFile(pkgPath, 'utf-8').catch(e =>
         panic(
