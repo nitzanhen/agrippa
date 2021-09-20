@@ -1,6 +1,7 @@
 import fsp from 'fs/promises';
 
-import findUp from 'find-up'
+import findUp from 'find-up';
+import { parse as parseJson } from 'json5';
 
 import { logger } from '../logger';
 import { Config } from '../generate/Config';
@@ -14,12 +15,12 @@ async function loadRC(): Promise<RCData> {
   logger.debug('Looking for .agripparc.json...')
 
   const rcPath = await findUp('.agripparc.json') ?? null;
-  const rc = rcPath ? JSON.parse(
+  const rc = rcPath ? parseJson(
     (
       await fsp.readFile(rcPath, 'utf-8').catch(e =>
         panic(
           'An unexpected error occured while parsing agripparc.json.',
-          'Please ensure that agripparc.json is valid, and has no trailing commas.',
+          'Please ensure that agripparc.json is valid.',
           `Error:', ${format(e)}`
         ))
     ) as string

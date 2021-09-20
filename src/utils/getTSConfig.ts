@@ -1,9 +1,12 @@
-import { load } from 'tsconfig';
+import fsp from 'fs/promises';
+
+
+import findUp from 'find-up';
+import { parse as parseJson } from 'json5';
 
 import { logger } from '../logger';
 
 import { panic } from './panic';
-
 import { format } from './strings';
 
 type TSConfigData = { tsConfigPath: string, tsConfig: any } | { tsConfigPath: null, tsConfig: null };
@@ -11,19 +14,24 @@ type TSConfigData = { tsConfigPath: string, tsConfig: any } | { tsConfigPath: nu
 async function loadTSConfig(): Promise<TSConfigData> {
   logger.debug('Looking for tsconfig.json...')
 
-  const tsConfig = await load(process.cwd())
-    .catch(e =>
-      panic(
-        'An unexpected error occured while parsing tsconfig.json.',
-        'Please ensure that tsconfig.json is valid, and has no trailing commas.',
-        `Error: ${format(e)}`
-      ));
+  const tsConfigPath = await findUp('./tsconfig.json') ?? null;
 
-  if (tsConfig.path) {
+  const tsConfig = tsConfigPath ? parseJson(
+    (
+      await fsp.readFile(tsConfigPath, 'utf-8').catch(e =>
+        panic(
+          'An unexpected error occured while parsing tsconfig.json.',
+          'Please ensure that tsconfig.json is valid.',
+          `Error:', ${format(e)}`
+        ))
+    ) as string
+  ) : null
+
+  if (tsConfig) {
     logger.debug(
       'tsconfig.json found!',
-      `path: ${format(tsConfig.path)}`,
-      `config: ${format(tsConfig.config)}`
+      `path: ${format(tsConfigPath)}`,
+      `config: ${format(tsConfig)}`
     )
   }
   else {
@@ -31,8 +39,8 @@ async function loadTSConfig(): Promise<TSConfigData> {
   }
 
   return {
-    tsConfigPath: tsConfig.path ?? null,
-    tsConfig: tsConfig.config
+    tsConfigPath,
+    tsConfig
   }
 }
 

@@ -23,13 +23,13 @@ interface GeneratedPaths {
  * Generates the files required by the CLI - in a folder or flat.
  */
 export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
-  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination } = config;
+  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination, allowOutsideBase } = config;
 
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
   const dirPath = path.resolve(baseDir, destination, flat ? '.' : pcName);
-  if (!isSubDirectory(baseDir, dirPath)) {
+  if (!isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
     panic(
       `The resolved directory for the component "${pcName}" falls outside the base directory:`,
       `Base directory: ${gray(baseDir)}`,
@@ -38,18 +38,16 @@ export async function generateFiles(config: Config, componentCode: string, logge
     );
   }
 
-  if (!flat) {
-    try {
-      //Create the needed folder
-      await fsp.mkdir(dirPath, { recursive: true })
+  try {
+    //Create the needed folder
+    await fsp.mkdir(dirPath, { recursive: true })
+  }
+  catch (e) {
+    if (e.code === 'EEXIST') {
+      logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
     }
-    catch (e) {
-      if (e.code === 'EEXIST') {
-        logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
-      }
-      else {
-        throw e;
-      }
+    else {
+      throw e;
     }
   }
 
@@ -68,7 +66,6 @@ export async function generateFiles(config: Config, componentCode: string, logge
       `To allow overwriting, pass ${green('--overwrite')} to the command.`
     )
   }
-
 
   await fsp.writeFile(componentFilePath, componentCode);
 
