@@ -20,7 +20,7 @@ async function loadRC(): Promise<RCData> {
       await fsp.readFile(rcPath, 'utf-8').catch(e =>
         panic(
           'An unexpected error occured while parsing agripparc.json.',
-          'Please ensure that agripparc.json is valid, and has no trailing commas.',
+          'Please ensure that agripparc.json is valid.',
           `Error:', ${format(e)}`
         ))
     ) as string

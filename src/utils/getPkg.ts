@@ -19,7 +19,7 @@ async function loadPkg(): Promise<PkgData> {
       await fsp.readFile(pkgPath, 'utf-8').catch(e =>
         panic(
           'An unexpected error occured while parsing package.json.',
-          'Please ensure that package.json is valid, and has no trailing commas.',
+          'Please ensure that package.json is valid.',
           `Error:', ${format(e)}`
         ))
     ) as string

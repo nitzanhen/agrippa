@@ -21,7 +21,7 @@ async function loadTSConfig(): Promise<TSConfigData> {
       await fsp.readFile(tsConfigPath, 'utf-8').catch(e =>
         panic(
           'An unexpected error occured while parsing tsconfig.json.',
-          'Please ensure that tsconfig.json is valid, and has no trailing commas.',
+          'Please ensure that tsconfig.json is valid.',
           `Error:', ${format(e)}`
         ))
     ) as string
