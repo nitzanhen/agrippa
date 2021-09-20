@@ -110,7 +110,6 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
 
       panic(
         'An error occured while resolving baseDir.',
-
       );
     });
 }

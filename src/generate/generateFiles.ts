@@ -23,13 +23,13 @@ interface GeneratedPaths {
  * Generates the files required by the CLI - in a folder or flat.
  */
 export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
-  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination } = config;
+  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination, allowOutsideBase } = config;
 
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
   const dirPath = path.resolve(baseDir, destination, flat ? '.' : pcName);
-  if (!isSubDirectory(baseDir, dirPath)) {
+  if (!isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
     panic(
       `The resolved directory for the component "${pcName}" falls outside the base directory:`,
       `Base directory: ${gray(baseDir)}`,
