@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    /** aa */
     "target": "es5",
     "lib": [
       "ESNext"
