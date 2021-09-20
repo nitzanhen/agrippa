@@ -38,18 +38,16 @@ export async function generateFiles(config: Config, componentCode: string, logge
     );
   }
 
-  if (!flat) {
-    try {
-      //Create the needed folder
-      await fsp.mkdir(dirPath, { recursive: true })
+  try {
+    //Create the needed folder
+    await fsp.mkdir(dirPath, { recursive: true })
+  }
+  catch (e) {
+    if (e.code === 'EEXIST') {
+      logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
     }
-    catch (e) {
-      if (e.code === 'EEXIST') {
-        logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
-      }
-      else {
-        throw e;
-      }
+    else {
+      throw e;
     }
   }
 
@@ -68,7 +66,6 @@ export async function generateFiles(config: Config, componentCode: string, logge
       `To allow overwriting, pass ${green('--overwrite')} to the command.`
     )
   }
-
 
   await fsp.writeFile(componentFilePath, componentCode);
 
