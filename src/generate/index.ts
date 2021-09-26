@@ -88,6 +88,12 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         desc: 'If true, allows components to be generated outside the resolved baseDir.',
         default: false
+      },
+      'export-type': {
+        alias: 'exportType',
+        choices: ['named', 'default'], // If a valid use case arise, 'none' can be added as an option.
+        desc: 'Whether to use a named export or a default export for the component.',
+        default: 'named'
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
@@ -131,7 +137,8 @@ export const generateCommand: GenerateCommand = {
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
       baseDir: argv['base-dir']!,
-      allowOutsideBase: argv['allow-outside-base']
+      allowOutsideBase: argv['allow-outside-base'],
+      exportType: argv['export-type']
     }
 
     logger.debug(

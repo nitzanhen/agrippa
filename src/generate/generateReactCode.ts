@@ -5,7 +5,7 @@ import { Config } from './Config';
 /**
  * Generates the contents of a React component.
  */
-export function generateReactCode({ props, importReact, name, typescript, children, styling, stylingModule }: Config): string {
+export function generateReactCode({ props, importReact, name, typescript, children, styling, stylingModule, exportType }: Config): string {
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
@@ -41,7 +41,7 @@ export function generateReactCode({ props, importReact, name, typescript, childr
     line(0, ostr(props === 'jsdoc', ` * @type {${componentType}}`)),
     line(0, ostr(props === 'jsdoc', ' */')),
 
-    line(0, `export const ${pcName}${cstr(TSProps, `: ${componentType}`)} = (${cstr(children, '{ children }')}) => {`),
+    line(0, `${cstr(exportType === 'named', 'export')} const ${pcName}${cstr(TSProps, `: ${componentType}`)} = (${cstr(children, '{ children }')}) => {`),
     '',
     line(1, ostr(styling === 'jss' || styling === 'mui', 'const classes = useStyles();')),
     line(1, ostr(styling === 'jss' || styling === 'mui', '')),
@@ -51,6 +51,8 @@ export function generateReactCode({ props, importReact, name, typescript, childr
     line(1, ');'),
     line(0, '}'),
     line(0, ostr(props === 'prop-types', '')),
-    line(0, ostr(props === 'prop-types', `${pcName}.propTypes = {}`))
+    line(0, ostr(props === 'prop-types', `${pcName}.propTypes = {}`)),
+    line(0, ostr(exportType === 'default', '')),
+    line(0, ostr(exportType === 'default', `export default ${pcName}`))
   ].filter(line => typeof line === 'string').join('\n');
 }

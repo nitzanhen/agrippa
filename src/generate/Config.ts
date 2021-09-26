@@ -19,4 +19,6 @@ export interface Config {
   destination: string;
   postCommand?: string;
   allowOutsideBase: boolean;
+
+  exportType: 'named' | 'default'
 }
