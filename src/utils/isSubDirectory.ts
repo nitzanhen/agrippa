@@ -12,5 +12,5 @@ export function isSubDirectory(parent: string, dir: string): boolean {
 
   const relativePath = path.relative(parent, dir);
 
-  return !!relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath)
+  return !!relativePath && !relativePath.startsWith('..') && !path.isAbsolute(relativePath);
 }

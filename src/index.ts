@@ -8,7 +8,7 @@ import { initCommand } from './init';
 import { logger } from './logger';
 import { pkgJson } from './utils/package';
 
-logger.debug(`Agrippa v${pkgJson.version}`)
+logger.debug(`Agrippa v${pkgJson.version}`);
 
 // Init yargs
 yargs(hideBin(process.argv))
@@ -23,7 +23,7 @@ yargs(hideBin(process.argv))
   .recommendCommands()
   .strict()
   .demandCommand(1, 'Please specify a command')
-  .parse()
+  .parse();
 
 
 

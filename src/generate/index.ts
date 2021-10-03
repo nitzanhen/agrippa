@@ -17,7 +17,7 @@ import { run } from './run';
 const builder = async (yargs: yargs.Argv<CommonConfig>) => {
   const [{ tsConfig }, { rc, rcPath }, { pkgPath }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
-  )
+  );
 
   return yargs.positional('name', {
     desc: 'The name of the component to be generated',
@@ -97,20 +97,20 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
-      logger.debug(`baseDir option, before resolving, is ${baseDir}`)
+      logger.debug(`baseDir option, before resolving, is ${baseDir}`);
 
       if (!baseDir) {
         logger.debug('No baseDir specified, resolving relative to cwd');
-        return process.cwd()
+        return process.cwd();
       }
       else if (rcPath) {
-        const resolvedPath = path.resolve(path.dirname(rcPath), baseDir)
+        const resolvedPath = path.resolve(path.dirname(rcPath), baseDir);
         logger.debug(`Path resolved relative to .agripparc.json: ${resolvedPath}`);
         return resolvedPath;
       }
       else if (pkgPath) {
-        const resolvedPath = path.resolve(path.dirname(pkgPath), baseDir)
-        logger.debug(`Path resolved relative to package.json: ${resolvedPath}`)
+        const resolvedPath = path.resolve(path.dirname(pkgPath), baseDir);
+        logger.debug(`Path resolved relative to package.json: ${resolvedPath}`);
         return resolvedPath;
       }
 
@@ -118,7 +118,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         'An error occured while resolving baseDir.',
       );
     });
-}
+};
 
 
 type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
@@ -139,12 +139,12 @@ export const generateCommand: GenerateCommand = {
       baseDir: argv['base-dir']!,
       allowOutsideBase: argv['allow-outside-base'],
       exportType: argv['export-type']
-    }
+    };
 
     logger.debug(
       'Generating component...',
       `config: ${format(config)}`
-    )
+    );
     run(config, logger);
   }
-}
+};

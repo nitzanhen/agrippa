@@ -80,7 +80,8 @@
       "as-needed"
     ],
     "no-underscore-dangle": "off",
-    "no-restricted-globals": "off"
+    "no-restricted-globals": "off",
+    "semi": "warn"
   },
   "settings": {
     "import/parsers": {
