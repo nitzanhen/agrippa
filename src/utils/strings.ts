@@ -10,9 +10,16 @@ export const cstr = (condition: boolean, string: string) => {
   return condition ? string : ''
 }
 
-export const line = (index: number, str: string | null) => {
-  return str && '\t'.repeat(index) + str;
+/** Indents every line of the given string by `num` tabs.  */
+export const indent = (str: string, num: number = 1) => {
+  return str
+    .split('\n')
+    .map(line => '\t'.repeat(num) + line)
+    .join('\n')
 }
+
+/** Joins `lines` with \n, filtering any non-string value. Could technically also be used for code blocks that are more than one line.  */
+export const joinLines = (...lines: (string | false)[]): string => lines.filter(line => typeof line === 'string').join('\n');
 
 export const isLowerCase = (str: string) => str === str.toLocaleLowerCase();
 
@@ -61,4 +68,7 @@ export const kebabCase = (str: string) => {
  * This does little more than Node's default printing behaviour,
  * but allows embedding objects into string without them turning into `[Object object]`.
  */
-export const format = (...args: unknown[]) => formatWithOptions({ colors: true }, ...args)
+export const format = (...args: unknown[]) => formatWithOptions({ colors: true }, ...args);
+
+/** Returns an empty string. Exists for clarity. */
+export const emptyLine = () => '';
