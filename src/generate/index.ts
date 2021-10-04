@@ -133,8 +133,7 @@ export const generateCommand: GenerateCommand = {
   aliases: ['gen'],
   describe: 'Generate a component',
   builder,
-  handler: async (argv) => {
-
+  handler: argv => {
     const config: Config = {
       name: argv.name as string,
       ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration'], argv),

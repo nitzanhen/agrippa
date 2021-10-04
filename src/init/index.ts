@@ -8,8 +8,7 @@ import { generateRC } from './generateRC';
 export const initCommand: yargs.CommandModule<CommonConfig, CommonConfig> = {
   command: 'init',
   describe: 'Create a config file',
-  handler: async () => {
-
+  handler: () => {
     logger.debug('Generating rc...');
     generateRC();
   }
