@@ -95,7 +95,6 @@ export class ComponentComposer {
   }
 
   getComponentFunctionDeclaration() {
-    /** @todo take care of typing in the case of JSDoc comments? */
     return declareFunction(
       this.componentName,
       this.getComponentParams(this.TSProps),
