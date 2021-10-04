@@ -9,18 +9,14 @@ export interface Config {
   flat: boolean;
   styling: 'none' | 'css' | 'scss' | 'jss' | 'mui';
   stylingModule: boolean;
-  /** @todo */
-  // memo: boolean;
+  memo: boolean;
   importReact: boolean;
   debug: boolean;
   overwrite: boolean;
-
   baseDir: string;
   destination: string;
   postCommand?: string;
   allowOutsideBase: boolean;
-
   exportType: 'named' | 'default'
-
   declaration: 'const' | 'function'
 }

@@ -74,7 +74,7 @@ export class ComponentComposer {
     );
   }
 
-  get createTSProps() {
+  get TSProps() {
     const { typescript, props } = this.config;
     return typescript && props === 'ts';
   }
@@ -82,24 +82,55 @@ export class ComponentComposer {
     return declareInterface(this.propInterfaceName, true);
   }
 
+  getComponentConstDeclaration() {
+    return declareConst(
+      this.componentName,
+      createArrowFunction(
+        this.getComponentParams(),
+        this.getComponentBody()
+      ),
+      this.config.exportType === 'named',
+      this.config.typescript ? this.getComponentType() : undefined
+    );
+  }
+
+  getComponentFunctionDeclaration() {
+    /** @todo take care of typing in the case of JSDoc comments? */
+    return declareFunction(
+      this.componentName,
+      this.getComponentParams(this.TSProps),
+      this.getComponentBody(),
+      this.config.exportType === 'named'
+    );
+  }
+
+  getComponentMemoDeclaration() {
+    const memoBase = this.TSProps ? `memo<${this.propInterfaceName}>` : 'memo';
+    const createMemo = (component: string) => `${memoBase}(${component})`;
+
+    return declareConst(
+      this.componentName,
+      createMemo(
+        declareFunction(
+          this.componentName,
+          this.getComponentParams()
+        )
+      ),
+      this.config.exportType === 'named',
+      this.config.typescript ? this.getComponentType() : undefined
+    );
+  }
+
   getComponentDeclaration() {
-    return this.config.declaration === 'const'
-      ? declareConst(
-        this.componentName,
-        createArrowFunction(
-          this.getComponentParams(),
-          this.getComponentBody()
-        ),
-        this.config.exportType === 'named',
-        this.config.typescript ? this.getComponentType() : undefined
-      )
-      /** @todo take care of typing in the case of JSDoc comments */
-      : declareFunction(
-        this.componentName,
-        this.getComponentParams(this.createTSProps),
-        this.getComponentBody(),
-        true
-      );
+    const { memo, declaration } = this.config;
+
+    if (memo) {
+      return this.getComponentMemoDeclaration();
+    }
+
+    return declaration === 'const'
+      ? this.getComponentConstDeclaration()
+      : this.getComponentFunctionDeclaration();
   }
 
   get createUseStylesBlock() {
@@ -117,9 +148,6 @@ export class ComponentComposer {
       this.config.styling === 'mui' ? 'makeStyles(theme => {})' : 'createUseStyles({})'
     );
   }
-
-
-
 
   getJSDocBlock() {
     return joinLines(
@@ -146,7 +174,7 @@ export class ComponentComposer {
 
       this.createUseStylesBlock && (this.getUseStylesBlock()! + '\n'),
 
-      this.createTSProps && (this.getPropInterfaceDeclaration() + '\n'),
+      this.TSProps && (this.getPropInterfaceDeclaration() + '\n'),
 
       props === 'jsdoc' && (this.getJSDocBlock() + '\n'),
 

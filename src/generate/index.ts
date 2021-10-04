@@ -99,6 +99,12 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         choices: ['const', 'function'],
         desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
         default: 'const'
+      },
+      'memo': {
+        type: 'boolean',
+        desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
+        default: false,
+
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
@@ -136,7 +142,7 @@ export const generateCommand: GenerateCommand = {
   handler: argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration'], argv),
+      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
