@@ -90,7 +90,7 @@ export class ComponentComposer {
         this.getComponentBody()
       ),
       this.config.exportType === 'named',
-      this.config.typescript ? this.getComponentType() : undefined
+      this.TSProps ? this.getComponentType() : undefined
     );
   }
 
@@ -117,7 +117,7 @@ export class ComponentComposer {
         )
       ),
       this.config.exportType === 'named',
-      this.config.typescript ? this.getComponentType() : undefined
+      this.TSProps ? this.getComponentType() : undefined
     );
   }
 
@@ -151,9 +151,9 @@ export class ComponentComposer {
 
   getJSDocBlock() {
     return joinLines(
-      createComment('jsdoc', `@typedef {${this.propInterfaceName}}`),
+      createComment('jsdoc', `@typedef ${this.propInterfaceName}`),
       emptyLine(),
-      createComment('jsdoc', `@type ${this.getComponentType()}`)
+      createComment('jsdoc', `@type {${this.getComponentType()}}`)
     );
   }
 
@@ -176,7 +176,7 @@ export class ComponentComposer {
 
       this.TSProps && (this.getPropInterfaceDeclaration() + '\n'),
 
-      props === 'jsdoc' && (this.getJSDocBlock() + '\n'),
+      props === 'jsdoc' && this.getJSDocBlock(),
 
       this.getComponentDeclaration(),
       emptyLine(),
