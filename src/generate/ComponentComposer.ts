@@ -37,7 +37,7 @@ export class ComponentComposer {
 
     return joinLines(
       emptyLine(),
-      callStyleHook && declareConst('classes', 'useStyles()') + '\n',
+      callStyleHook && (declareConst('classes', 'useStyles()') + '\n'),
       'return (',
       indent(this.getJSX()),
       ');'
@@ -66,8 +66,7 @@ export class ComponentComposer {
       styling === 'jss' && createImport('react-jss', 'createUseStyles', 'named'),
       styling === 'mui' && createImport('@material-ui/core', 'makeStyles', 'named'),
       props === 'prop-types' && createImport('prop-types', 'PropTypes', 'default'),
-      emptyLine(),
-      isStylesFileCreated && this.getStylesImport(),
+      isStylesFileCreated && (emptyLine() + this.getStylesImport()),
     );
   }
 
@@ -131,16 +130,16 @@ export class ComponentComposer {
       this.getImportBlock(),
       emptyLine(),
 
-      this.createUseStylesBlock && this.getUseStylesBlock()! + '\n',
+      this.createUseStylesBlock && (this.getUseStylesBlock()! + '\n'),
 
-      this.createTSProps && this.getPropInterfaceDeclaration() + '\n',
+      this.createTSProps && (this.getPropInterfaceDeclaration() + '\n'),
 
-      props === 'jsdoc' && this.getJSDocBlock() + '\n',
+      props === 'jsdoc' && (this.getJSDocBlock() + '\n'),
 
       this.getComponentDeclaration(),
       emptyLine(),
 
-      props === 'prop-types' && this.getPropTypesBlock() + '\n',
+      props === 'prop-types' && (this.getPropTypesBlock() + '\n'),
       exportType === 'default' && this.getDefaultExport()
     );
   }
