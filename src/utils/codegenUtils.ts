@@ -42,7 +42,7 @@ export function createImport(module: string, whatToImport?: string, importType?:
  * declateConst('classes', 'useStyles()', false) => const classes = useStyles();
  */
 export const declareConst = (name: string, value: string, exported: boolean = false, type: string = '') =>
-  `${cstr(exported, 'export ')}const ${name}${type} = ${value};`;
+  `${cstr(exported, 'export ')}const ${name}${cstr(!!type, `: ${type}`)} = ${value};`;
 
 /**
  * Create an interface declaration string.
