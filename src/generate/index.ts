@@ -94,6 +94,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         choices: ['named', 'default'], // If a valid use case arise, 'none' can be added as an option.
         desc: 'Whether to use a named export or a default export for the component.',
         default: 'named'
+      },
+      'declaration': {
+        choices: ['const', 'function'],
+        desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
+        default: 'const'
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
@@ -132,7 +137,7 @@ export const generateCommand: GenerateCommand = {
 
     const config: Config = {
       name: argv.name as string,
-      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination'], argv),
+      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration'], argv),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],

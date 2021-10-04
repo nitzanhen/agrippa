@@ -1,5 +1,5 @@
-import { cstr, emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareInterface } from '../utils/codegenUtils';
+import { emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
+import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface } from '../utils/codegenUtils';
 
 import { Config } from './Config';
 
@@ -22,8 +22,12 @@ export class ComponentComposer {
     return kebabCase(this.config.name);
   }
 
-  getComponentParams() {
-    return cstr(this.config.children, '{ children }');
+  getComponentParams(includeType: boolean = false) {
+    if (includeType) {
+      return `${this.config.children ? '{ children }' : 'props'}: ${this.propInterfaceName}`;
+    }
+
+    return this.config.children ? '{ children }' : '';
   }
 
   getJSX() {
@@ -70,16 +74,32 @@ export class ComponentComposer {
     );
   }
 
+  get createTSProps() {
+    const { typescript, props } = this.config;
+    return typescript && props === 'ts';
+  }
+  getPropInterfaceDeclaration() {
+    return declareInterface(this.propInterfaceName, true);
+  }
+
   getComponentDeclaration() {
-    return declareConst(
-      this.componentName,
-      createArrowFunction(
-        this.getComponentParams(),
-        this.getComponentBody()
-      ),
-      this.config.exportType === 'named',
-      this.config.typescript ? this.getComponentType() : undefined
-    );
+    return this.config.declaration === 'const'
+      ? declareConst(
+        this.componentName,
+        createArrowFunction(
+          this.getComponentParams(),
+          this.getComponentBody()
+        ),
+        this.config.exportType === 'named',
+        this.config.typescript ? this.getComponentType() : undefined
+      )
+      /** @todo take care of typing in the case of JSDoc comments */
+      : declareFunction(
+        this.componentName,
+        this.getComponentParams(this.createTSProps),
+        this.getComponentBody(),
+        true
+      );
   }
 
   get createUseStylesBlock() {
@@ -99,13 +119,7 @@ export class ComponentComposer {
   }
 
 
-  get createTSProps() {
-    const { typescript, props } = this.config;
-    return typescript && props === 'ts';
-  }
-  getPropInterfaceDeclaration() {
-    return declareInterface(this.propInterfaceName, true);
-  }
+
 
   getJSDocBlock() {
     return joinLines(

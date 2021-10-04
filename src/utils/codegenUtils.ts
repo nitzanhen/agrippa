@@ -58,15 +58,27 @@ export const declareConst = (name: string, value: string, exported: boolean = fa
 export const declareInterface = (name: string, exported: boolean = false) =>
   `${cstr(exported, 'export ')}interface ${name} {}`;
 
+  /**
+   * Create a function declaration string.
+   * Could also be used as a function value (for this use case `exported` must be false, though).
+   * 
+   * @param name the name to give the function
+   * @param params *a string* representing the function's parameters 
+   * @param body the function's body (as a string)
+   * @param exported whether to export the function or not
+   */
+export const declareFunction = (name: string, params: string = '', body: string = '', exported: boolean = false) =>
+  `${cstr(exported, 'export ')}function ${name}(${params}) {\n${indent(body)}\n};`;
+
+
 /**
  * Create an arrow function string
  * 
  * @param params *a string* representing the function's parameters 
  * @param body the function's body (as a string)
  */
-export const createArrowFunction = (params: string = '', body: string = '') => {
-  return `(${params}) => {\n${indent(body)}\n}`;
-};
+export const createArrowFunction = (params: string = '', body: string = '') =>
+  `(${params}) => {\n${indent(body)}\n}`;
 
 /**
  * Create a default export string
