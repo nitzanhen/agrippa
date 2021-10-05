@@ -139,7 +139,7 @@ export const generateCommand: GenerateCommand = {
   aliases: ['gen'],
   describe: 'Generate a component',
   builder,
-  handler: argv => {
+  handler: async argv => {
     const config: Config = {
       name: argv.name as string,
       ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
@@ -155,6 +155,7 @@ export const generateCommand: GenerateCommand = {
       'Generating component...',
       `config: ${format(config)}`
     );
-    run(config, logger);
+
+    await run(config, logger);
   }
 };

@@ -35,6 +35,7 @@
   "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
     "@types/node": "^16.4.7",
+    "@types/node-fetch": "^3.0.3",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
@@ -47,6 +48,7 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "axios": "^0.22.0",
     "chalk": "^4.1.2",
     "find-up": "^5.0.0",
     "json5": "^2.2.0",

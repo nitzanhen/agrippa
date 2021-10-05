@@ -6,9 +6,14 @@ import { hideBin } from 'yargs/helpers';
 import { generateCommand } from './generate';
 import { initCommand } from './init';
 import { logger } from './logger';
+import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/package';
+import { panic } from './utils/panic';
 
-logger.debug(`Agrippa v${pkgJson.version}`);
+logger.info(`Agrippa v${pkgJson.version}`);
+
+const updatePromise = lookForUpdates();
+
 
 // Init yargs
 yargs(hideBin(process.argv))
@@ -23,7 +28,10 @@ yargs(hideBin(process.argv))
   .recommendCommands()
   .strict()
   .demandCommand(1, 'Please specify a command')
-  .parse();
+  .parseAsync()
+  .then(() => updatePromise)
+  .then(updateCallback => updateCallback())
+  .catch(panic);
 
 
 
