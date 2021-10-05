@@ -28,6 +28,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
+        desc: 'Which prop declaration method to use',
         default: tsConfig ? 'ts' : 'none'
       },
       children: {
