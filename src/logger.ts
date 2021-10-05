@@ -1,4 +1,4 @@
-import { red, cyan, blue } from 'chalk';
+import { red, cyan, blue, yellow } from 'chalk';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
@@ -20,6 +20,11 @@ export class Logger {
   info(...messages: unknown[]) {
     const prefixedMesssages = messages.map(msg => `[${blue('INFO')}]: ${format(msg)}`).join('\n');
     console.info(prefixedMesssages);
+  }
+
+  warn(...warnings: unknown[]) {
+    const prefixedErrs = warnings.map(warning => `[${yellow('WARN')}]: ${format(warning)}`).join('\n');
+    console.log(prefixedErrs);
   }
 }
 

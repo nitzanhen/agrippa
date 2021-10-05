@@ -1,10 +1,9 @@
 import axios from 'axios';
-import { green } from 'chalk';
+import { green, magenta } from 'chalk';
 import { diff, gte, lte } from 'semver';
 
 import { logger } from '../logger';
 
-import { pkgJson } from './package';
 import { panic } from './panic';
 
 /**
@@ -18,15 +17,18 @@ export const lookForUpdates = async (): Promise<() => void> => {
   try {
     const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
     const latestVersion = res.data.version;
-    const currentVersion = pkgJson.version;
+    const currentVersion = '1.1.0';
 
     return () => {
       if (gte(latestVersion, currentVersion)) {
         const df = diff(latestVersion, currentVersion);
-        logger.info(`New ${df} version available: ${latestVersion}`); /** @todo logger.warn() */
+        logger.warn(
+          `New ${df} version available: ${latestVersion}!`,
+          `please update now by typing ${magenta('npm i -g agrrippa')} into the terminal`
+        );
       }
       else if (lte(latestVersion, currentVersion)) {
-        logger.info(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
+        logger.warn(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
       }
 
       //nothing to do.
