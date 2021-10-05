@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../src",
+    "noEmit": true
+  },
+  "include": [
+    "src",
+    "src/init/rc-template.json",
+    "."
+  ]
+}
