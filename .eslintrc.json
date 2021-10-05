@@ -19,7 +19,8 @@
   },
   "plugins": [
     "import",
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "unused-imports"
   ],
   "rules": {
     "linebreak-style": "off",
@@ -27,10 +28,15 @@
     "import/extensions": "off",
     "no-use-before-define": "off",
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": [
       "warn",
       {
-        "argsIgnorePattern": "(^_+)|(this)"
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "(^_)|(this)"
       }
     ],
     "@typescript-eslint/no-use-before-define": [
