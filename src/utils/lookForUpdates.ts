@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { green } from 'chalk';
+import { diff, gte, lte } from 'semver';
 
 import { logger } from '../logger';
 
 import { pkgJson } from './package';
 import { panic } from './panic';
-import { compareSemver } from './semver';
 
 /**
  * Checks if a newer version of Agrippa exists.
@@ -21,13 +21,11 @@ export const lookForUpdates = async (): Promise<() => void> => {
     const currentVersion = pkgJson.version;
 
     return () => {
-      const comp = compareSemver(currentVersion, latestVersion);
-
-      if (comp === 1) {
-        // currentVersion < latestVersion
-        logger.info(`New version available: ${latestVersion}`); /** @todo logger.warn() */
+      if (gte(latestVersion, currentVersion)) {
+        const df = diff(latestVersion, currentVersion);
+        logger.info(`New ${df} version available: ${latestVersion}`); /** @todo logger.warn() */
       }
-      else if (comp === -1) {
+      else if (lte(latestVersion, currentVersion)) {
         logger.info(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
       }
 

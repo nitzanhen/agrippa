@@ -36,6 +36,7 @@
   "devDependencies": {
     "@types/node": "^16.4.7",
     "@types/node-fetch": "^3.0.3",
+    "@types/semver": "^7.3.8",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
@@ -53,6 +54,7 @@
     "find-up": "^5.0.0",
     "json5": "^2.2.0",
     "rhax": "^2.0.0-alpha.1",
+    "semver": "^7.3.5",
     "yargs": "^17.0.1"
   },
   "keywords": [
