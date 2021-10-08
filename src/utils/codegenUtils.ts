@@ -78,7 +78,7 @@ export const declareFunction = (name: string, params: string = '', body: string 
  * @param body the function's body (as a string)
  */
 export const createArrowFunction = (params: string = '', body: string = '') =>
-  `(${params}) => {\n${indent(body)}\n}`;
+  `(${params}) => {${cstr(!!body, '\n' + indent(body) + '\n')}}`;
 
 /**
  * Create a default export string
