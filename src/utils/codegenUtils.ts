@@ -68,7 +68,7 @@ export const declareInterface = (name: string, exported: boolean = false) =>
    * @param exported whether to export the function or not
    */
 export const declareFunction = (name: string, params: string = '', body: string = '', exported: boolean = false) =>
-  `${cstr(exported, 'export ')}function ${name}(${params}) {\n${indent(body)}\n}`;
+  `${cstr(exported, 'export ')}function ${name}(${params}) {${body ? `\n${indent(body)}\n` : ' '}}`;
 
 
 /**
