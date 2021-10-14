@@ -1,4 +1,4 @@
-import { emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
+import { cstr, emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface } from '../utils/codegenUtils';
 
 import { Config } from './Config';
@@ -31,7 +31,7 @@ export class ComponentComposer {
   }
 
   getJSX() {
-    return this.config.children ? '<div>{children}</div>' : '<div />';
+    return `<div>${cstr(this.config.children, 'children')}</div>`;
   };
 
   getComponentBody() {
