@@ -14,8 +14,6 @@
     "prebuild": "rimraf bin",
     "build": "tsc -p tsconfig.build.json",
     "lint": "eslint src --ext .ts --color",
-    "prettier": "prettier --check \"src/*.ts\"",
-    "prettier:fix": "prettier --write \"src/*.ts\"",
     "prepublishOnly": "yarn lint && yarn build",
     "preversion": "yarn lint",
     "test": "jest"
