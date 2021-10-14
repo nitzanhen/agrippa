@@ -13,10 +13,9 @@
     "dev": "tsc -p tsconfig.build.json -w",
     "prebuild": "rimraf bin",
     "build": "tsc -p tsconfig.build.json",
+    "test": "jest",
     "lint": "eslint src --ext .ts --color",
-    "prepublishOnly": "yarn lint && yarn build",
-    "preversion": "yarn lint",
-    "test": "jest"
+    "preversion": "yarn lint && yarn build && yarn test"
   },
   "repository": {
     "type": "git",
