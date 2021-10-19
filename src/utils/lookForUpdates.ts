@@ -3,6 +3,7 @@ import { green, magenta } from 'chalk';
 import { diff, gte, lte } from 'semver';
 
 import { logger } from '../logger';
+import { pkgJson } from './package';
 
 import { panic } from './panic';
 
@@ -17,7 +18,7 @@ export const lookForUpdates = async (): Promise<() => void> => {
   try {
     const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
     const latestVersion = res.data.version;
-    const currentVersion = '1.1.0';
+    const currentVersion = pkgJson.version;
 
     return () => {
       if (gte(latestVersion, currentVersion)) {
