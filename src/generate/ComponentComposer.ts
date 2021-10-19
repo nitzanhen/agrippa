@@ -37,7 +37,7 @@ export class ComponentComposer {
   getComponentBody() {
     const { styling } = this.config;
 
-    const callStyleHook = styling === 'jss' || styling === 'scss';
+    const callStyleHook = styling === 'jss' || styling === 'mui';
 
     return joinLines(
       emptyLine(),
@@ -62,7 +62,7 @@ export class ComponentComposer {
 
   getImportBlock() {
     const { props, importReact, styling } = this.config;
-    const isStylesFileCreated = styling === 'css' || styling === 'mui';
+    const isStylesFileCreated = styling === 'css' || styling === 'scss';
 
     return joinLines(
       props === 'jsdoc' && '//@ts-check',
