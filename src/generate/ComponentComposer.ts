@@ -37,7 +37,7 @@ export class ComponentComposer {
   getComponentBody() {
     const { styling } = this.config;
 
-    const callStyleHook = styling === 'jss' || styling === 'mui';
+    const callStyleHook = styling === 'jss' || styling === 'scss';
 
     return joinLines(
       emptyLine(),
