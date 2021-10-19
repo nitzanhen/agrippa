@@ -105,7 +105,9 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
         default: false,
-
+      },
+      '$schema': {
+        type: 'string'
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
