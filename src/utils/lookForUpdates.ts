@@ -29,7 +29,7 @@ export const lookForUpdates = async (): Promise<() => void> => {
         );
       }
       else if (lte(latestVersion, currentVersion)) {
-        logger.warn(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
+        logger.debug(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
       }
 
       //nothing to do.
