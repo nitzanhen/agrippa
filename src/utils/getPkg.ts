@@ -1,6 +1,6 @@
 import fsp from 'fs/promises';
 
-import findUp from 'find-up'
+import findUp from 'find-up';
 import { parse as parseJson } from 'json5';
 
 import { logger } from '../logger';
@@ -11,7 +11,7 @@ import { panic } from './panic';
 type PkgData = { pkgPath: string, pkg: any } | { pkgPath: null, pkg: null };
 
 async function loadPkg(): Promise<PkgData> {
-  logger.debug('Looking for .package.json...')
+  logger.debug('Looking for .package.json...');
 
   const pkgPath = await findUp('package.json') ?? null;
   const pkg = pkgPath ? parseJson(
@@ -23,17 +23,17 @@ async function loadPkg(): Promise<PkgData> {
           `Error:', ${format(e)}`
         ))
     ) as string
-  ) : null
+  ) : null;
 
   if (pkg) {
     logger.debug(
       'package.json found!',
       `path: ${format(pkgPath)}`,
       `content: ${format(pkg)}`
-    )
+    );
   }
   else {
-    logger.debug('No .package.json found.')
+    logger.debug('No .package.json found.');
   }
 
 

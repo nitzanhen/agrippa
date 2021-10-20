@@ -1,7 +1,7 @@
 {
   "name": "agrippa",
   "description": "A React CLI for component generation",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "main": "bin/index.js",
   "author": {
     "name": "Nitzan Hen",
@@ -10,14 +10,12 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "tsc -w",
+    "dev": "tsc -p tsconfig.build.json -w",
     "prebuild": "rimraf bin",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
+    "test": "jest",
     "lint": "eslint src --ext .ts --color",
-    "prettier": "prettier --check \"src/*.ts\"",
-    "prettier:fix": "prettier --write \"src/*.ts\"",
-    "prepublishOnly": "yarn lint && yarn build",
-    "preversion": "yarn lint"
+    "preversion": "yarn lint && yarn build && yarn test"
   },
   "repository": {
     "type": "git",
@@ -34,7 +32,10 @@
   },
   "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "@types/node": "^16.4.7",
+    "@types/node-fetch": "^3.0.3",
+    "@types/semver": "^7.3.8",
     "@types/yargs": "^17.0.2",
     "@typescript-eslint/eslint-plugin": "^4.28.5",
     "@typescript-eslint/parser": "^4.28.5",
@@ -42,14 +43,20 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-unused-imports": "^1.1.5",
+    "jest": "^27.2.4",
     "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.5",
+    "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "axios": "^0.22.0",
     "chalk": "^4.1.2",
     "find-up": "^5.0.0",
     "json5": "^2.2.0",
     "rhax": "^2.0.0-alpha.1",
+    "semver": "^7.3.5",
     "yargs": "^17.0.1"
   },
   "keywords": [

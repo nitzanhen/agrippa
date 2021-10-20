@@ -14,7 +14,7 @@ export async function runPostCommand(variablePaths: VariablePaths, config: Confi
   const { postCommand: rawPostCommand } = config;
 
   if (rawPostCommand) {
-    logger.debug(`Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`)
+    logger.debug(`Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`);
 
     const postCommand = substitutePaths(rawPostCommand, variablePaths);
 
@@ -29,6 +29,6 @@ export async function runPostCommand(variablePaths: VariablePaths, config: Confi
     }
   }
   else {
-    logger.debug('No post command provided.')
+    logger.debug('No post command provided.');
   }
 }

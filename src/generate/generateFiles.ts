@@ -40,23 +40,23 @@ export async function generateFiles(config: Config, componentCode: string, logge
 
   try {
     //Create the needed folder
-    await fsp.mkdir(dirPath, { recursive: true })
+    await fsp.mkdir(dirPath, { recursive: true });
   }
   catch (e) {
     if (e.code === 'EEXIST') {
-      logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`)
+      logger.debug(`Directory ${gray(dirPath)} already exists. Writing into it...`);
     }
     else {
       throw e;
     }
   }
 
-  const componentFileExtension = typescript ? 'tsx' : 'jsx'
+  const componentFileExtension = typescript ? 'tsx' : 'jsx';
   const componentFileName = `${flat ? pcName : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(dirPath, componentFileName);
 
   const stylesFileName = `${kcName}${cstr(stylingModule, '.module')}.${styling}`;
-  const stylesFilePath = path.join(dirPath, stylesFileName)
+  const stylesFilePath = path.join(dirPath, stylesFileName);
 
   const createStylesFile = styling === 'css' || styling === 'scss';
 
@@ -64,7 +64,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
     panic(
       'Existing files would be overwritten by this command, leading to data loss.',
       `To allow overwriting, pass ${green('--overwrite')} to the command.`
-    )
+    );
   }
 
   await fsp.writeFile(componentFilePath, componentCode);
@@ -75,7 +75,7 @@ export async function generateFiles(config: Config, componentCode: string, logge
   };
 
   if (createStylesFile) {
-    await fsp.open(stylesFilePath, 'w')
+    await fsp.open(stylesFilePath, 'w');
     generatedPaths.styles = stylesFilePath;
   }
 

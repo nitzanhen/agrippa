@@ -13,20 +13,20 @@ export async function generateRC() {
   const destinationPath = path.join(process.cwd(), '.agripparc.json');
 
   try {
-    await fsp.copyFile(templatePath, destinationPath, constants.COPYFILE_EXCL)
+    await fsp.copyFile(templatePath, destinationPath, constants.COPYFILE_EXCL);
     logger.info(
       `Creation successful. Path: ${green(destinationPath)}`,
-    )
+    );
   }
   catch (e) {
     if (e.code === 'EEXIST') {
-      panic('An .agripparc.json config file already exists in the current working directory.')
+      panic('An .agripparc.json config file already exists in the current working directory.');
     }
     else {
       panic(
         'An unexpected error occured while creating agripparc.json',
         `Error: ${format(e)}`
-      )
+      );
     }
   }
 }

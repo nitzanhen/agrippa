@@ -17,7 +17,7 @@ import { run } from './run';
 const builder = async (yargs: yargs.Argv<CommonConfig>) => {
   const [{ tsConfig }, { rc, rcPath }, { pkgPath }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
-  )
+  );
 
   return yargs.positional('name', {
     desc: 'The name of the component to be generated',
@@ -28,6 +28,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
+        desc: 'Which prop declaration method to use',
         default: tsConfig ? 'ts' : 'none'
       },
       children: {
@@ -88,23 +89,42 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         desc: 'If true, allows components to be generated outside the resolved baseDir.',
         default: false
+      },
+      'export-type': {
+        alias: 'exportType',
+        choices: ['named', 'default'], // If a valid use case arise, 'none' can be added as an option.
+        desc: 'Whether to use a named export or a default export for the component.',
+        default: 'named'
+      },
+      'declaration': {
+        choices: ['const', 'function'],
+        desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
+        default: 'const'
+      },
+      'memo': {
+        type: 'boolean',
+        desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
+        default: false,
+      },
+      '$schema': {
+        type: 'string'
       }
     } as const)
     .coerce('base-dir', (baseDir: string | undefined) => {
-      logger.debug(`baseDir option, before resolving, is ${baseDir}`)
+      logger.debug(`baseDir option, before resolving, is ${baseDir}`);
 
       if (!baseDir) {
         logger.debug('No baseDir specified, resolving relative to cwd');
-        return process.cwd()
+        return process.cwd();
       }
       else if (rcPath) {
-        const resolvedPath = path.resolve(path.dirname(rcPath), baseDir)
+        const resolvedPath = path.resolve(path.dirname(rcPath), baseDir);
         logger.debug(`Path resolved relative to .agripparc.json: ${resolvedPath}`);
         return resolvedPath;
       }
       else if (pkgPath) {
-        const resolvedPath = path.resolve(path.dirname(pkgPath), baseDir)
-        logger.debug(`Path resolved relative to package.json: ${resolvedPath}`)
+        const resolvedPath = path.resolve(path.dirname(pkgPath), baseDir);
+        logger.debug(`Path resolved relative to package.json: ${resolvedPath}`);
         return resolvedPath;
       }
 
@@ -112,7 +132,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         'An error occured while resolving baseDir.',
       );
     });
-}
+};
 
 
 type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
@@ -122,22 +142,23 @@ export const generateCommand: GenerateCommand = {
   aliases: ['gen'],
   describe: 'Generate a component',
   builder,
-  handler: async (argv) => {
-
+  handler: async argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination'], argv),
+      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
       baseDir: argv['base-dir']!,
-      allowOutsideBase: argv['allow-outside-base']
-    }
+      allowOutsideBase: argv['allow-outside-base'],
+      exportType: argv['export-type']
+    };
 
     logger.debug(
       'Generating component...',
       `config: ${format(config)}`
-    )
-    run(config, logger);
+    );
+
+    await run(config, logger);
   }
-}
+};

@@ -12,7 +12,7 @@ import { panic } from './panic';
 type RCData = { rcPath: string, rc: Partial<Config> } | { rcPath: null, rc: null };
 
 async function loadRC(): Promise<RCData> {
-  logger.debug('Looking for .agripparc.json...')
+  logger.debug('Looking for .agripparc.json...');
 
   const rcPath = await findUp('.agripparc.json') ?? null;
   const rc = rcPath ? parseJson(
@@ -24,17 +24,17 @@ async function loadRC(): Promise<RCData> {
           `Error:', ${format(e)}`
         ))
     ) as string
-  ) : null
+  ) : null;
 
   if (rc) {
     logger.debug(
       '.agripparc.json found!',
       `path: ${format(rcPath)}`,
       `config: ${format(rc)}`
-    )
+    );
   }
   else {
-    logger.debug('No .agripparc.json found.')
+    logger.debug('No .agripparc.json found.');
   }
 
   return { rcPath, rc };
@@ -44,7 +44,7 @@ let rcData: RCData | undefined = undefined;
 
 export async function getRC() {
   if (!rcData) {
-    rcData = await loadRC()
+    rcData = await loadRC();
   }
   return rcData;
 }

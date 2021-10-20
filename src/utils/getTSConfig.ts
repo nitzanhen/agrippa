@@ -12,7 +12,7 @@ import { format } from './strings';
 type TSConfigData = { tsConfigPath: string, tsConfig: any } | { tsConfigPath: null, tsConfig: null };
 
 async function loadTSConfig(): Promise<TSConfigData> {
-  logger.debug('Looking for tsconfig.json...')
+  logger.debug('Looking for tsconfig.json...');
 
   const tsConfigPath = await findUp('./tsconfig.json') ?? null;
 
@@ -25,23 +25,23 @@ async function loadTSConfig(): Promise<TSConfigData> {
           `Error:', ${format(e)}`
         ))
     ) as string
-  ) : null
+  ) : null;
 
   if (tsConfig) {
     logger.debug(
       'tsconfig.json found!',
       `path: ${format(tsConfigPath)}`,
       `config: ${format(tsConfig)}`
-    )
+    );
   }
   else {
-    logger.debug('No tsconfig.js found.')
+    logger.debug('No tsconfig.js found.');
   }
 
   return {
     tsConfigPath,
     tsConfig
-  }
+  };
 }
 
 let tsConfigData: TSConfigData | undefined = undefined;
