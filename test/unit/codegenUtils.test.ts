@@ -6,11 +6,14 @@ describe('utils/codegenUtils.ts', () => {
     expect(createImport('styles.css')).toBe("import 'styles.css';");
     expect(createImport('module')).toBe("import 'module';");
 
-    expect(createImport('react', 'React', 'default')).toBe("import React from 'react';");
-    expect(createImport('jsonwebtoken', 'jwt', 'default')).toBe("import jwt from 'jsonwebtoken';");
+    expect(createImport('react', 'default', 'React')).toBe("import React from 'react';");
+    expect(createImport('jsonwebtoken', 'default', 'jwt')).toBe("import jwt from 'jsonwebtoken';");
 
-    expect(createImport('react', 'useMemo', 'named')).toBe("import { useMemo } from 'react';");
-    expect(createImport('@material-ui/core', 'makeStyles', 'named')).toBe("import { makeStyles } from '@material-ui/core';");
+    expect(createImport('react', 'named', 'useMemo')).toBe("import { useMemo } from 'react';");
+    expect(createImport('@material-ui/core', 'named', 'makeStyles')).toBe("import { makeStyles } from '@material-ui/core';");
+
+    expect(createImport('react', 'composite', ['React', 'memo', 'useEffect'])).toBe("import React, { memo, useEffect } from 'react';");
+    expect(createImport('m1', 'composite', ['defaultImport', 'ni1', 'ni2'])).toBe("import defaultImport, { ni1, ni2 } from 'm1';");
   });
 
   test('declareConst', () => {

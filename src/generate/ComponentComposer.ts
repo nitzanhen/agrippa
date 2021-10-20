@@ -56,20 +56,31 @@ export class ComponentComposer {
     const { stylingModule, styling } = this.config;
 
     return stylingModule
-      ? createImport(`./${this.styleFileName}.module.${styling}`, 'classes', 'default')
+      ? createImport(`./${this.styleFileName}.module.${styling}`, 'default', 'classes')
       : createImport(`./${this.styleFileName}.${styling}`);
   }
 
+  getReactImport() {
+    if (this.config.memo) {
+      return this.config.importReact
+        ? createImport('react', 'composite', ['React', 'memo'])
+        : createImport('react', 'named', 'memo')
+    }
+
+    return createImport('react', 'default', 'React');
+  }
+
   getImportBlock() {
-    const { props, importReact, styling } = this.config;
+    const { props, importReact, styling, memo } = this.config;
     const isStylesFileCreated = styling === 'css' || styling === 'scss';
+    const createReactImport = importReact || memo;
 
     return joinLines(
       props === 'jsdoc' && '//@ts-check',
-      importReact && createImport('react', 'React', 'default'),
-      styling === 'jss' && createImport('react-jss', 'createUseStyles', 'named'),
-      styling === 'mui' && createImport('@material-ui/core', 'makeStyles', 'named'),
-      props === 'prop-types' && createImport('prop-types', 'PropTypes', 'default'),
+      createReactImport && this.getReactImport(),
+      styling === 'jss' && createImport('react-jss', 'named', 'createUseStyles'),
+      styling === 'mui' && createImport('@material-ui/core', 'named', 'makeStyles'),
+      props === 'prop-types' && createImport('prop-types', 'default', 'PropTypes'),
       isStylesFileCreated && (emptyLine() + this.getStylesImport()),
     );
   }
