@@ -64,7 +64,7 @@ export class ComponentComposer {
     if (this.config.memo) {
       return this.config.importReact
         ? createImport('react', 'composite', ['React', 'memo'])
-        : createImport('react', 'named', 'memo')
+        : createImport('react', 'named', 'memo');
     }
 
     return createImport('react', 'default', 'React');

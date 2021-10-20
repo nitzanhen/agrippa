@@ -3,6 +3,7 @@ import { green, magenta } from 'chalk';
 import { diff, gte, lte } from 'semver';
 
 import { logger } from '../logger';
+
 import { pkgJson } from './package';
 
 import { panic } from './panic';
