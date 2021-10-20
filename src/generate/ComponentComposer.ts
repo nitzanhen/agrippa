@@ -112,7 +112,8 @@ export class ComponentComposer {
       createMemo(
         declareFunction(
           this.componentName,
-          this.getComponentParams()
+          this.getComponentParams(),
+          this.getComponentBody()
         )
       ),
       this.config.exportType === 'named',
