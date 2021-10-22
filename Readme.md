@@ -16,6 +16,8 @@ v1.2.0 also features a rewriting of the generation logic, in a way that would ma
 To update to the new version, call `npm i -g agrippa`.
 Read more about our release on [the release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.2.0).
 
+Also, [we have a Twitter account now](https://twitter.com/agrippa_cli)! It will post news, tips and more, check it out!
+
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
 🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
