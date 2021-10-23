@@ -11,7 +11,7 @@ It can easily generate templates for React components of different compositions 
 
 **Agrippa v1.2.0 is now officially out!! 🎉🎉** <br/>
 It introduces a few new generation options, such as the option to generate a component as a function declaration (`function Component(props) ...`) and the option to export the component as a `default` export.
-v1.2.0 also features a rewriting of the generation logic, in a way that would make generation easier to maintain, scale and test. Some strandardized testing has also already been implemented.
+v1.2.0 also features a rewriting of the generation logic, in a way that would make generation easier to maintain, scale and test. Some standardized testing has also already been implemented.
 
 To update to the new version, call `npm i -g agrippa`.
 Read more about our release on [the release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.2.0).
