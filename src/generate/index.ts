@@ -131,6 +131,12 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       panic(
         'An error occured while resolving baseDir.',
       );
+    })
+    .check(argv => {
+      const { props, typescript } = argv;
+      if (props === 'ts' && !typescript) {
+        throw new Error("`props` field was set to 'ts', but `typescript` is false.");
+      }
     });
 };
 
