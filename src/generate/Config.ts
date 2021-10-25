@@ -13,7 +13,7 @@ export interface Config {
   importReact: boolean;
   debug: boolean;
   overwrite: boolean;
-  baseDir: string;
+  baseDir?: string;
   destination: string;
   postCommand?: string;
   allowOutsideBase: boolean;

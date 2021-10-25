@@ -115,7 +115,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
 
       if (!baseDir) {
         logger.debug('No baseDir specified, resolving relative to cwd');
-        return process.cwd();
+        return undefined;
       }
       else if (rcPath) {
         const resolvedPath = path.resolve(path.dirname(rcPath), baseDir);
@@ -155,7 +155,7 @@ export const generateCommand: GenerateCommand = {
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
-      baseDir: argv['base-dir']!,
+      baseDir: argv['base-dir'],
       allowOutsideBase: argv['allow-outside-base'],
       exportType: argv['export-type']
     };

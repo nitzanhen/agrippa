@@ -28,8 +28,8 @@ export async function generateFiles(config: Config, componentCode: string, logge
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
-  const dirPath = path.resolve(baseDir, destination, flat ? '.' : pcName);
-  if (!isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
+  const dirPath = path.resolve(baseDir ?? process.cwd(), destination, flat ? '.' : pcName);
+  if (baseDir && !isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
     panic(
       `The resolved directory for the component "${pcName}" falls outside the base directory:`,
       `Base directory: ${gray(baseDir)}`,
