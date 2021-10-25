@@ -180,7 +180,7 @@ export class ComponentComposer {
     const { props, exportType } = this.config;
 
     return joinLines(
-      this.getImportBlock(),
+      this.getImportBlock() || false,
       emptyLine(),
 
       this.createUseStylesBlock && (this.getUseStylesBlock()! + '\n'),
