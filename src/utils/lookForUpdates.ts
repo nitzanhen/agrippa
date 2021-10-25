@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { green, magenta } from 'chalk';
-import { diff, gte, lte } from 'semver';
+import { diff, gt, lt } from 'semver';
 
 import { logger } from '../logger';
 
@@ -22,14 +22,14 @@ export const lookForUpdates = async (): Promise<() => void> => {
     const currentVersion = pkgJson.version;
 
     return () => {
-      if (gte(latestVersion, currentVersion)) {
+      if (gt(latestVersion, currentVersion)) {
         const df = diff(latestVersion, currentVersion);
         logger.warn(
           `New ${df} version available: ${latestVersion}!`,
           `please update now by typing ${magenta('npm i -g agrrippa')} into the terminal`
         );
       }
-      else if (lte(latestVersion, currentVersion)) {
+      else if (lt(latestVersion, currentVersion)) {
         logger.debug(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
       }
 
