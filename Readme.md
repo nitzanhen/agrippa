@@ -18,6 +18,8 @@ Read more about our release on [the release page](https://github.com/NitzanHen/a
 
 Also, [we have a Twitter account now](https://twitter.com/agrippa_cli)! It will post news, tips and more, check it out!
 
+(v1.2.1 fixes two bugs - the "newer version available" message was always displayed, and an unnecessary empty line was sometimes generated in the imports block.)
+
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
 🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
