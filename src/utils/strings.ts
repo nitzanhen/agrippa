@@ -26,7 +26,7 @@ export const isLowerCase = (str: string) => str === str.toLocaleLowerCase();
 /**
  * Turns the first letter of the string to upper case (and leaves the rest unchanged).
  */
-export const capitalize = (str: string) => str[0].toLocaleUpperCase() + str.slice(1);
+export const capitalize = (str: string) => str && (str[0].toLocaleUpperCase() + str.slice(1));
 
 export const isKebabCase = (str: string) => str.split('-').every(isLowerCase);
 
