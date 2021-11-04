@@ -137,6 +137,8 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       if (props === 'ts' && !typescript) {
         throw new Error("`props` field was set to 'ts', but `typescript` is false.");
       }
+
+      return true;
     });
 };
 
