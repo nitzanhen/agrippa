@@ -66,8 +66,7 @@
           "parent",
           "sibling",
           "index"
-        ],
-        "newlines-between": "always-and-inside-groups"
+        ]
       }
     ],
     "import/no-cycle": "off",

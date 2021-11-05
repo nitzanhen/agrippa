@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "e2e-runtime",
+    "target": "esnext"
+  },
+  "include": [
+    "test/e2e/core"
+  ]
+}

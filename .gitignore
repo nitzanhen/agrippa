@@ -144,3 +144,4 @@ dist
 build
 
 bin
+e2e-runtime
