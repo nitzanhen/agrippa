@@ -18,5 +18,6 @@ export interface Config {
   postCommand?: string;
   allowOutsideBase: boolean;
   exportType: 'named' | 'default'
-  declaration: 'const' | 'function'
+  declaration: 'const' | 'function';
+  separateIndex: boolean;
 }

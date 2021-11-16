@@ -3,6 +3,8 @@ import path from 'path';
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { pick } from 'rhax';
 
+import { green } from 'chalk';
+
 import { logger } from '../logger';
 import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
@@ -106,6 +108,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
         default: false,
       },
+      'separate-index': {
+        alias: 'separateIndex',
+        type: 'boolean',
+        default: false
+      },
       '$schema': {
         type: 'string'
       }
@@ -135,7 +142,16 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .check(argv => {
       const { props, typescript } = argv;
       if (props === 'ts' && !typescript) {
-        throw new Error("`props` field was set to 'ts', but `typescript` is false.");
+        throw new Error(`${green('props')} field was set to 'ts', but ${green('typescript')} is false.`);
+      }
+
+      return true;
+    })
+    .check(argv => {
+      const seperateIndex = argv['separate-index'];
+      const { flat } = argv;
+      if (seperateIndex && flat) {
+        logger.warn(`The ${green('separateIndex')} and ${green('flat')} flags were both set. Ignoring ${green('separateIndex')}...`);
       }
 
       return true;
@@ -159,7 +175,8 @@ export const generateCommand: GenerateCommand = {
       postCommand: argv['post-command'],
       baseDir: argv['base-dir'],
       allowOutsideBase: argv['allow-outside-base'],
-      exportType: argv['export-type']
+      exportType: argv['export-type'],
+      separateIndex: argv['separate-index']
     };
 
     logger.debug(

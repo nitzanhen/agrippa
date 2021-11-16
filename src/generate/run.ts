@@ -21,7 +21,8 @@ export async function run(config: Config, logger: Logger) {
     const variablePaths = {
       '<componentPath>': generatedPaths.component,
       '<stylesPath>': generatedPaths.styles,
-      '<dirPath>': generatedPaths.dir
+      '<dirPath>': generatedPaths.dir,
+      '<indexPath>': generatedPaths.index
     };
     await runPostCommand(variablePaths, config, logger);
   }
