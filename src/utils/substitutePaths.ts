@@ -15,6 +15,12 @@ export interface VariablePaths {
    * note that if the `--flat` flag is passed, the directory may contain additional files.
    */
   '<dirPath>': string;
+  /**
+   * An index file for the created directory.
+   * Note that this will either contain only an export for the created component (if `--separate-index` is `true`),
+   * or the component code itself.
+   */
+  '<indexPath>'?: string;
 }
 
 /**
