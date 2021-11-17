@@ -18,18 +18,20 @@ import { cstr, indent } from './strings';
  * createImport('./styles.css') => import './styles.css';
  */
 export function createImport(module: string): string;
-export function createImport(module: string, importType: 'named' | 'default', whatToImport: string): string;
+export function createImport(module: string, importType: 'default', whatToImport: string): string;
+export function createImport(module: string, importType: 'named', namedImports: string | string[]): string;
 export function createImport(module: string, importType: 'composite', whatToImport: [defaultImport: string, ...namedImports: string[]]): string;
 export function createImport(module: string, importType?: 'named' | 'default' | 'composite', whatToImport?: string | string[]): string {
   if (!whatToImport) {
     return `import '${module}';`;
   }
-  else if(Array.isArray(whatToImport)) {
-    const [defaultImport, ...namedImports] = whatToImport;
+  else if(importType === 'composite') {
+    const [defaultImport, ...namedImports] = whatToImport as string[];
     return `import ${defaultImport}, { ${namedImports.join(', ')} } from '${module}';`;
   }
   else if (importType === 'named') {
-    return `import { ${whatToImport} } from '${module}';`;
+    const namedImports = Array.isArray(whatToImport) ? whatToImport.join(', ') : whatToImport;
+    return `import { ${namedImports} } from '${module}';`;
   }
 
   return `import ${whatToImport} from '${module}';`;
