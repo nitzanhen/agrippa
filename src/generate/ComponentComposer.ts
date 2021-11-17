@@ -34,7 +34,7 @@ export class ComponentComposer {
     const { reactNative } = this.config;
     const comp = !reactNative ? 'div' : 'View';
 
-    return `<${comp}>${cstr(this.config.children, 'children')}</${comp}>`;
+    return `<${comp}>${cstr(this.config.children, '{children}')}</${comp}>`;
   };
 
   getComponentBody() {
