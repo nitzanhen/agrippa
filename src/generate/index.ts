@@ -17,9 +17,11 @@ import { Config } from './Config';
 import { run } from './run';
 
 const builder = async (yargs: yargs.Argv<CommonConfig>) => {
-  const [{ tsConfig }, { rc, rcPath }, { pkgPath }] = await Promise.all(
+  const [{ tsConfig }, { rc, rcPath }, { pkgPath, pkg }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
   );
+
+  const isReactNative = 'react-native' in pkg.dependencies;
 
   return yargs.positional('name', {
     desc: 'The name of the component to be generated',
@@ -50,9 +52,9 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         default: false
       },
       styling: {
-        choices: ['none', 'css', 'scss', 'jss', 'mui'],
+        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native'],
         desc: 'Which styling to generate',
-        default: 'none'
+        default: isReactNative ? 'react-native' : 'none'
       },
       'styling-module': {
         alias: 'stylingModule',
@@ -113,6 +115,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         default: false
       },
+      'react-native': {
+        alias: 'reactNative',
+        type: 'boolean',
+        default: isReactNative
+      },
       '$schema': {
         type: 'string'
       }
@@ -148,10 +155,17 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       return true;
     })
     .check(argv => {
-      const seperateIndex = argv['separate-index'];
-      const { flat } = argv;
-      if (seperateIndex && flat) {
+      if (argv['separate-index'] && argv.flat) {
         logger.warn(`The ${green('separateIndex')} and ${green('flat')} flags were both set. Ignoring ${green('separateIndex')}...`);
+      }
+
+      return true;
+    })
+    .check(argv => {
+      const { styling } = argv;
+
+      if (argv['react-native'] && !['none', 'react-native'].includes(styling)) {
+        throw new Error(`${green('react-native')} mode only supports 'none' or 'react-native' for styling; received ${styling} instead.`);
       }
 
       return true;
@@ -176,7 +190,8 @@ export const generateCommand: GenerateCommand = {
       baseDir: argv['base-dir'],
       allowOutsideBase: argv['allow-outside-base'],
       exportType: argv['export-type'],
-      separateIndex: argv['separate-index']
+      separateIndex: argv['separate-index'],
+      reactNative: argv['react-native']
     };
 
     logger.debug(

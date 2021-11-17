@@ -31,7 +31,10 @@ export class ComponentComposer {
   }
 
   getJSX() {
-    return `<div>${cstr(this.config.children, 'children')}</div>`;
+    const { reactNative } = this.config;
+    const comp = !reactNative ? 'div' : 'View';
+
+    return `<${comp}>${cstr(this.config.children, 'children')}</${comp}>`;
   };
 
   getComponentBody() {
@@ -71,7 +74,7 @@ export class ComponentComposer {
   }
 
   getImportBlock() {
-    const { props, importReact, styling, memo } = this.config;
+    const { props, importReact, styling, memo, reactNative } = this.config;
     const isStylesFileCreated = styling === 'css' || styling === 'scss';
     const createReactImport = importReact || memo;
 
@@ -82,6 +85,11 @@ export class ComponentComposer {
       styling === 'mui' && createImport('@material-ui/core', 'named', 'makeStyles'),
       props === 'prop-types' && createImport('prop-types', 'default', 'PropTypes'),
       isStylesFileCreated && (emptyLine() + this.getStylesImport()),
+      reactNative && createImport(
+        'react-native',
+        'named',
+        styling === 'react-native' ? ['View', 'StyleSheet'] : ['View']
+      )
     );
   }
 
@@ -144,20 +152,19 @@ export class ComponentComposer {
       : this.getComponentFunctionDeclaration();
   }
 
-  get createUseStylesBlock() {
+  get createCSSInJSBlock() {
     const { styling } = this.config;
-    return styling === 'jss' || styling === 'mui';
+    return ['jss', 'mui', 'react-native'].includes(styling);
   }
 
-  getUseStylesBlock() {
-    if (!this.createUseStylesBlock) {
-      return null;
-    }
+  getCSSInJSBlock() {
+    const { styling } = this.config;
 
-    return declareConst(
-      'useStyles',
-      this.config.styling === 'mui' ? 'makeStyles(theme => {})' : 'createUseStyles({})'
-    );
+    return ({
+      'mui': declareConst('useStyles', 'makeStyles(theme => {})'),
+      'jss': declareConst('useStyles', 'createUseStyles({})'),
+      'react-native': declareConst('styles', 'StyleSheet.create({})')
+    } as Record<string, string>)[styling] ?? null;
   }
 
   getJSDocBlock() {
@@ -177,13 +184,16 @@ export class ComponentComposer {
   }
 
   compose() {
-    const { props, exportType } = this.config;
+    const { props, exportType, styling } = this.config;
+
+    const stylesAboveComponent = this.createCSSInJSBlock && styling !== 'react-native';
+    const stylesBelowComponent = this.createCSSInJSBlock && styling === 'react-native';
 
     return joinLines(
       this.getImportBlock() || false,
       emptyLine(),
 
-      this.createUseStylesBlock && (this.getUseStylesBlock()! + '\n'),
+      stylesAboveComponent && (this.getCSSInJSBlock()! + '\n'),
 
       this.TSProps && (this.getPropInterfaceDeclaration() + '\n'),
 
@@ -191,6 +201,8 @@ export class ComponentComposer {
 
       this.getComponentDeclaration(),
       emptyLine(),
+
+      stylesBelowComponent && (this.getCSSInJSBlock()! + '\n'),
 
       props === 'prop-types' && (this.getPropTypesBlock() + '\n'),
       exportType === 'default' && this.getDefaultExport()

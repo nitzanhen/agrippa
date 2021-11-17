@@ -7,7 +7,7 @@ export interface Config {
   children: boolean;
   typescript: boolean;
   flat: boolean;
-  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui';
+  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui' | 'react-native';
   stylingModule: boolean;
   memo: boolean;
   importReact: boolean;
@@ -20,4 +20,5 @@ export interface Config {
   exportType: 'named' | 'default'
   declaration: 'const' | 'function';
   separateIndex: boolean;
+  reactNative: boolean;
 }
