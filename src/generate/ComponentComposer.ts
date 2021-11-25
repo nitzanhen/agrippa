@@ -55,7 +55,7 @@ export class ComponentComposer {
     return `React.${this.config.children ? 'FC' : 'VFC'}<${this.propInterfaceName}>`;
   }
 
-  getStylesImport() {
+  getStyleFileImport() {
     const { stylingModule, styling } = this.config;
 
     return stylingModule
@@ -84,7 +84,7 @@ export class ComponentComposer {
       styling === 'jss' && createImport('react-jss', 'named', 'createUseStyles'),
       styling === 'mui' && createImport('@material-ui/core', 'named', 'makeStyles'),
       props === 'prop-types' && createImport('prop-types', 'default', 'PropTypes'),
-      isStylesFileCreated && (emptyLine() + this.getStylesImport()),
+      isStylesFileCreated && (emptyLine() + this.getStyleFileImport()),
       reactNative && createImport(
         'react-native',
         'named',
