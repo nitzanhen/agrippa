@@ -14,7 +14,6 @@
     "prebuild": "rimraf bin",
     "build": "tsc",
     "test": "jest",
-    "test:e2e": "(rimraf e2e-runtime) && (tsc -p tsconfig.e2e.json) && (node e2e-runtime/test/e2e/core/main.js)",
     "lint": "eslint src --ext .ts --color",
     "preversion": "yarn lint && yarn build && yarn test"
   },
