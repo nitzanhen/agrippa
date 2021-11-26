@@ -10,9 +10,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "tsc -p tsconfig.build.json -w",
+    "dev": "tsc -w",
     "prebuild": "rimraf bin",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "tsc",
     "test": "jest",
     "test:e2e": "(rimraf e2e-runtime) && (tsc -p tsconfig.e2e.json) && (node e2e-runtime/test/e2e/core/main.js)",
     "lint": "eslint src --ext .ts --color",
