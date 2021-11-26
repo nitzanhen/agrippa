@@ -1,7 +1,0 @@
-{
-  "compilerOptions": {
-    "outDir": "build",
-    "target": "esnext",
-    "rootDir": "test/integration"
-  }
-}
