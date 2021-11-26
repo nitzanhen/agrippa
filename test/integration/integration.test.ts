@@ -130,16 +130,16 @@ describe.each(caseNames)('Case %#: %s', (name) => {
     expect(solution.files.length).toBe(output.files.length);
   });
 
-  test.each(solution.dirs)('Dir $path generated', ({ path }) => {
+  solution.dirs.length && test.each(solution.dirs)('Dir $path generated', ({ path }) => {
     const outputDirPaths = new Set(output.dirs.map(d => d.path));
 
     expect(outputDirPaths.has(path)).toBe(true);
   });
 
-  test.each(solution.files)('File $path generated', ({ path, data }) => {
+  solution.files.length && test.each(solution.files)('File $path generated', ({ path, data }) => {
     const outputFile = output.files.find(f => f.path === path);
 
     expect(outputFile).toBeTruthy();
-    expect(outputFile?.data).toEqual(data);
+    expect(outputFile?.data).toBe(data);
   });
 });
