@@ -123,17 +123,16 @@ describe.each(caseNames)('Case %#: %s', (name) => {
   // Compare solution & output
 
   test('Solution and output have the same number of directories', () => {
-    expect(solution.dirs.length).toBe(output.dirs.length);
+    expect(output.dirs.length).toBe(solution.dirs.length);
   });
 
   test('Solution and output have the same number of files', () => {
-    expect(solution.files.length).toBe(output.files.length);
+    expect(output.files.length).toBe(solution.files.length);
   });
 
+  const outputDirPaths = output.dirs.map(d => d.path);
   solution.dirs.length && test.each(solution.dirs)('Dir $path generated', ({ path }) => {
-    const outputDirPaths = new Set(output.dirs.map(d => d.path));
-
-    expect(outputDirPaths.has(path)).toBe(true);
+    expect(outputDirPaths).toContain(path);
   });
 
   solution.files.length && test.each(solution.files)('File $path generated', ({ path, data }) => {
