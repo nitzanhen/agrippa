@@ -13,22 +13,28 @@ const safeTry = <T>(fn: () => T): { ok: true, data: T } | { ok: false, err: Erro
   }
 };
 
+/** Simple representation of a file found in an integration test case */
 interface TestFile {
   path: string;
   data: string;
 }
+/** Simple representation of a directory found in an integration test case */
 interface TestDir {
   path: string;
 }
+
+/** The files and dirs returned from scanDir(). */
 interface ScannedDir {
   files: TestFile[];
   dirs: TestDir[];
 }
+/** The data returned from runCase(); contains the scanned solution and output directories, ready to be compared. */
 interface TestCase {
   name: string;
   solution: ScannedDir;
   output: ScannedDir;
 }
+/** The structure of a testinfo.json file for a given test case. */
 interface TestInfo {
   name: string;
   description?: string;
@@ -37,6 +43,10 @@ interface TestInfo {
 
 const isTestFile = (ent: TestFile | TestDir): ent is TestFile => 'data' in ent;
 
+/** 
+ * Scans the directory resolved from the given path.
+ * Returns all files and folders in that directory, as a `ScannedDir` object.
+ */
 const scanDir = (dirPath: string): ScannedDir =>
   fgSync('**/*', {
     cwd: dirPath,
@@ -58,6 +68,13 @@ const scanDir = (dirPath: string): ScannedDir =>
       { files: [] as TestFile[], dirs: [] as TestDir[] }
     );
 
+/** 
+ * Runs a test case, specified by its name. 
+ * This entails:
+ * - Scanning the solution dir & testinfo.json
+ * - Creating an output directory and running the Agrippa command there
+ * - Scanning the output directory after the command finished
+ */
 const runCase = (caseName: string): TestCase => {
   const casePath = join(__dirname, caseName);
 
