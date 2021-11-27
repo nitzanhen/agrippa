@@ -28,8 +28,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
-        desc: 'Which prop declaration method to use',
-        default: tsConfig ? 'ts' : 'none'
+        desc: 'Which prop declaration method to use'
       },
       children: {
         type: 'boolean',
@@ -153,7 +152,8 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      props: argv.props ?? (argv.typescript ? 'ts' : 'none'),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
