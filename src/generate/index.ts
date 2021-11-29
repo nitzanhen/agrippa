@@ -21,7 +21,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     [getTSConfig(), getRC(), getPkg()]
   );
 
-  const isReactNative = 'react-native' in pkg.dependencies;
+  const isReactNative = (pkg?.dependencies) && 'react-native' in pkg.dependencies;
 
   return yargs.positional('name', {
     desc: 'The name of the component to be generated',
