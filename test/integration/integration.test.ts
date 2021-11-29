@@ -102,6 +102,7 @@ const runCase = (caseName: string): TestCase => {
   }
   catch(e) {
     if(e.code !== 'EEXIST') {
+      console.warn(`output directory for case ${caseName} already exists.`);
       throw e;
     }
   }
