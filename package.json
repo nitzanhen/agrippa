@@ -13,8 +13,9 @@
     "dev": "tsc -w",
     "prebuild": "rimraf bin",
     "build": "tsc",
-    "test": "jest",
+    "test:unit": "jest",
     "test:integration": "(docker build -f ./Dockerfile.integration -t agrippa_test .) && (docker run -it --name agrippa_test --rm agrippa_test)",
+    "test": "yarn test:unit && yarn test:integration",
     "lint": "eslint src --ext .ts --color",
     "preversion": "yarn lint && yarn build && yarn test"
   },
