@@ -7,18 +7,21 @@ It can easily generate templates for React components of different compositions 
 
 [docs](https://github.com/NitzanHen/agrippa/wiki)
 
-## v1.2.0
+## v1.3.0
 
-**Agrippa v1.2.0 is now officially out!! 🎉🎉** <br/>
-It introduces a few new generation options, such as the option to generate a component as a function declaration (`function Component(props) ...`) and the option to export the component as a `default` export.
-v1.2.0 also features a rewriting of the generation logic, in a way that would make generation easier to maintain, scale and test. Some standardized testing has also already been implemented.
+**Agrippa v1.3.0 has entered the RC stage** <br/>
+The new version introduces some cool new features:
+- A new feature, `separate-index`, improves the generated component structure by separating the component code from the index file! 
+  *It improves DX by a lot, and is the new default*. We truly recommend it, but you can opt out by setting `separate-index` to `false`.
+- Added support for `react-native`! React-native projects are detected automatically, but you can also use the `react-native` flag.
+- We implemented *integration tests*, as well as some unit tests. Now, we can ship new versions with more confidence!
+- As always, numerous bugs were fixed.
 
-To update to the new version, call `npm i -g agrippa`.
-Read more about our release on [the release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.2.0).
+The complete release notes will be released together with the official release of v1.3.0, which is expected to be in a couple of days.
+
+To update to the new version, call `npm i -g agrippa@next`. If you have any feedback, reach out!
 
 Also, [we have a Twitter account now](https://twitter.com/agrippa_cli)! It will post news, tips and more, check it out!
-
-(v1.2.1 fixes two bugs - the "newer version available" message was always displayed, and an unnecessary empty line was sometimes generated in the imports block.)
 
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
