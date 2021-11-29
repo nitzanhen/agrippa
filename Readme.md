@@ -13,7 +13,7 @@ It can easily generate templates for React components of different compositions 
 The new version introduces some cool new features:
 - A new feature, `separate-index`, improves the generated component structure by separating the component code from the index file! 
   *It improves DX by a lot, and is the new default*. We truly recommend it, but you can opt out by setting `separate-index` to `false`.
-- Added support for `react-native` was implemented! React-native projects are detected automatically, but you can also use the `react-native` flag.
+- Added support for `react-native`! React-native projects are detected automatically, but you can also use the `react-native` flag.
 - We implemented *integration tests*, as well as some unit tests. Now, we can ship new versions with more confidence!
 - As always, numerous bugs were fixed.
 
