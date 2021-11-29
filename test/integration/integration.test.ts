@@ -1,7 +1,6 @@
 import { join } from 'path';
-import { mkdir } from 'fs/promises';
 import { execSync } from 'child_process';
-import { readdirSync, readFileSync } from 'fs';
+import { mkdirSync, readdirSync, readFileSync } from 'fs';
 import { sync as fgSync } from 'fast-glob';
 
 const safeTry = <T>(fn: () => T): { ok: true, data: T } | { ok: false, err: Error } => {
@@ -98,7 +97,14 @@ const runCase = (caseName: string): TestCase => {
   // Run Agrippa & scan output files
 
   const outputDir = join(casePath, 'output');
-  mkdir(outputDir);
+  try {
+    mkdirSync(outputDir);
+  }
+  catch(e) {
+    if(e.code !== 'EEXIST') {
+      throw e;
+    }
+  }
 
   const logs = safeTry(() => execSync(command, { cwd: outputDir }));
   if (logs.ok) {
