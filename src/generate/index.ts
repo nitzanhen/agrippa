@@ -112,7 +112,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       'separate-index': {
         alias: 'separateIndex',
         type: 'boolean',
-        default: false
+        default: true
       },
       'react-native': {
         alias: 'reactNative',
