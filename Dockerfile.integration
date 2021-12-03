@@ -18,8 +18,8 @@ WORKDIR /usr/src/app
 
 # Install agrippa as a package
 
-COPY --from=base /usr/src/app/agrippa-v1.3.0-rc.1.tgz ./agrippa.tgz
-RUN npm i -g agrippa.tgz
+COPY --from=base /usr/src/app/agrippa-*.tgz ./
+RUN find . -name "agrippa*.tgz" | xargs -I % sh -c "npm i -g %"
 
 # Setup and run tests
 
