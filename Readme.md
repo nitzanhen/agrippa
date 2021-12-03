@@ -9,19 +9,18 @@ It can easily generate templates for React components of different compositions 
 
 ## v1.3.0
 
-**Agrippa v1.3.0 has entered the RC stage** <br/>
+**Agrippa v1.3.0 is officially out!** <br/>
 The new version introduces some cool new features:
 - A new feature, `separate-index`, improves the generated component structure by separating the component code from the index file! 
-  *It improves DX by a lot, and is the new default*. We truly recommend it, but you can opt out by setting `separate-index` to `false`.
+  *It improves DX by a lot, and is the new default*. We truly recommend it, but you can opt out by setting `separateIndex` to `false`.
 - Added support for `react-native`! React-native projects are detected automatically, but you can also use the `react-native` flag.
 - We implemented *integration tests*, as well as some unit tests. Now, we can ship new versions with more confidence!
 - As always, numerous bugs were fixed.
 
-The complete release notes will be released together with the official release of v1.3.0, which is expected to be in a couple of days.
+You can find the complete release notes in the [v1.3.0 release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.3.0).
 
-To update to the new version, call `npm i -g agrippa@next`. If you have any feedback, reach out!
-
-Also, [we have a Twitter account now](https://twitter.com/agrippa_cli)! It will post news, tips and more, check it out!
+To update to the new version, call `npm i -g agrippa`. 
+As always, please reach out with any bugs or feedback!
 
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
