@@ -1,0 +1,5 @@
+{
+  "name": "button-defexp-ts",
+  "description": "A simple Button test with default exports & TS",
+  "command": "agrippa gen def-exp-button --export-type default --ts"
+}
