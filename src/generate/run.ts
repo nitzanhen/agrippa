@@ -11,11 +11,12 @@ export async function run(config: Config, logger: Logger) {
   const componentCode = generateReactCode(config);
   try {
     const generatedPaths = await generateFiles(config, componentCode, logger);
-
+    
+    const uniquePaths = [...new Set(Object.values(generatedPaths))];
     logger.info(
       'Generation successful.',
       'Generated files:',
-      ...Object.values(generatedPaths)
+      ...uniquePaths
     );
 
     const variablePaths = {
