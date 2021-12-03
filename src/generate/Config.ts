@@ -19,6 +19,7 @@ export interface Config {
   allowOutsideBase: boolean;
   exportType: 'named' | 'default'
   declaration: 'const' | 'function';
+  tsPropsDeclaration?: 'interface' | 'type';
   separateIndex: boolean;
   reactNative: boolean;
 }

@@ -1,6 +1,7 @@
 import { cstr, emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface } from '../utils/codegenUtils';
+import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../utils/codegenUtils';
 
+import { logger } from '../logger';
 import { Config } from './Config';
 
 /**
@@ -98,7 +99,16 @@ export class ComponentComposer {
     return typescript && props === 'ts';
   }
   getPropInterfaceDeclaration() {
-    return declareInterface(this.propInterfaceName, true);
+    const { typescript } = this.config;
+    if (!typescript) {
+      logger.debug('getPropInterfaceDeclaration() called but typescript is false. This shouldn\'t be possible.');
+    }
+
+    const propsDeclaration = this.config.tsPropsDeclaration as 'type' | 'interface';
+
+    return propsDeclaration === 'type'
+      ? declareType(this.propInterfaceName, true)
+      : declareInterface(this.propInterfaceName, true);
   }
 
   getComponentConstDeclaration() {

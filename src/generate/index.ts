@@ -104,6 +104,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
         default: 'const'
       },
+      'ts-props-declaration': {
+        alias: 'tsPropsDeclaration',
+        choices: ['interface', 'type'],
+        desc: 'For TS components, whether to declare props as an interface or a type',
+      },
       'memo': {
         type: 'boolean',
         desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
@@ -168,6 +173,12 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       }
 
       return true;
+    })
+    .check(argv => {
+      if (argv['ts-props-declaration'] && !argv.typescript) {
+        throw new Error(`the ${green('typescript')} flag must be 'true' for ${green('ts-props-declaration')}`);
+      }
+      return true;
     });
 };
 
@@ -184,6 +195,7 @@ export const generateCommand: GenerateCommand = {
       name: argv.name as string,
       ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
       props: argv.props ?? (argv.typescript ? 'ts' : 'none'),
+      tsPropsDeclaration: argv['ts-props-declaration'] ?? (argv.typescript ? 'interface' : undefined),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
