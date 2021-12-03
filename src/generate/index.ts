@@ -155,7 +155,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     })
     .check(argv => {
       if (argv['separate-index'] && argv.flat) {
-        logger.warn(`The ${green('separateIndex')} and ${green('flat')} flags were both set. Ignoring ${green('separateIndex')}...`);
+        logger.debug(`The ${green('separateIndex')} and ${green('flat')} flags were both set. Ignoring ${green('separateIndex')}...`);
       }
 
       return true;
