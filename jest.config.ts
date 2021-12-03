@@ -5,7 +5,7 @@ module.exports = {
   moduleDirectories: ['node_modules', 'src'],
   modulePathIgnorePatterns: ['<rootDir>/bin/'],
   roots: [
-    'test'
+    'test/unit'
   ],
   globals: {
     'ts-jest': {

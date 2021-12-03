@@ -1,0 +1,5 @@
+{
+  "name": "button-typescript",
+  "description": "A simple Typescript test",
+  "command": "agrippa gen ts-button --ts"
+}

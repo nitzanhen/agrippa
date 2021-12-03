@@ -4,7 +4,7 @@ import fsp from 'fs/promises';
 
 import { gray, green } from 'chalk';
 
-import { cstr, kebabCase, pascalCase } from '../utils/strings';
+import { cstr, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 
@@ -16,20 +16,21 @@ import { Config } from './Config';
 interface GeneratedPaths {
   component: string;
   styles?: string;
-  dir: string
+  dir: string;
+  index?: string;
 }
 
 /**
  * Generates the files required by the CLI - in a folder or flat.
  */
 export async function generateFiles(config: Config, componentCode: string, logger: Logger): Promise<GeneratedPaths> {
-  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination, allowOutsideBase } = config;
+  const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination, allowOutsideBase, separateIndex, exportType } = config;
 
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
-  const dirPath = path.resolve(baseDir, destination, flat ? '.' : pcName);
-  if (!isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
+  const dirPath = path.resolve(baseDir ?? process.cwd(), destination, flat ? '.' : pcName);
+  if (baseDir && !isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
     panic(
       `The resolved directory for the component "${pcName}" falls outside the base directory:`,
       `Base directory: ${gray(baseDir)}`,
@@ -52,15 +53,22 @@ export async function generateFiles(config: Config, componentCode: string, logge
   }
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx';
-  const componentFileName = `${flat ? pcName : 'index'}.${componentFileExtension}`;
+  const componentFileName = `${(flat || separateIndex) ? pcName : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(dirPath, componentFileName);
 
   const stylesFileName = `${kcName}${cstr(stylingModule, '.module')}.${styling}`;
   const stylesFilePath = path.join(dirPath, stylesFileName);
 
+  const indexFileName = `index.${typescript ? 'ts' : 'js'}`;
+  const indexFilePath = path.join(dirPath, indexFileName);
+
   const createStylesFile = styling === 'css' || styling === 'scss';
 
-  if (!overwrite && ((fs.existsSync(componentFilePath) || (createStylesFile && fs.existsSync(stylesFilePath))))) {
+  if (!overwrite && ((
+    fs.existsSync(componentFilePath)
+    || (createStylesFile && fs.existsSync(stylesFilePath))
+    || (separateIndex && fs.existsSync(indexFilePath))
+  ))) {
     panic(
       'Existing files would be overwritten by this command, leading to data loss.',
       `To allow overwriting, pass ${green('--overwrite')} to the command.`
@@ -77,6 +85,20 @@ export async function generateFiles(config: Config, componentCode: string, logge
   if (createStylesFile) {
     await fsp.open(stylesFilePath, 'w');
     generatedPaths.styles = stylesFilePath;
+  }
+
+  if (separateIndex && !flat) {
+    const indexFileCode = joinLines(
+      `export * from './${pcName}';`,
+      exportType === 'default' && `export { default } from './${pcName}';`
+    );
+
+    await fsp.writeFile(indexFilePath, indexFileCode);
+    generatedPaths.index = indexFilePath;
+  }
+  else if(!separateIndex && !flat) {
+    // The generated component *is* the index file.
+    generatedPaths.index = componentFilePath;
   }
 
   return generatedPaths;

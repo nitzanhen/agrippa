@@ -1,0 +1,5 @@
+{
+  "name": "button-flat",
+  "description": "A simple Button test with --flat",
+  "command": "agrippa gen flat-button --flat"
+}

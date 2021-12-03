@@ -11,17 +11,19 @@ export async function run(config: Config, logger: Logger) {
   const componentCode = generateReactCode(config);
   try {
     const generatedPaths = await generateFiles(config, componentCode, logger);
-
+    
+    const uniquePaths = [...new Set(Object.values(generatedPaths))];
     logger.info(
       'Generation successful.',
       'Generated files:',
-      ...Object.values(generatedPaths)
+      ...uniquePaths
     );
 
     const variablePaths = {
       '<componentPath>': generatedPaths.component,
       '<stylesPath>': generatedPaths.styles,
-      '<dirPath>': generatedPaths.dir
+      '<dirPath>': generatedPaths.dir,
+      '<indexPath>': generatedPaths.index
     };
     await runPostCommand(variablePaths, config, logger);
   }

@@ -7,16 +7,18 @@ export interface Config {
   children: boolean;
   typescript: boolean;
   flat: boolean;
-  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui';
+  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui' | 'react-native';
   stylingModule: boolean;
   memo: boolean;
   importReact: boolean;
   debug: boolean;
   overwrite: boolean;
-  baseDir: string;
+  baseDir?: string;
   destination: string;
   postCommand?: string;
   allowOutsideBase: boolean;
   exportType: 'named' | 'default'
-  declaration: 'const' | 'function'
+  declaration: 'const' | 'function';
+  separateIndex: boolean;
+  reactNative: boolean;
 }

@@ -3,6 +3,8 @@ import path from 'path';
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { pick } from 'rhax';
 
+import { green } from 'chalk';
+
 import { logger } from '../logger';
 import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
@@ -15,9 +17,11 @@ import { Config } from './Config';
 import { run } from './run';
 
 const builder = async (yargs: yargs.Argv<CommonConfig>) => {
-  const [{ tsConfig }, { rc, rcPath }, { pkgPath }] = await Promise.all(
+  const [{ tsConfig }, { rc, rcPath }, { pkgPath, pkg }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
   );
+
+  const isReactNative = (pkg?.dependencies) && 'react-native' in pkg.dependencies;
 
   return yargs.positional('name', {
     desc: 'The name of the component to be generated',
@@ -28,8 +32,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
     .options({
       props: {
         choices: ['ts', 'jsdoc', 'prop-types', 'none'],
-        desc: 'Which prop declaration method to use',
-        default: tsConfig ? 'ts' : 'none'
+        desc: 'Which prop declaration method to use'
       },
       children: {
         type: 'boolean',
@@ -48,9 +51,9 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         default: false
       },
       styling: {
-        choices: ['none', 'css', 'scss', 'jss', 'mui'],
+        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native'],
         desc: 'Which styling to generate',
-        default: 'none'
+        default: isReactNative ? 'react-native' : 'none'
       },
       'styling-module': {
         alias: 'stylingModule',
@@ -106,6 +109,16 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
         default: false,
       },
+      'separate-index': {
+        alias: 'separateIndex',
+        type: 'boolean',
+        default: true
+      },
+      'react-native': {
+        alias: 'reactNative',
+        type: 'boolean',
+        default: isReactNative
+      },
       '$schema': {
         type: 'string'
       }
@@ -115,7 +128,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
 
       if (!baseDir) {
         logger.debug('No baseDir specified, resolving relative to cwd');
-        return process.cwd();
+        return undefined;
       }
       else if (rcPath) {
         const resolvedPath = path.resolve(path.dirname(rcPath), baseDir);
@@ -131,6 +144,30 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       panic(
         'An error occured while resolving baseDir.',
       );
+    })
+    .check(argv => {
+      const { props, typescript } = argv;
+      if (props === 'ts' && !typescript) {
+        throw new Error(`${green('props')} field was set to 'ts', but ${green('typescript')} is false.`);
+      }
+
+      return true;
+    })
+    .check(argv => {
+      if (argv['separate-index'] && argv.flat) {
+        logger.debug(`The ${green('separateIndex')} and ${green('flat')} flags were both set. Ignoring ${green('separateIndex')}...`);
+      }
+
+      return true;
+    })
+    .check(argv => {
+      const { styling } = argv;
+
+      if (argv['react-native'] && !['none', 'react-native'].includes(styling)) {
+        throw new Error(`${green('react-native')} mode only supports 'none' or 'react-native' for styling; received ${styling} instead.`);
+      }
+
+      return true;
     });
 };
 
@@ -145,13 +182,16 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['props', 'children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      props: argv.props ?? (argv.typescript ? 'ts' : 'none'),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
-      baseDir: argv['base-dir']!,
+      baseDir: argv['base-dir'],
       allowOutsideBase: argv['allow-outside-base'],
-      exportType: argv['export-type']
+      exportType: argv['export-type'],
+      separateIndex: argv['separate-index'],
+      reactNative: argv['react-native']
     };
 
     logger.debug(
