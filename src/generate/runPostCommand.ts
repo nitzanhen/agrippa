@@ -4,19 +4,19 @@ import { promisify } from 'util';
 import { gray } from 'chalk';
 
 import { Logger } from '../logger';
-import { substitutePaths, VariablePaths } from '../utils/substitutePaths';
+import { substituteVars, PostCommandVariables } from '../utils/substitutePaths';
 
 import { Config } from './Config';
 
 const exec = promisify(execCB);
 
-export async function runPostCommand(variablePaths: VariablePaths, config: Config, logger: Logger) {
+export async function runPostCommand(postCommandVars: PostCommandVariables, config: Config, logger: Logger) {
   const { postCommand: rawPostCommand } = config;
 
   if (rawPostCommand) {
     logger.debug(`Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`);
 
-    const postCommand = substitutePaths(rawPostCommand, variablePaths);
+    const postCommand = substituteVars(rawPostCommand, postCommandVars);
 
     logger.info(`Running post command: ${gray(postCommand)}`);
     const { stdout, stderr } = await exec(postCommand);

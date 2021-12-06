@@ -1,3 +1,4 @@
+import { kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { panic } from '../utils/panic';
 
@@ -11,7 +12,7 @@ export async function run(config: Config, logger: Logger) {
   const componentCode = generateReactCode(config);
   try {
     const generatedPaths = await generateFiles(config, componentCode, logger);
-    
+
     const uniquePaths = [...new Set(Object.values(generatedPaths))];
     logger.info(
       'Generation successful.',
@@ -19,13 +20,15 @@ export async function run(config: Config, logger: Logger) {
       ...uniquePaths
     );
 
-    const variablePaths = {
+    const postCommandVars = {
       '<componentPath>': generatedPaths.component,
       '<stylesPath>': generatedPaths.styles,
       '<dirPath>': generatedPaths.dir,
-      '<indexPath>': generatedPaths.index
+      '<indexPath>': generatedPaths.index,
+      '<ComponentName>': pascalCase(config.name),
+      '<component-name>': kebabCase(config.name)
     };
-    await runPostCommand(variablePaths, config, logger);
+    await runPostCommand(postCommandVars, config, logger);
   }
   catch (e) {
     panic(e);
