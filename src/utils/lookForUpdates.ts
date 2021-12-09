@@ -26,7 +26,7 @@ export const lookForUpdates = async (): Promise<() => void> => {
         const df = diff(latestVersion, currentVersion);
         logger.warn(
           `New ${df} version available: ${latestVersion}!`,
-          `please update now by typing ${magenta('npm i -g agrrippa')} into the terminal`
+          `please update now by typing ${magenta('npm i -g agrippa')} into the terminal`
         );
       }
       else if (lt(latestVersion, currentVersion)) {
