@@ -1,22 +1,16 @@
 import { formatWithOptions } from 'util';
 
 /** Simple util to render a string conditionally, or *null* if it is not met */
-export const ostr = (condition: boolean, string: string) => {
-  return condition ? string : null;
-};
+export const ostr = (condition: boolean, string: string) => condition ? string : null;
 
 /** Simple util to render a string conditionally, or *an empty string* if it is not met */
-export const cstr = (condition: boolean, string: string) => {
-  return condition ? string : '';
-};
+export const cstr = (condition: boolean, string: string) => condition ? string : '';
 
 /** Indents every line of the given string by `num` tabs.  */
-export const indent = (str: string, num: number = 1, token = '  ') => {
-  return str
+export const indent = (str: string, num = 1, token = '  ') => str
     .split('\n')
     .map(line => token.repeat(num) + line)
     .join('\n');
-};
 
 /** Joins `lines` with \n, filtering any non-string value. Technically also supports code blocks that are more than one line.  */
 export const joinLines = (...lines: (string | false)[]): string => lines.filter(line => typeof line === 'string').join('\n');

@@ -48,7 +48,7 @@ export function createImport(module: string, importType?: 'named' | 'default' | 
  * @example
  * declateConst('classes', 'useStyles()', false) => const classes = useStyles();
  */
-export const declareConst = (name: string, value: string, exported: boolean = false, type: string = '') =>
+export const declareConst = (name: string, value: string, exported = false, type = '') =>
   `${cstr(exported, 'export ')}const ${name}${cstr(!!type, `: ${type}`)} = ${value};`;
 
 /**
@@ -62,7 +62,7 @@ export const declareConst = (name: string, value: string, exported: boolean = fa
  * @example
  * declareInterface('ButtonProps', true) => export interface ButtonProps {}
  */
-export const declareInterface = (name: string, exported: boolean = false) =>
+export const declareInterface = (name: string, exported = false) =>
   `${cstr(exported, 'export ')}interface ${name} {}`;
 
 /**
@@ -75,7 +75,7 @@ export const declareInterface = (name: string, exported: boolean = false) =>
  * @example
  * declareType('ButtonProps', true) => export type ButtonProps = {};
  */
-export const declareType = (name: string, exported: boolean = false) =>
+export const declareType = (name: string, exported = false) =>
   `${cstr(exported, 'export ')}type ${name} = {};`;
 
 /**
@@ -87,7 +87,7 @@ export const declareType = (name: string, exported: boolean = false) =>
  * @param body the function's body (as a string)
  * @param exported whether to export the function or not
  */
-export const declareFunction = (name: string, params: string = '', body: string = '', exported: boolean = false) =>
+export const declareFunction = (name: string, params = '', body = '', exported = false) =>
   `${cstr(exported, 'export ')}function ${name}(${params}) {${body ? `\n${indent(body)}\n` : ' '}}`;
 
 
@@ -97,7 +97,7 @@ export const declareFunction = (name: string, params: string = '', body: string 
  * @param params *a string* representing the function's parameters 
  * @param body the function's body (as a string)
  */
-export const createArrowFunction = (params: string = '', body: string = '') =>
+export const createArrowFunction = (params = '', body = '') =>
   `(${params}) => {${cstr(!!body, '\n' + indent(body) + '\n')}}`;
 
 /**

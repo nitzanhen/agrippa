@@ -2,8 +2,7 @@ import { format, indent, joinLines } from './utils/strings';
 import { styles } from './utils/styles';
 
 export class Logger {
-  constructor() { }
-
+  
   info(...messages: unknown[]) {
     const prefixedMesssages = messages
       .map(msg => format(msg))
