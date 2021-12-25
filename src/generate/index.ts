@@ -1,7 +1,6 @@
 import path from 'path';
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { green } from 'chalk';
-
 import { logger } from '../logger';
 import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
@@ -10,7 +9,6 @@ import { getPkg } from '../utils/getPkg';
 import { format } from '../utils/strings';
 import { pick } from '../utils/objects';
 import { panic } from '../utils/panic';
-
 import { Config } from './Config';
 import { run } from './run';
 

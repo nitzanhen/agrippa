@@ -1,6 +1,5 @@
 import { cstr, emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../utils/codegenUtils';
-
 import { logger } from '../logger';
 import { Config } from './Config';
 

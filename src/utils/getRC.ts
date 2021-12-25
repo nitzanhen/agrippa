@@ -1,11 +1,8 @@
 import fsp from 'fs/promises';
-
 import findUp from 'find-up';
 import { parse as parseJson } from 'json5';
-
 import { logger } from '../logger';
 import { Config } from '../generate/Config';
-
 import { format } from './strings';
 import { panic } from './panic';
 

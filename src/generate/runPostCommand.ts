@@ -1,11 +1,8 @@
 import { exec as execCB } from 'child_process';
 import { promisify } from 'util';
-
 import { gray } from 'chalk';
-
 import { Logger } from '../logger';
 import { substituteVars, PostCommandVariables } from '../utils/substitutePaths';
-
 import { Config } from './Config';
 
 const exec = promisify(execCB);

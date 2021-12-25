@@ -1,7 +1,6 @@
 import { kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { panic } from '../utils/panic';
-
 import { Config } from './Config';
 import { generateFiles } from './generateFiles';
 import { runPostCommand } from './runPostCommand';

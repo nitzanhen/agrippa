@@ -2,7 +2,6 @@ import path, { basename } from 'path';
 import fs from 'fs';
 import fsp from 'fs/promises';
 import { bold, italic } from 'chalk';
-
 import { cstr, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';

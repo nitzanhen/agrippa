@@ -1,9 +1,7 @@
 import { constants } from 'fs';
 import fsp from 'fs/promises';
 import path from 'path';
-
 import { green } from 'chalk';
-
 import { logger } from '../logger';
 import { format } from '../utils/strings';
 import { panic } from '../utils/panic';

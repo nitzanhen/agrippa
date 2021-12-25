@@ -1,7 +1,5 @@
 import { italic } from 'chalk';
-
 import { logger } from '../logger';
-
 import { pkgJson } from './package';
 
 /**

@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { italic, magenta } from 'chalk';
 import { diff, gt, lt } from 'semver';
-
 import { logger } from '../logger';
-
 import { pkgJson } from './package';
-
 import { panic } from './panic';
 
 /**
