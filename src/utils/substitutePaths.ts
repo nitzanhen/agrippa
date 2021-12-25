@@ -1,4 +1,4 @@
-import { reduce } from 'rhax';
+import { reduce } from './objects';
 
 /** 
  * Variables to fill in for the post-command (e.g. <componentPath> for the path at which a component is generated).
@@ -37,9 +37,8 @@ export interface PostCommandVariables {
  * @param vars the paths to substitute for each alias.
  */
 export const substituteVars = (str: string, vars: PostCommandVariables): string =>
-  /** @todo fix Rhax such that any casting is not needed. */
-  reduce<any, any>(
+  reduce(
+    vars,
     (acc, path, alias) => path ? acc.replace(new RegExp(alias as string, 'g'), path) : acc,
     str,
-    vars
   );
