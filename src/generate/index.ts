@@ -16,7 +16,7 @@ import { panic } from '../utils/panic';
 import { Config } from './Config';
 import { run } from './run';
 
-const builder = async (yargs: yargs.Argv<CommonConfig>) => {
+const builder = async (yargs: yargs.Argv) => {
   const [{ tsConfig }, { rc, rcPath }, { pkgPath, pkg }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
   );
@@ -124,10 +124,15 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         default: isReactNative
       },
+      'debug': {
+        type: 'boolean',
+        default: false
+      },
       '$schema': {
         type: 'string'
       }
     } as const)
+    .middleware(({ debug }) => void (debug && (process.env.DEBUG = 'true')), true)
     .coerce('base-dir', (baseDir: string | undefined) => {
       logger.debug(`baseDir option, before resolving, is ${baseDir}`);
 
@@ -183,7 +188,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
 };
 
 
-type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
+type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<{}, R> : never
 
 export const generateCommand: GenerateCommand = {
   command: 'generate <name> [options]',

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { green, magenta } from 'chalk';
+import { italic, magenta } from 'chalk';
 import { diff, gt, lt } from 'semver';
 
 import { logger } from '../logger';
@@ -30,7 +30,7 @@ export const lookForUpdates = async (): Promise<() => void> => {
         );
       }
       else if (lt(latestVersion, currentVersion)) {
-        logger.debug(`Current version, ${green(currentVersion)}, is greater than the latest stable release, ${green(latestVersion)}`);
+        logger.debug(`Current version, ${italic(currentVersion)}, is greater than the latest stable release, ${italic(latestVersion)}`);
       }
 
       //nothing to do.

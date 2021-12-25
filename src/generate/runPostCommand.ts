@@ -14,21 +14,34 @@ export async function runPostCommand(postCommandVars: PostCommandVariables, conf
   const { postCommand: rawPostCommand } = config;
 
   if (rawPostCommand) {
-    logger.debug(`Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`);
-
     const postCommand = substituteVars(rawPostCommand, postCommandVars);
 
-    logger.info(`Running post command: ${gray(postCommand)}`);
     const { stdout, stderr } = await exec(postCommand);
 
-    if (stdout) {
-      logger.info(stdout);
-    }
     if (stderr) {
-      logger.error(stderr);
+      logger.stage(
+        'error',
+        'Post command failed',
+        `Raw post command (before filling in actual paths): ${gray(rawPostCommand)}`,
+        gray(`command: ${postCommand}`),
+        stderr
+      );
     }
+    else {
+      logger.stage(
+        'success',
+        'Post command successfully executed',
+        gray(`Raw post command (before substituting vars): ${rawPostCommand}`),
+        gray(`command: ${postCommand}`),
+        gray(stdout ? `output: ${stdout}` : 'No output received from command.')
+      );
+    }
+
   }
   else {
-    logger.debug('No post command provided.');
+    logger.stage(
+      'NA',
+      'No Post command to run'
+    );
   }
 }
