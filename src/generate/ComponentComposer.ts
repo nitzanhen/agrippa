@@ -22,7 +22,7 @@ export class ComponentComposer {
     return kebabCase(this.config.name);
   }
 
-  getComponentParams(includeType = false) {
+  getComponentParams(includeType: boolean = false) {
     if (includeType) {
       return `${this.config.children ? '{ children }' : 'props'}: ${this.propInterfaceName}`;
     }
@@ -35,7 +35,7 @@ export class ComponentComposer {
     const comp = !reactNative ? 'div' : 'View';
 
     return `<${comp}>${cstr(this.config.children, '{children}')}</${comp}>`;
-  }
+  };
 
   getComponentBody() {
     const { styling } = this.config;

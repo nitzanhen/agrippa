@@ -4,6 +4,7 @@
     "lib": [
       "ESNext"
     ],
+    "rootDir": "src",
     "outDir": "bin",
     "module": "commonjs",
     "strict": true,
@@ -16,6 +17,6 @@
   },
   "include": [
     "src",
-    "package.json"
+    "src/init/rc-template.json",
   ]
 }
