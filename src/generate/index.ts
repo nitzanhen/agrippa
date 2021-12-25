@@ -1,8 +1,5 @@
 import path from 'path';
-
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
-import { pick } from 'rhax';
-
 import { green } from 'chalk';
 
 import { logger } from '../logger';
@@ -11,6 +8,7 @@ import { getTSConfig } from '../utils/getTSConfig';
 import { getRC } from '../utils/getRC';
 import { getPkg } from '../utils/getPkg';
 import { format } from '../utils/strings';
+import { pick } from '../utils/objects';
 import { panic } from '../utils/panic';
 
 import { Config } from './Config';
@@ -198,7 +196,7 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      ...pick(argv, ['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo']),
       props: argv.props ?? (argv.typescript ? 'ts' : 'none'),
       tsPropsDeclaration: argv['ts-props-declaration'] ?? (argv.typescript ? 'interface' : undefined),
       stylingModule: argv['styling-module'],
