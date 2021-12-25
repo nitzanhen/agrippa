@@ -1,13 +1,14 @@
 import path, { basename } from 'path';
 import fs from 'fs';
 import fsp from 'fs/promises';
-import { bold, cyan, gray } from 'chalk';
+import { bold, italic } from 'chalk';
 
 import { cstr, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { panic } from '../utils/panic';
 import { getEnvironmentTags } from '../utils/environmentTags';
+import { styles } from '../utils/styles';
 import { Config } from './Config';
 import { generateReactCode } from './generateReactCode';
 
@@ -25,7 +26,6 @@ interface GeneratedPaths {
 export async function generateFiles(config: Config, logger: Logger): Promise<GeneratedPaths> {
   const { name, flat, typescript, styling, stylingModule, overwrite, baseDir, destination, allowOutsideBase, separateIndex, exportType } = config;
 
-
   const pcName = pascalCase(name);
   const kcName = kebabCase(name);
 
@@ -33,10 +33,10 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
 
   logger.info(
     '',
-    `Generating ${bold(pcName)}`,
+    `Generating ${styles.componentName(pcName)}`,
     '',
-    `Directory: ${gray(dirPath)}`,
-    `Environment: ${cyan.bold.italic(getEnvironmentTags(config))}`,
+    `Directory: ${styles.path(dirPath)}`,
+    `Environment: ${styles.tag(getEnvironmentTags(config))}`,
     ''
   );
 
@@ -46,11 +46,11 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
   if (baseDir && !isSubDirectory(baseDir, dirPath) && !allowOutsideBase) {
     logger.stage(
       'error',
-      `Failed to create directory ${dirName}`,
-      `The resolved directory for the component "${pcName}" falls outside the base directory:`,
-      `Base directory: ${baseDir}`,
-      `Resolved directory: ${dirPath}`,
-      "If this is the desired behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json"
+      `Failed to create directory ${italic(dirName)}`,
+      styles.error(`The resolved directory for the component ${italic(pcName)} falls outside the base directory.`),
+      styles.comment(`Base directory: ${italic(baseDir)}`),
+      styles.comment(`Resolved directory: ${italic(dirPath)}`),
+      styles.comment("To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json")
     );
     panic();
   }
@@ -58,8 +58,8 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
   if (fs.existsSync(dirPath)) {
     logger.stage(
       'NA',
-      `Directory ${dirName} already exists.`,
-      gray(`path: ${dirPath}`)
+      `Directory ${italic(dirName)} already exists.`,
+      styles.comment(`path: ${styles.path(dirPath)}`)
     );
   }
   else {
@@ -67,15 +67,15 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
       await fsp.mkdir(dirPath, { recursive: true });
       logger.stage(
         'success',
-        `Directory ${dirName} created successfully.`,
-        gray(`path: ${dirPath}`)
+        `Directory ${italic(dirName)} created successfully.`,
+        styles.comment(`path: ${styles.path(dirPath)}`)
       );
     }
     catch (err) {
       logger.stage(
         'error',
-        `Failed to create directory ${dirName}`,
-        gray(`path: ${dirPath}`),
+        `Failed to create directory ${italic(dirName)}`,
+        styles.comment(`path: ${styles.path(dirPath)}`),
         err
       );
       panic();
@@ -109,8 +109,8 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
     willBeOverwrittenFiles.forEach(([key, path]) => logger.stage(
       'error',
       `${key} file already exists`,
-      gray(`path: ${path}`),
-      gray(`To allow overwriting, pass ${bold('--overwrite')} to the command.`)
+      styles.comment(`path: ${styles.path(path)}`),
+      styles.comment(`To allow overwriting, pass ${bold('--overwrite')} to the command.`)
     ));
     panic();
   }
@@ -121,15 +121,15 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
     await fsp.writeFile(componentFilePath, generateReactCode(config));
     logger.stage(
       'success',
-      `Component File ${componentFileName} created successfully.`,
-      gray(`path: ${componentFilePath}`)
+      `Component file ${italic(componentFileName)} created successfully.`,
+      styles.comment(`path: ${componentFilePath}`)
     );
   }
   catch (err) {
     logger.stage(
       'error',
-      `Failed to create component file ${componentFileName}`,
-      gray(`path: ${componentFilePath}`),
+      `Failed to create component file ${italic(componentFileName)}`,
+      styles.comment(`path: ${styles.path(componentFilePath)}`),
       err
     );
     panic();
@@ -150,15 +150,15 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
 
       logger.stage(
         'success',
-        `Styles File ${stylesFileName} created successfully.`,
-        gray(`path: ${stylesFilePath}`)
+        `Styles file ${italic(stylesFileName)} created successfully.`,
+        styles.comment(`path: ${styles.path(stylesFilePath)}`)
       );
     }
     catch (err) {
       logger.stage(
         'error',
-        `Failed to create styles file ${stylesFileName}`,
-        gray(`path: ${stylesFilePath}`),
+        `Failed to create styles file ${italic(stylesFileName)}`,
+        styles.comment(`path: ${styles.path(stylesFilePath)}`),
         err
       );
       panic();
@@ -179,15 +179,15 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
 
       logger.stage(
         'success',
-        `Index File ${indexFileName} created successfully.`,
-        gray(`path: ${indexFilePath}`)
+        `Index file ${italic(indexFileName)} created successfully.`,
+        styles.comment(`path: ${styles.path(indexFilePath)}`)
       );
     }
     catch (err) {
       logger.stage(
         'error',
-        `Failed to create index file ${indexFileName}`,
-        gray(`path: ${indexFilePath}`),
+        `Failed to create index file ${italic(indexFileName)}`,
+        styles.comment(`path: ${styles.path(indexFilePath)}`),
         err
       );
       panic();
@@ -199,7 +199,7 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
     logger.stage(
       'NA',
       'Generated component is the index file',
-      gray(`path: ${indexFilePath}`)
+      styles.comment(`path: ${styles.path(indexFilePath)}`)
     );
   }
 

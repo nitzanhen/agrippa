@@ -1,14 +1,5 @@
-import chalk from 'chalk';
-
 import { format, indent, joinLines } from './utils/strings';
-
-const colors = {
-  error: chalk.red,
-  warning: chalk.yellow,
-  debug: chalk.cyan,
-  success: chalk.green,
-  NA: chalk.hex('#B6B6B6')
-};
+import { styles } from './utils/styles';
 
 export class Logger {
   constructor() { }
@@ -23,7 +14,7 @@ export class Logger {
   error(...errs: unknown[]) {
     const prefixedErrs = errs
       .map(err => format(err))
-      .map(err => colors.error(err))
+      .map(err => styles.error(err))
       .join('\n');
     console.error(prefixedErrs);
   }
@@ -32,7 +23,7 @@ export class Logger {
     if (process.env.DEBUG) {
       const prefixedMesssages = messages
         .map(msg => format(msg))
-        .map(msg => colors.debug(msg))
+        .map(msg => styles.debug(msg))
         .join('\n');
       console.log(prefixedMesssages);
     }
@@ -41,7 +32,7 @@ export class Logger {
   warn(...warnings: unknown[]) {
     const prefixedErrs = warnings
       .map(wrn => format(wrn))
-      .map(wrn => colors.warning(wrn))
+      .map(wrn => styles.warning(wrn))
       .join('\n');
     console.log(prefixedErrs);
   }
@@ -58,7 +49,7 @@ export class Logger {
       NA: '•',
     })[status];
 
-    const header = colors[status].bold(`${bullet} ${summary}`);
+    const header = styles[status].bold(`${bullet} ${summary}`);
 
     const logFn = status === 'error' ? console.error : console.log;
 
