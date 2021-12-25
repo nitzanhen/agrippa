@@ -15,7 +15,9 @@ export async function generateRC() {
   try {
     await fsp.copyFile(templatePath, destinationPath, constants.COPYFILE_EXCL);
     logger.info(
+      '',
       `Creation successful. Path: ${green(destinationPath)}`,
+      ''
     );
   }
   catch (e) {
