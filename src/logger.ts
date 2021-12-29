@@ -56,7 +56,7 @@ export class Logger {
     logFn(joinLines(
       header,
       ...messages.map(
-        line => indent(format(line), 1)
+        line => indent(format(line), 1, '  ')
       ),
       ''
     ));
