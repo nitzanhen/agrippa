@@ -1,4 +1,4 @@
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from 'utils/codegenUtils';
+import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../../src/utils/codegenUtils';
 
 describe('utils/codegenUtils.ts', () => {
 

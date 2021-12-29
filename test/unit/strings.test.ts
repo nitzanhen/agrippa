@@ -1,6 +1,6 @@
 import { formatWithOptions } from 'util';
 
-import { capitalize, cstr, emptyLine, format, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from 'utils/strings';
+import { capitalize, cstr, emptyLine, format, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from '../../src/utils/strings';
 
 describe('strings', () => {
 
