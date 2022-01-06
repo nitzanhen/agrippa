@@ -47,7 +47,7 @@ const builder = async (yargs: yargs.Argv) => {
         default: false
       },
       styling: {
-        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native'],
+        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native', 'styled-components'],
         desc: 'Which styling to generate',
         default: isReactNative ? 'react-native' : 'none'
       },

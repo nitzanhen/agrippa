@@ -2,12 +2,13 @@ import path, { basename } from 'path';
 import fs from 'fs';
 import fsp from 'fs/promises';
 import { bold, italic } from 'chalk';
-import { cstr, joinLines, kebabCase, pascalCase } from '../utils/strings';
+import { cstr, emptyLine, joinLines, kebabCase, pascalCase } from '../utils/strings';
 import { Logger } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { panic } from '../utils/panic';
 import { getEnvironmentTags } from '../utils/environmentTags';
 import { styles } from '../utils/styles';
+import { createImport, declareConst } from '../utils/codegenUtils';
 import { Config } from './Config';
 import { generateReactCode } from './generateReactCode';
 
@@ -83,18 +84,20 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
 
 
   // Create files
-
   const componentFileExtension = typescript ? 'tsx' : 'jsx';
   const componentFileName = `${(flat || separateIndex) ? pcName : 'index'}.${componentFileExtension}`;
   const componentFilePath = path.join(dirPath, componentFileName);
 
-  const stylesFileName = `${kcName}${cstr(stylingModule, '.module')}.${styling}`;
+  const stylesFileName = styling === 'styled-components'
+    ? `${pcName}.styles.${typescript ? 'ts' : 'js'}`
+    : `${kcName}${cstr(stylingModule, '.module')}.${styling}`;
+
   const stylesFilePath = path.join(dirPath, stylesFileName);
 
   const indexFileName = `index.${typescript ? 'ts' : 'js'}`;
   const indexFilePath = path.join(dirPath, indexFileName);
 
-  const createStylesFile = styling === 'css' || styling === 'scss';
+  const createStylesFile = ['css', 'scss', 'styled-components'].includes(styling);
 
   const willBeOverwrittenFiles = ([
     ['Component', componentFilePath, fs.existsSync(componentFilePath)],
@@ -144,7 +147,15 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
 
   if (createStylesFile) {
     try {
-      await fsp.open(stylesFilePath, 'w');
+      const stylesFileCode = styling === 'styled-components'
+        ? joinLines(
+          createImport('styled-components', 'default', 'styled'),
+          emptyLine(),
+          declareConst('Root', 'styled.button``', true)
+        )
+        : '';
+
+      await fsp.writeFile(stylesFilePath, stylesFileCode);
       generatedPaths.styles = stylesFilePath;
 
       logger.stage(

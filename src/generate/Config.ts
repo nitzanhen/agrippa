@@ -7,7 +7,7 @@ export interface Config {
   children: boolean;
   typescript: boolean;
   flat: boolean;
-  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui' | 'react-native';
+  styling: 'none' | 'css' | 'scss' | 'jss' | 'mui' | 'react-native' | 'styled-components';
   stylingModule: boolean;
   memo: boolean;
   importReact: boolean;
