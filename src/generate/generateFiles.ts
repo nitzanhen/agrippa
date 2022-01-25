@@ -151,7 +151,7 @@ export async function generateFiles(config: Config, logger: Logger): Promise<Gen
         ? joinLines(
           createImport('styled-components', 'default', 'styled'),
           emptyLine(),
-          declareConst('Root', 'styled.button``', true)
+          declareConst('Root', 'styled.div``', true)
         )
         : '';
 
