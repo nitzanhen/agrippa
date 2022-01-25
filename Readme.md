@@ -33,6 +33,8 @@ As always, please reach out with any bugs or feedback!
 This page contains useful information to get started with using Agrippa. 
 All other documentation & guides can be found [on our wiki](https://github.com/NitzanHen/agrippa/wiki).
 
+Examples can be found among our [integration tests](https://github.com/NitzanHen/agrippa/tree/main/test/integration).
+
 ## Installation
 
 ```bash
