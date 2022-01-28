@@ -7,6 +7,12 @@ It can easily generate templates for React components of different compositions 
 
 [docs](https://github.com/NitzanHen/agrippa/wiki)
 
+## Features
+🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
+🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
+🧠 **Smart defaults** - agrippa can detect and set defaults based on your environment's configuration, with no extra steps. <br/>
+⚙️ **Configurable** - by using a plain old JSON file.
+
 ## v1.4.0
 
 **Agrippa v1.4.0 has entered the RC stage!** <br/>
@@ -17,19 +23,14 @@ Assuming no bugs are found, it will be rolled officially in a few days.
 >  Please reach out with any bugs or feedback!
 
 The new version introduces some cool new features:
-- ***Agrippa's terminal UI has been revamped***! hopefully you'll agree the new look is a lot more ✨*aesthetic*✨
-- **tsPropsDeclaration**: TS users can now select between `interface`s and `type`s for component props declarations.<br/>For more info, see [the docs on `tsPropsDeclaration`](https://github.com/NitzanHen/agrippa/wiki/The-complete-list-of-generation-options).
-- **Styled-components**: Agrippa now supports styling with `styled-components`! This is actually the second issue opened for Agrippa, and it's been open for quite a while now. t's truly nice to see it finally implemented. <br/>To check it out, use the value `styled-components` for the `styling` flag.
-- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `ice-button`).
-- **Dependency cleanup**: two packages that Agrippa has been using up to now, but hasn't really needed to, were removed, and Agrippa should now be a little lighter.
+- ***Agrippa's terminal UI has been revamped**!* hopefully you'll agree the new look is a lot more ✨*aesthetic*✨<br/><br/>
+- **tsPropsDeclaration**: TS users can now select between `interface`s and `type`s for component props declarations.<br/>For more info, see [the docs on `tsPropsDeclaration`](https://github.com/NitzanHen/agrippa/wiki/The-complete-list-of-generation-options).<br/><br/>
+- **Styled-components**: Agrippa now supports styling with `styled-components`! This is actually the second issue opened for Agrippa, and it's been open for quite a while now. t's truly nice to see it finally implemented. <br/>To check it out, use the value `styled-components` for the `styling` flag.<br/><br/>
+- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `ice-button`).<br/><br/>
+- **Dependency cleanup**: two packages that Agrippa has been using up to now but didn't really need to were removed, and Agrippa should now be a little lighter.
 
 Also, more tests were added, which is always nice.
 
-## Features
-🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
-🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
-🧠 **Smart defaults** - agrippa can detect and set defaults based on your environment's configuration, with no extra steps. <br/>
-⚙️ **Configurable** - by using a plain old JSON file.
 
 ## Docs 
 
