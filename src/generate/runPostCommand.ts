@@ -38,7 +38,7 @@ export async function runPostCommand(postCommandVars: PostCommandVariables, conf
   else {
     logger.stage(
       'NA',
-      'No Post command to run'
+      'No post command to run'
     );
   }
 }
