@@ -7,20 +7,23 @@ It can easily generate templates for React components of different compositions 
 
 [docs](https://github.com/NitzanHen/agrippa/wiki)
 
-## v1.3.0
+## v1.4.0
 
-**Agrippa v1.3.0 is officially out!** <br/>
+**Agrippa v1.4.0 has entered the RC stage!** <br/>
+This means it's almost ready for a production launch.
+Assuming no bugs are found, it will be rolled officially in a few days.
+
+>  To test out the new version, call `npm i -g agrippa@next`. <br/>
+>  Please reach out with any bugs or feedback!
+
 The new version introduces some cool new features:
-- A new feature, `separate-index`, improves the generated component structure by separating the component code from the index file! 
-  *It improves DX by a lot, and is the new default*. We truly recommend it, but you can opt out by setting `separateIndex` to `false`.
-- Added support for `react-native`! React-native projects are detected automatically, but you can also use the `react-native` flag.
-- We implemented *integration tests*, as well as some unit tests. Now, we can ship new versions with more confidence!
-- As always, numerous bugs were fixed.
+- ***Agrippa's terminal UI has been revamped***! hopefully you'll agree the new look is a lot more ✨*aesthetic*✨
+- **tsPropsDeclaration**: TS users can now select between `interface`s and `type`s for component props declarations.<br/>For more info, see [the docs on `tsPropsDeclaration`](https://github.com/NitzanHen/agrippa/wiki/The-complete-list-of-generation-options).
+- **Styled-components**: Agrippa now supports styling with `styled-components`! This is actually the second issue opened for Agrippa, and it's been open for quite a while now. t's truly nice to see it finally implemented. <br/>To check it out, use the value `styled-components` for the `styling` flag.
+- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `ice-button`).
+- **Dependency cleanup**: two packages that Agrippa has been using up to now, but hasn't really needed to, were removed, and Agrippa should now be a little lighter.
 
-You can find the complete release notes in the [v1.3.0 release page](https://github.com/NitzanHen/agrippa/releases/tag/v1.3.0).
-
-To update to the new version, call `npm i -g agrippa`. 
-As always, please reach out with any bugs or feedback!
+Also, more tests were added, which is always nice.
 
 ## Features
 🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
@@ -68,8 +71,10 @@ The options that `agrippa gen` accepts are listed in [The Complete List of Gener
 ## Using a config
 In most projects, some options repeat themselves on most, if not all, components of the app. For example, if the codebase uses CSS modules as a styling solution, then the majority of component would be generated with `--styling css`. 
 
-To avoid this unnecessary boilerplate, an `.agripparc.json` config file can be used. It's dead simple to set up! simply call `agrippa init` at the root of your project, or create an empty `.agripparc.json` file, and edit its contents to match the desired defaults. <br/>
+To avoid this unnecessary boilerplate, an `.agripparc.json` config file can be used. It's dead simple to set up! simply call `agrippa init` at the root of your project, or create a basic `.agripparc.json` file, and edit its contents to match the desired defaults. <br/>
 The config file's options are the same as the CLI's. The latter's options take precedence over the former's, which is useful for overriding the project's defaults when needed.
+
+> Note: many options - including *Typescript* & *React Native* - can be determined automatically by Agrippa, so they don't need to be specified in the config or at the command line.
 
 ## Community
 
