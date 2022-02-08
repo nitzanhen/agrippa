@@ -1,6 +1,6 @@
-/** Options common to all commands. */
-export interface CommonConfig { 
-  debug: boolean; 
-}
 
-export type ValueOf<O> = O[keyof O];
+export type Falsey = undefined | null | false;
+
+export type MaybePromise<P> = Promise<P> | P;
+
+export type SemiPartial<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;

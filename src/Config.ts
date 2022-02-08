@@ -1,6 +1,4 @@
-/**
- * @see {@link ./index.ts} for a description of option descriptions, aliases, defaults, etc.
- */
+
 export interface Config {
   name: string;
   props: 'ts' | 'jsdoc' | 'prop-types' | 'none';
@@ -13,13 +11,14 @@ export interface Config {
   importReact: boolean;
   debug: boolean;
   overwrite: boolean;
-  baseDir?: string;
+  baseDir: string | undefined;
   destination: string;
-  postCommand?: string;
+  postCommand: string | undefined;
   allowOutsideBase: boolean;
   exportType: 'named' | 'default'
   declaration: 'const' | 'function';
-  tsPropsDeclaration?: 'interface' | 'type';
+  tsPropsDeclaration: 'interface' | 'type' | undefined;
   separateIndex: boolean;
   reactNative: boolean;
+  pure: boolean;
 }

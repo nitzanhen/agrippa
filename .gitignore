@@ -141,7 +141,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,yarn
 
 .devcontainer
-build
-
 bin
-e2e-runtime
+src_old

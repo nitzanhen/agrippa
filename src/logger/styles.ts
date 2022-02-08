@@ -9,5 +9,6 @@ export const styles = {
   success: chalk.green,
   comment: chalk.gray,
   path: chalk.gray.italic,
+  italic: chalk.italic,
   NA: chalk.hex('#B6B6B6')
 };
