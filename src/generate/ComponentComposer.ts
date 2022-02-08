@@ -1,6 +1,6 @@
 import { cstr, emptyLine, indent, joinLines, kebabCase, pascalCase } from '../utils/strings';
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface } from '../utils/codegenUtils';
-
+import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../utils/codegenUtils';
+import { logger } from '../logger';
 import { Config } from './Config';
 
 /**
@@ -30,9 +30,20 @@ export class ComponentComposer {
     return this.config.children ? '{ children }' : '';
   }
 
+  getJSXRoot() {
+    const { reactNative, styling } = this.config;
+
+    if (reactNative) {
+      return 'View';
+    }
+    if (styling === 'styled-components') {
+      return 'Root';
+    }
+    return 'div';
+  }
+
   getJSX() {
-    const { reactNative } = this.config;
-    const comp = !reactNative ? 'div' : 'View';
+    const comp = this.getJSXRoot();
 
     return `<${comp}>${cstr(this.config.children, '{children}')}</${comp}>`;
   };
@@ -58,6 +69,12 @@ export class ComponentComposer {
   getStyleFileImport() {
     const { stylingModule, styling } = this.config;
 
+    if (styling === 'styled-components') {
+      return createImport(`./${this.componentName}.styles`, 'named', 'Root');
+    }
+
+    // styling is css or scss
+
     return stylingModule
       ? createImport(`./${this.styleFileName}.module.${styling}`, 'default', 'classes')
       : createImport(`./${this.styleFileName}.${styling}`);
@@ -75,21 +92,21 @@ export class ComponentComposer {
 
   getImportBlock() {
     const { props, importReact, styling, memo, reactNative } = this.config;
-    const isStylesFileCreated = styling === 'css' || styling === 'scss';
+    const isStylesFileCreated = ['css', 'scss', 'styled-components'].includes(styling);
     const createReactImport = importReact || memo;
 
     return joinLines(
       props === 'jsdoc' && '//@ts-check',
       createReactImport && this.getReactImport(),
-      styling === 'jss' && createImport('react-jss', 'named', 'createUseStyles'),
-      styling === 'mui' && createImport('@material-ui/core', 'named', 'makeStyles'),
-      props === 'prop-types' && createImport('prop-types', 'default', 'PropTypes'),
-      isStylesFileCreated && (emptyLine() + this.getStyleFileImport()),
       reactNative && createImport(
         'react-native',
         'named',
         styling === 'react-native' ? ['View', 'StyleSheet'] : ['View']
-      )
+      ),
+      styling === 'jss' && createImport('react-jss', 'named', 'createUseStyles'),
+      styling === 'mui' && createImport('@material-ui/core', 'named', 'makeStyles'),
+      props === 'prop-types' && createImport('prop-types', 'default', 'PropTypes'),
+      isStylesFileCreated && (emptyLine() + this.getStyleFileImport()),
     );
   }
 
@@ -98,7 +115,16 @@ export class ComponentComposer {
     return typescript && props === 'ts';
   }
   getPropInterfaceDeclaration() {
-    return declareInterface(this.propInterfaceName, true);
+    const { typescript } = this.config;
+    if (!typescript) {
+      logger.debug('getPropInterfaceDeclaration() called but typescript is false. This shouldn\'t be possible.');
+    }
+
+    const propsDeclaration = this.config.tsPropsDeclaration as 'type' | 'interface';
+
+    return propsDeclaration === 'type'
+      ? declareType(this.propInterfaceName, true)
+      : declareInterface(this.propInterfaceName, true);
   }
 
   getComponentConstDeclaration() {

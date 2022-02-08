@@ -2,7 +2,6 @@
 
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-
 import { generateCommand } from './generate';
 import { initCommand } from './init';
 import { logger } from './logger';
@@ -10,18 +9,12 @@ import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/package';
 import { panic } from './utils/panic';
 
-logger.info(`Agrippa v${pkgJson.version}`);
+logger.info(`\nAgrippa v${pkgJson.version}`);
 
 const updatePromise = lookForUpdates();
 
-
 // Init yargs
 yargs(hideBin(process.argv))
-  .option('debug', {
-    type: 'boolean',
-    default: false,
-    global: true
-  })
   .command(generateCommand)
   .command(initCommand)
   .wrap(yargs.terminalWidth())

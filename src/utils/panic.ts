@@ -1,7 +1,5 @@
-import { gray } from 'chalk';
-
+import { italic } from 'chalk';
 import { logger } from '../logger';
-
 import { pkgJson } from './package';
 
 /**
@@ -10,8 +8,8 @@ import { pkgJson } from './package';
 export function panic(...errs: unknown[]): never {
   logger.error(
     ...errs,
-    '',
-    `If you believe you've found a bug, please visit ${gray(pkgJson.bugs.url)} to submit an issue.`);
+    'Generation failed.',
+    `If you believe you've found a bug, please visit ${italic(pkgJson.bugs.url)} to submit an issue.`);
 
   process.exit(1);
 }

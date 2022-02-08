@@ -15,22 +15,19 @@ It can easily generate templates for React components of different compositions 
 
 ## v1.4.0
 
-**Agrippa v1.4.0 has entered the RC stage!** <br/>
-This means it's almost ready for a production launch.
-Assuming no bugs are found, it will be rolled officially in a few days.
-
->  To test out the new version, call `npm i -g agrippa@next`. <br/>
->  Please reach out with any bugs or feedback!
+**Agrippa v1.4.0 is officially out!** <br/>
 
 The new version introduces some cool new features:
 - ***Agrippa's terminal UI has been revamped**!* hopefully you'll agree the new look is a lot more ✨*aesthetic*✨<br/><br/>
 - **tsPropsDeclaration**: TS users can now select between `interface`s and `type`s for component props declarations.<br/>For more info, see [the docs on `tsPropsDeclaration`](https://github.com/NitzanHen/agrippa/wiki/The-complete-list-of-generation-options).<br/><br/>
 - **Styled-components**: Agrippa now supports styling with `styled-components`! This is actually the second issue opened for Agrippa, and it's been open for quite a while now. t's truly nice to see it finally implemented. <br/>To check it out, use the value `styled-components` for the `styling` flag.<br/><br/>
-- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `ice-button`).<br/><br/>
+- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `nice-button`).<br/><br/>
 - **Dependency cleanup**: two packages that Agrippa has been using up to now but didn't really need to were removed, and Agrippa should now be a little lighter.
 
 Also, more tests were added, which is always nice.
 
+>  To update, call `npm i -g agrippa`. <br/>
+>  Please reach out with any bugs or feedback!
 
 ## Docs 
 

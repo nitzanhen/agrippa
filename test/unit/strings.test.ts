@@ -1,6 +1,6 @@
 import { formatWithOptions } from 'util';
 
-import { capitalize, cstr, emptyLine, format, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from 'utils/strings';
+import { capitalize, cstr, emptyLine, format, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from '../../src/utils/strings';
 
 describe('strings', () => {
 
@@ -20,6 +20,12 @@ describe('strings', () => {
     expect(indent('\t')).toBe('\t\t');
     expect(indent('x\ny\nz')).toBe('\tx\n\ty\n\tz');
     expect(indent('x\ny\nz', 3)).toBe('\t\t\tx\n\t\t\ty\n\t\t\tz');
+
+    expect(indent('x', 1, '  ')).toBe('  x');
+    expect(indent('x', 2, '  ')).toBe('    x');
+    expect(indent('\t', 1, '  ')).toBe('  \t');
+    expect(indent('x\ny\nz', 1, '  ')).toBe('  x\n  y\n  z');
+    expect(indent('x\ny\nz', 3, '  ')).toBe('      x\n      y\n      z');
   });
 
   test('joinLines', () => {

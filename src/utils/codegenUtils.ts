@@ -25,7 +25,7 @@ export function createImport(module: string, importType?: 'named' | 'default' | 
   if (!whatToImport) {
     return `import '${module}';`;
   }
-  else if(importType === 'composite') {
+  else if (importType === 'composite') {
     const [defaultImport, ...namedImports] = whatToImport as string[];
     return `import ${defaultImport}, { ${namedImports.join(', ')} } from '${module}';`;
   }
@@ -65,15 +65,28 @@ export const declareConst = (name: string, value: string, exported: boolean = fa
 export const declareInterface = (name: string, exported: boolean = false) =>
   `${cstr(exported, 'export ')}interface ${name} {}`;
 
-  /**
-   * Create a function declaration string.
-   * Could also be used as a function value (for this use case `exported` must be false, though).
-   * 
-   * @param name the name to give the function
-   * @param params *a string* representing the function's parameters 
-   * @param body the function's body (as a string)
-   * @param exported whether to export the function or not
-   */
+/**
+ * Create a TS `type` declaration string.
+ * This can easily be modified to add the ability to specify the Type itself.
+ * 
+ * @param name 
+ * @param exported 
+ * 
+ * @example
+ * declareType('ButtonProps', true) => export type ButtonProps = {};
+ */
+export const declareType = (name: string, exported: boolean = false) =>
+  `${cstr(exported, 'export ')}type ${name} = {};`;
+
+/**
+ * Create a function declaration string.
+ * Could also be used as a function value (for this use case `exported` must be false, though).
+ * 
+ * @param name the name to give the function
+ * @param params *a string* representing the function's parameters 
+ * @param body the function's body (as a string)
+ * @param exported whether to export the function or not
+ */
 export const declareFunction = (name: string, params: string = '', body: string = '', exported: boolean = false) =>
   `${cstr(exported, 'export ')}function ${name}(${params}) {${body ? `\n${indent(body)}\n` : ' '}}`;
 

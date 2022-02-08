@@ -1,4 +1,4 @@
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface } from 'utils/codegenUtils';
+import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../../src/utils/codegenUtils';
 
 describe('utils/codegenUtils.ts', () => {
 
@@ -36,6 +36,15 @@ describe('utils/codegenUtils.ts', () => {
 
     expect(declareInterface('ButtonProps', true)).toBe('export interface ButtonProps {}');
     expect(declareInterface('TabProps', true)).toBe('export interface TabProps {}');
+
+  });
+
+  test('declareType', () => {
+    expect(declareType('ButtonProps')).toBe('type ButtonProps = {};');
+    expect(declareType('TabProps')).toBe('type TabProps = {};');
+
+    expect(declareType('ButtonProps', true)).toBe('export type ButtonProps = {};');
+    expect(declareType('TabProps', true)).toBe('export type TabProps = {};');
 
   });
 

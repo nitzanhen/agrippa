@@ -1,11 +1,8 @@
-import yargs from 'yargs';
-
+import { CommandModule } from 'yargs';
 import { logger } from '../logger';
-import { CommonConfig } from '../utils/types';
-
 import { generateRC } from './generateRC';
 
-export const initCommand: yargs.CommandModule<CommonConfig, CommonConfig> = {
+export const initCommand: CommandModule = {
   command: 'init',
   describe: 'Create a config file',
   handler: () => {

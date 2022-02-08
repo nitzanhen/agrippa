@@ -11,10 +11,10 @@ export const cstr = (condition: boolean, string: string) => {
 };
 
 /** Indents every line of the given string by `num` tabs.  */
-export const indent = (str: string, num: number = 1) => {
+export const indent = (str: string, num: number = 1, token = '\t') => {
   return str
     .split('\n')
-    .map(line => '\t'.repeat(num) + line)
+    .map(line => token.repeat(num) + line)
     .join('\n');
 };
 

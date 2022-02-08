@@ -6,7 +6,6 @@
     ],
     "rootDir": "src",
     "outDir": "bin",
-    "baseUrl": "src",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,

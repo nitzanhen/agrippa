@@ -1,22 +1,18 @@
 import path from 'path';
-
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
-import { pick } from 'rhax';
-
 import { green } from 'chalk';
-
 import { logger } from '../logger';
 import { CommonConfig } from '../utils/types';
 import { getTSConfig } from '../utils/getTSConfig';
 import { getRC } from '../utils/getRC';
 import { getPkg } from '../utils/getPkg';
 import { format } from '../utils/strings';
+import { pick } from '../utils/objects';
 import { panic } from '../utils/panic';
-
 import { Config } from './Config';
 import { run } from './run';
 
-const builder = async (yargs: yargs.Argv<CommonConfig>) => {
+const builder = async (yargs: yargs.Argv) => {
   const [{ tsConfig }, { rc, rcPath }, { pkgPath, pkg }] = await Promise.all(
     [getTSConfig(), getRC(), getPkg()]
   );
@@ -51,7 +47,7 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         default: false
       },
       styling: {
-        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native'],
+        choices: ['none', 'css', 'scss', 'jss', 'mui', 'react-native', 'styled-components'],
         desc: 'Which styling to generate',
         default: isReactNative ? 'react-native' : 'none'
       },
@@ -104,6 +100,11 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
         default: 'const'
       },
+      'ts-props-declaration': {
+        alias: 'tsPropsDeclaration',
+        choices: ['interface', 'type'],
+        desc: 'For TS components, whether to declare props as an interface or a type',
+      },
       'memo': {
         type: 'boolean',
         desc: 'If true, a memo() component will be generated. *Overrides --declaration*',
@@ -119,10 +120,15 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
         type: 'boolean',
         default: isReactNative
       },
+      'debug': {
+        type: 'boolean',
+        default: false
+      },
       '$schema': {
         type: 'string'
       }
     } as const)
+    .middleware(({ debug }) => void (debug && (process.env.DEBUG = 'true')), true)
     .coerce('base-dir', (baseDir: string | undefined) => {
       logger.debug(`baseDir option, before resolving, is ${baseDir}`);
 
@@ -168,11 +174,17 @@ const builder = async (yargs: yargs.Argv<CommonConfig>) => {
       }
 
       return true;
+    })
+    .check(argv => {
+      if (argv['ts-props-declaration'] && !argv.typescript) {
+        throw new Error(`the ${green('typescript')} flag must be 'true' for ${green('ts-props-declaration')}`);
+      }
+      return true;
     });
 };
 
 
-type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<CommonConfig, R> : never
+type GenerateCommand = (typeof builder) extends BuilderCallback<CommonConfig, infer R> ? CommandModule<{}, R> : never
 
 export const generateCommand: GenerateCommand = {
   command: 'generate <name> [options]',
@@ -182,8 +194,9 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const config: Config = {
       name: argv.name as string,
-      ...pick(['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo'], argv),
+      ...pick(argv, ['children', 'typescript', 'flat', 'styling', 'debug', 'overwrite', 'destination', 'declaration', 'memo']),
       props: argv.props ?? (argv.typescript ? 'ts' : 'none'),
+      tsPropsDeclaration: argv['ts-props-declaration'] ?? (argv.typescript ? 'interface' : undefined),
       stylingModule: argv['styling-module'],
       importReact: argv['import-react'],
       postCommand: argv['post-command'],
