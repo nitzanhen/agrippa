@@ -1,10 +1,10 @@
 import { writeFile } from 'fs/promises';
 import { basename } from 'path';
+import { AgrippaFile } from '../AgrippaFile';
 import { styles } from '../logger';
-import { Agrippa } from '../utils';
-import { Stage, StageStatus } from './Stage';
+import { Stage, stageResult, StageStatus } from './Stage';
 
-export const createFile = (file: Agrippa.File): Stage => {
+export const createFile = (file: AgrippaFile): Stage => {
   return async (context, logger) => {
     const { config } = context;
 
@@ -17,14 +17,11 @@ export const createFile = (file: Agrippa.File): Stage => {
 
       const filename = basename(path);
 
-      return {
-        status: StageStatus.SUCCESS,
-        summary: `File ${styles.italic(filename)} created successfully.`,
-        newContext: {
-          ...context,
-          createdFiles: [...context.createdFiles, file]
-        }
-      };
+      return stageResult(
+        StageStatus.SUCCESS,
+        `File ${styles.italic(filename)} created successfully.`,
+        //{ ...context, createdFiles: [...context.createdFiles, file] }
+      );
     }
 
     return {

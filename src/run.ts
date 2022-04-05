@@ -1,36 +1,50 @@
+import { AgrippaFile } from './AgrippaFile';
 import { Config } from './Config';
-import { LogObserver, Logger } from './logger';
-import { execute, loadFiles, Pipeline, PipelineContext } from './pipeline';
+import { Logger, styles } from './logger';
+import { createDir } from './pipeline/createDir';
+import { Stage, summaryLine } from './pipeline/Stage';
+import { indent } from './utils/strings';
 
 export interface RunOptions {
-  pipeline: Pipeline,
-  config?: Partial<Config>,
-  logObserver?: LogObserver | null
+  envFiles: Record<string, any>;
+  config: Config;
+  stages?: Stage[]
 }
 
+export function defaultStages(options: RunOptions): Stage[] {
+  return [
+    ...createDir({
+      path: './temp',
+      files: [
+        new AgrippaFile('./index.ts', 'a'),
+        new AgrippaFile('./styles.css', 'b'),
+        new AgrippaFile('./Component.tsx', 'c'),
+      ]
+    })
+  ];
+}
+
+
 /**
- * Agrippa's main entrypoint.
- * Expects to receive a (partial) config, and executes the pipeline. 
+ * Main Agrippa process.
+ * Generates directories, files and file contents based on the given params.
  */
-export const run = async ({
-  pipeline,
-  config = {},
-  logObserver = null
-}: RunOptions) => {
-  const loadedFiles = await loadFiles({
-    '.agripparc.json': '.agripparc.json',
-    'tsconfig.json': 'tsconfig.json',
-    'package.json': 'package.json'
-  });
+export async function run(options: RunOptions) {
+  const { config, stages = defaultStages(options) } = options;
 
-  const initialContext: PipelineContext = {
-    config: config as Config,
-    createdDirs: [],
-    createdFiles: [],
-    loadedFiles
-  };
+  let context = { config };
+  const logger = console;
 
-  const logger = new Logger(logObserver);
+  for (const stage of stages) {
+    const stageLogger = new Logger();
 
-  return execute(pipeline, initialContext, logger);
-};
+    const result = await stage(context, stageLogger);
+    logger.log(summaryLine(result));
+    const logs = stageLogger.consume();
+    logger.log(indent(styles.comment(logs), 2, ' '));
+
+    context = result.newContext ?? context;
+  }
+
+  logger.log('run: done');
+}

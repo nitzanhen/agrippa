@@ -1,10 +1,26 @@
-import { Logger } from '../logger/Logger';
-import { MaybePromise } from '../utils';
-import { PipelineContext } from './PipelineContext';
+import { Config } from '../Config';
+import { styles } from '../logger';
 
-export type Stage = (context: PipelineContext, logger: Logger) => MaybePromise<StageResponse>;
 
-// eslint-disable-next-line import/export
+export interface Context {
+  config: Config;
+}
+
+export type Stage = (context: Context, logger: Console) => Promise<StageResult>;
+
+export interface StageResult {
+  status: StageStatus,
+  summary: string,
+  newContext?: Context
+}
+
+export const stageStatusBullets: Record<StageStatus, string> = {
+  success: '✓',
+  warning: '✓',
+  error: '✗',
+  NA: '•',
+};
+
 export enum StageStatus {
   SUCCESS = 'success',
   WARNING = 'warning',
@@ -12,20 +28,9 @@ export enum StageStatus {
   NA = 'NA'
 }
 
-// eslint-disable-next-line import/export
-export namespace StageStatus {
-  export const bullets: Record<StageStatus, string> = {
-    success: '✓',
-    warning: '✓',
-    error: '✗',
-    NA: '•',
-  };
-}
+export const stageResult = (status: StageStatus, summary: string, newContext?: Context): StageResult => ({ status, summary, newContext });
 
+/** @todo find a better place for this? */
+export const summaryLine = ({ status, summary }: StageResult) => styles[status].bold(`${ stageStatusBullets[status]} ${summary}`);
 
-export interface StageResponse {
-  status: StageStatus,
-  summary: string,
-  newContext?: PipelineContext
-}
 
