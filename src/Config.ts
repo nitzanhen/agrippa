@@ -1,14 +1,35 @@
 
+/** @todo descriptions */
 export interface Config {
-  environment: 'react' | 'solidjs' | 'preact' | 'react-native' | 'custom',
-  typescript: boolean,
-  styling: ''
+  /** Component's name, *in pascal case* */
+  name: string,
+  /** Component's name in kebab case */
+  kebabName: string
 
+  environment: 'react' | 'solidjs' | 'preact' | 'react-native' | 'custom';
   reactOptions?: {},
   solidjsOptions?: {},
   preactOptions?: {},
   reactNativeOptions?: {},
-  typescriptOptions?: {}
+
+  typescript: boolean;
+  typescriptOptions?: {};
+
+  styling: string;
+  cssOptions?: {
+    modules: boolean
+  }
+
+  baseDir: string;
+  destination: string;
+  allowOutsideBase: boolean;
+  flat: boolean;
+
+
+
+
+
+
 
   pure: boolean;
 }

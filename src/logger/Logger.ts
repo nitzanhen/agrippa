@@ -1,34 +1,58 @@
+import { Chalk } from 'chalk';
 import { Writable } from 'stream';
+import { formatWithOptions } from 'util';
+
+const emptyWritable = () => new Writable({ write() { } })
 
 export class Logger extends console.Console {
 
-  private logChunks: Buffer[] = [];
-  protected readonly out: NodeJS.WritableStream;
-  protected readonly err?: NodeJS.WritableStream;
+  private logs: string[] = [];
 
   constructor(
-    out?: NodeJS.WritableStream,
+    out: NodeJS.WritableStream = emptyWritable(),
     err?: NodeJS.WritableStream
   ) {
-    out = new Writable({
-      write: (chunk, ...args) => {
-        out?.write(chunk, ...args);
-        this.logChunks.push(chunk);
-      }
-    });
-
     super(out, err, false);
-    this.out = out;
-    this.err = err;
+  }
+
+  private format(...args: unknown[]) {
+    return formatWithOptions({ colors: true }, ...args);
+  }
+
+  /** @override */
+  log(...data: any[]): void {
+    const s = this.format(...data);
+    super.log(s);
+    this.logs.push(s);
+  }
+
+  /** @override */
+  info(...data: any[]): void {
+    const s = this.format(...data);
+    super.info(s);
+    this.logs.push(s);
+  }
+
+  /** @override */
+  warn(...data: any[]): void {
+    const s = this.format(...data);
+    super.warn(s);
+    this.logs.push(s);
+  }
+
+  /** @override */
+  error(...data: any[]): void {
+    const s = this.format(...data);
+    super.error(s);
+    this.logs.push(s);
   }
 
   /**
    * @todo description.
-   * Logger *shouldn't be used after it is consumed.*
    */
   consume() {
-    this.out.end();
-    this.err?.end();
-    return Buffer.concat(this.logChunks).toString('utf8');
+    return this.logs.join('\n')
   }
+
+
 }
