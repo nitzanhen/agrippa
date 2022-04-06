@@ -6,3 +6,48 @@ export const indent = (str: string, num: number = 1, token = '\t') => {
     .map(line => token.repeat(num) + line)
     .join('\n');
 };
+
+/** Joins `lines` with '\n', filtering any non-string value. Technically also supports code blocks that are more than one line.  */
+export const joinLines = (...lines: (string | false)[]): string => lines.filter(line => typeof line === 'string').join('\n');
+
+export const isLowerCase = (str: string) => str === str.toLocaleLowerCase();
+
+/**
+ * Turns the first letter of the string to upper case (and leaves the rest unchanged).
+ */
+export const capitalize = (str: string) => str && (str[0].toLocaleUpperCase() + str.slice(1));
+
+export const isKebabCase = (str: string) => str.split('-').every(isLowerCase);
+
+export const isCamelCase = (str: string) => !str || /^[a-z][A-Za-z]*$/.test(str);
+
+export const isPascalCase = (str: string) =>  !str || /^[A-Z][A-Za-z]*$/.test(str);
+
+export const pascalCase = (str: string) => {
+  if (isPascalCase(str)) {
+    return str;
+  }
+  else if (isCamelCase(str)) {
+    return capitalize(str);
+  }
+  else if (isKebabCase(str)) {
+    return str.split('-')
+      .map(capitalize)
+      .join('');
+  }
+
+  throw RangeError('Improper string formatting');
+};
+
+export const kebabCase = (str: string) => {
+  if (isPascalCase(str) || isCamelCase(str)) {
+    return str.split(/(?=[A-Z])/)
+      .map(segment => segment.toLocaleLowerCase())
+      .join('-');
+  }
+  else if (isKebabCase(str)) {
+    return str;
+  }
+
+  throw RangeError('Improper string formatting');
+};
