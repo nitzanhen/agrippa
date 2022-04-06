@@ -1,35 +1,46 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
 import { Config } from '../Config';
-import type { RunOptions } from '../run';
+import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
 import { Stage } from './Stage';
 
-export interface defaultStagesOptions {
-  envFiles: Record<string, any>;
-  config: Config;
+const getDirPath = ({ baseDir, destination, name }: Config) => resolve(baseDir ?? process.cwd(), destination, name);
+
+export function defaultIndexFile(config: Config): AgrippaFile {
+  const { name, componentFileOptions: { exportType }, typescript } = config;
+
+  const dirPath = getDirPath(config);
+
+  const fileName = `index.${typescript ? 'ts' : 'js'}`;
+  const path = join(dirPath, fileName);
+
+  const code = joinLines(
+    `export * from './${name}';`,
+    exportType === 'default' && `export { default } from './${name}';`
+  );
+
+  return new AgrippaFile(path, code);
 }
 
-export function defaultStages(options: RunOptions): Stage[] {
-  const { config, envFiles } = options;
-  const { baseDir, destination, flat, name, kebabName, typescript, styling } = config;
+export function defaultStages(config: Config): Stage[] {
+  const { name, kebabName, typescript, styling, styleFileOptions } = config;
 
-  const dirPath = resolve(baseDir ?? process.cwd(), destination, flat ? '.' : name);
+  const dirPath = getDirPath(config);
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx';
-  const componentFileName = `${(flat || separateIndex) ? name : 'index'}.${componentFileExtension}`;
+  const componentFileName = `${name}.${componentFileExtension}`;
   const componentFilePath = join(dirPath, componentFileName);
 
   const stylesFileName = styling === 'styled-components'
     ? `${name}.styles.${typescript ? 'ts' : 'js'}`
-    : `${kebabName}${stylingModule ? '.module' : ''}.${styling}`;
+    : `${kebabName}${styleFileOptions?.module ? '.module' : ''}.${styling}`;
 
   const stylesFilePath = join(dirPath, stylesFileName);
 
-  const indexFileName = `index.${typescript ? 'ts' : 'js'}`;
-  const indexFilePath = join(dirPath, indexFileName);
-
+  /** @todo replace with config flag (with default value set to this) */
   const createStylesFile = ['css', 'scss', 'styled-components'].includes(styling);
+
 
   return [
     ...createDir({
@@ -37,7 +48,7 @@ export function defaultStages(options: RunOptions): Stage[] {
       files: [
         new AgrippaFile(componentFilePath, 'c'),
         createStylesFile && new AgrippaFile(stylesFilePath, ''),
-        new AgrippaFile('./index.ts', 'a'),
+        defaultIndexFile(config)
 
       ].filter((f): f is AgrippaFile => !!f)
     })
