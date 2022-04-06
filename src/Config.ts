@@ -6,6 +6,10 @@ export interface Config {
   /** Component's name in kebab case */
   kebabName: string
 
+  componentFileOptions: {
+    exportType: 'named' | 'default'
+  }
+
   environment: 'react' | 'solidjs' | 'preact' | 'react-native' | 'custom';
   reactOptions?: {},
   solidjsOptions?: {},
@@ -16,20 +20,14 @@ export interface Config {
   typescriptOptions?: {};
 
   styling: string;
-  cssOptions?: {
-    modules: boolean
+  styleFileOptions: {
+    extension: string;
+    module: boolean;
   }
 
   baseDir: string;
   destination: string;
   allowOutsideBase: boolean;
-  flat: boolean;
-
-
-
-
-
-
 
   pure: boolean;
 }

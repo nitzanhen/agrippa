@@ -1,12 +1,11 @@
 import { Config } from './Config';
 import { Logger, styles } from './logger';
-import { defaultStages, Stage, summaryLine } from './stage';
+import { Stage, summaryLine } from './stage';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
   envFiles: Record<string, any>;
   config: Config;
-  name: string;
   stages: Stage[]
 }
 
@@ -16,14 +15,14 @@ export interface RunOptions {
  * Generates directories, files and file contents based on the given params.
  */
 export async function run(options: RunOptions) {
-  const { config, stages, name } = options;
+  const { config, stages } = options;
 
   let context = { config };
   const logger = new Logger(!config.pure ? process.stdout : undefined, process.stderr);
 
   logger.info(
     '',
-    `Generating ${styles.componentName(name)}\n`,
+    `Generating ${styles.componentName(config.name)}\n`,
     //`Environment: ${styles.tag(getEnvironmentTags(config))}`,
   );
 
@@ -40,5 +39,5 @@ export async function run(options: RunOptions) {
 
   return {
     logs: logger.consume()
-  }
+  };
 }
