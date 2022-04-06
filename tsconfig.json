@@ -18,7 +18,6 @@
     "downlevelIteration": true,
   },
   "include": [
-    "src",
-    "src/init/rc-template.json",
+    "src"
   ]
 }
