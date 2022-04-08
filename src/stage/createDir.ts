@@ -1,5 +1,7 @@
+import { existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
 import { basename, resolve } from 'path';
+import { bold, italic } from 'chalk';
 import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
 import { styles } from '../logger';
 import { createFile } from './createFile';
@@ -16,21 +18,35 @@ export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptio
   const dirStage: Stage = async (context, logger) => {
     const { config } = context;
 
+    const dirName = basename(path);
+    logger.info(`path: ${styles.path(path)}`);
+
     if (config.pure) {
       return stageResult(StageStatus.NA, 'No file created (pure mode)');
     }
 
-    await mkdir(path, { recursive });
+    if (existsSync(path) && !config.overwrite) {
+      logger.info(`To allow overwriting, pass ${bold('--overwrite')} to the command.`);
+      return stageResult(StageStatus.ERROR, `Directory ${italic(dirName)} already exists.`);
+    }
 
-    logger.info(`path: ${styles.path(path)}`);
+    try {
+      await mkdir(path, { recursive });
 
-    const dirName = basename(path);
+      return stageResult(
+        StageStatus.SUCCESS,
+        `Directory ${styles.italic(dirName)} created successfully.`,
+        //{ ...context, createdDirs: [...context.createdDirs, { path }] }
+      );
+    }
+    catch (e) {
+      logger.error(e);
 
-    return stageResult(
-      StageStatus.SUCCESS,
-      `Directory ${styles.italic(dirName)} created successfully.`,
-      //{ ...context, createdDirs: [...context.createdDirs, { path }] }
-    );
+      return stageResult(
+        StageStatus.ERROR,
+        `Creation of directory ${dirName} failed.`
+      );
+    }
   };
 
   const fileStages = files

@@ -28,6 +28,7 @@ async function main() {
     baseDir: process.cwd(),
     destination: '.',
     allowOutsideBase: false,
+    overwrite: false,
 
     reactOptions: {
       importReact: true

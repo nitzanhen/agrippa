@@ -31,6 +31,7 @@ export interface Config {
   baseDir: string;
   destination: string;
   allowOutsideBase: boolean;
+  overwrite: boolean;
 
   pure: boolean;
 }
