@@ -4,6 +4,7 @@ import { basename, resolve } from 'path';
 import { bold, italic } from 'chalk';
 import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
 import { styles } from '../logger';
+import { isSubDirectory } from '../utils/isSubDirectory';
 import { createFile } from './createFile';
 import { Stage, stageResult, StageStatus } from './Stage';
 
@@ -17,15 +18,27 @@ export interface CreateDirOptions extends AgrippaDir {
 export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptions): Stage[] => {
   const dirStage: Stage = async (context, logger) => {
     const { config } = context;
+    const { pure, baseDir, allowOutsideBase, overwrite } = config;
 
     const dirName = basename(path);
-    logger.info(`path: ${styles.path(path)}`);
 
-    if (config.pure) {
+    if (pure) {
       return stageResult(StageStatus.NA, 'No file created (pure mode)');
     }
 
-    if (existsSync(path) && !config.overwrite) {
+    if (baseDir && !isSubDirectory(baseDir, path) && !allowOutsideBase) {
+      logger.error(`The resolved path for the directory ${italic(dirName)} falls outside the base directory.`);
+      logger.error(`Base directory: ${italic(baseDir)}`);
+      logger.error(`Resolved directory: ${italic(path)}`);
+      logger.error("To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json");
+
+      return stageResult(StageStatus.ERROR, 'Directory path outside baseDir');
+    }
+
+    logger.info(`path: ${styles.path(path)}`);
+
+
+    if (existsSync(path) && !overwrite) {
       logger.info(`To allow overwriting, pass ${bold('--overwrite')} to the command.`);
       return stageResult(StageStatus.ERROR, `Directory ${italic(dirName)} already exists.`);
     }
