@@ -42,8 +42,6 @@ export class ComponentComposer {
     }
 
     blocks.add(imports.getBlock());
-
-    console.log(blocks, blocks.join());
     
 
     return blocks.join();
