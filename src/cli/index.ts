@@ -14,8 +14,9 @@ async function main() {
     get kebabName() {
       return kebabCase(this.name);
     },
-    componentFileOptions: {
-      exportType: 'named'
+    componentOptions: {
+      exportType: 'named',
+      declaration: 'const'
     },
     environment: 'react',
     typescript: true,
@@ -27,6 +28,10 @@ async function main() {
     baseDir: process.cwd(),
     destination: '.',
     allowOutsideBase: false,
+
+    reactOptions: {
+      importReact: true
+    },
 
     pure: false
   };

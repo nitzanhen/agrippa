@@ -1,9 +1,9 @@
-import { Chalk } from 'chalk';
 import { Writable } from 'stream';
 import { formatWithOptions } from 'util';
 
-const emptyWritable = () => new Writable({ write() { } })
+const emptyWritable = () => new Writable({ write() { } });
 
+/** @todo reduce boilerplate in overrides, add description */
 export class Logger extends console.Console {
 
   private logs: string[] = [];
@@ -51,7 +51,7 @@ export class Logger extends console.Console {
    * @todo description.
    */
   consume() {
-    return this.logs.join('\n')
+    return this.logs.join('\n');
   }
 
 

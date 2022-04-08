@@ -6,12 +6,15 @@ export interface Config {
   /** Component's name in kebab case */
   kebabName: string
 
-  componentFileOptions: {
-    exportType: 'named' | 'default'
+  componentOptions: {
+    exportType: 'named' | 'default';
+    declaration: 'const' | 'function';
   }
 
   environment: 'react' | 'solidjs' | 'preact' | 'react-native' | 'custom';
-  reactOptions?: {},
+  reactOptions?: {
+    importReact: boolean;
+  },
   solidjsOptions?: {},
   preactOptions?: {},
   reactNativeOptions?: {},

@@ -51,3 +51,13 @@ export const kebabCase = (str: string) => {
 
   throw RangeError('Improper string formatting');
 };
+
+/** Simple util to render a string conditionally, or *null* if it is not met */
+export const ostr = (condition: boolean, string: string) => {
+  return condition ? string : null;
+};
+
+/** Simple util to render a string conditionally, or *an empty string* if it is not met */
+export const cstr = (condition: boolean, string: string) => {
+  return condition ? string : '';
+};
