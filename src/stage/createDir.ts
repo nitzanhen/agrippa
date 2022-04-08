@@ -5,6 +5,7 @@ import { bold, italic } from 'chalk';
 import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
 import { styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
+import { joinLines } from '../utils';
 import { createFile } from './createFile';
 import { Stage, stageResult, StageStatus } from './Stage';
 
@@ -27,10 +28,12 @@ export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptio
     }
 
     if (baseDir && !isSubDirectory(baseDir, path) && !allowOutsideBase) {
-      logger.error(`The resolved path for the directory ${italic(dirName)} falls outside the base directory.`);
-      logger.error(`Base directory: ${italic(baseDir)}`);
-      logger.error(`Resolved directory: ${italic(path)}`);
-      logger.error("To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json");
+      logger.error(joinLines(
+        `The resolved path for the directory ${italic(dirName)} falls outside the base directory.`,
+        `Base directory: ${italic(baseDir)}`,
+        `Resolved directory: ${italic(path)}`,
+        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json"
+      ));
 
       return stageResult(StageStatus.ERROR, 'Directory path outside baseDir');
     }
