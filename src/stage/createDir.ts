@@ -23,7 +23,7 @@ export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptio
     const dirName = basename(path);
 
     if (pure) {
-      return stageResult(StageStatus.NA, 'No file created (pure mode)');
+      return stageResult(StageStatus.NA, 'No directory created (pure mode)');
     }
 
     if (baseDir && !isSubDirectory(baseDir, path) && !allowOutsideBase) {
