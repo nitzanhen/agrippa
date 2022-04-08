@@ -2,8 +2,8 @@ import { Config } from '../../Config';
 import { indent, joinLines } from '../../utils';
 import { createArrowFunction, declareConst, declareFunction } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
-import { ComposerPlugin } from '../ComponentComposer';
 import { Imports } from '../Imports';
+import { ComposerPlugin } from './ComposerPlugin';
 
 export class ReactPlugin implements ComposerPlugin {
   key = 'react';

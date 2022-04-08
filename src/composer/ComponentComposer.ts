@@ -2,13 +2,7 @@
 import { Config } from '../Config';
 import { Blocks } from './Blocks';
 import { Imports } from './Imports';
-
-
-
-export type ComposerPlugin = {
-  key: string;
-  onCompose: (blocks: Blocks, imports: Imports, config: Config) => void;
-}
+import { ComposerPlugin } from './plugin';
 
 /**
  * @todo description
