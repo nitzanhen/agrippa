@@ -1,43 +1,5 @@
 import { Block } from './Blocks';
-
-export interface DefaultImport {
-  importType: 'default';
-  module: string;
-  importAs: string;
-}
-
-export interface NamedImport {
-  importType: 'named';
-  module: string;
-  whatToImport: string[];
-}
-
-export interface CompositeImport {
-  importType: 'composite';
-  module: string;
-  defaultImport: string;
-  namedImports: string[];
-}
-
-export interface SideEffectImport {
-  importType: 'side-effect';
-  module: string;
-}
-
-export type Import = DefaultImport | NamedImport | CompositeImport | SideEffectImport;
-
-export const stringifyImport = (i: Import) => {
-  switch (i.importType) {
-    case 'default':
-      return `import ${i.importAs} from '${i.module}';`;
-    case 'named':
-      return `import { ${i.whatToImport.join(', ')} } from '${i.module}';`;
-    case 'composite':
-      return `import ${i.defaultImport}, { ${i.namedImports.join(', ')} } from '${i.module}';`;
-    case 'side-effect':
-      return `import '${i.module}';`;
-  }
-};
+import { Import } from './Import';
 
 export class Imports {
   public static readonly BLOCK_KEY = 'imports';
@@ -47,12 +9,16 @@ export class Imports {
 
   public constructor() { };
 
-  public add(imp: Import) {
-    this.imports.set(imp.module, imp);
+  public add(newImport: Import) {
+    const module = newImport.module;
+    const oldImport = this.imports.get(module);
+    const i = oldImport ? Import.merge(oldImport, newImport) : newImport;
+
+    this.imports.set(module, i);
   }
 
   getBlock(): Block {
-    const data = [...this.imports.values()].map(stringifyImport).join('\n') + '\n';
+    const data = [...this.imports.values()].map(Import.stringify).join('\n') + '\n';
 
     return {
       key: Imports.BLOCK_KEY,
