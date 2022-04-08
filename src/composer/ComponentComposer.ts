@@ -18,7 +18,7 @@ export class ComponentComposer {
 
   public registerPlugin(plugin: ComposerPlugin) {
     /** @todo consider an OrderedMap? */
-    const keyIndex = this.plugins.findIndex(p => p.key === plugin.key);
+    const keyIndex = this.plugins.findIndex(p => p.id === plugin.id);
     if (keyIndex === -1) {
       this.plugins.push(plugin);
     }

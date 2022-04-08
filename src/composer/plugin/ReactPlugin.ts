@@ -7,7 +7,7 @@ import { ComposerPlugin } from './ComposerPlugin';
 
 /** @todo doc */
 export class ReactPlugin implements ComposerPlugin {
-  key = 'react';
+  id = 'react';
   rootTag = 'div';
   
 
