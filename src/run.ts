@@ -1,6 +1,6 @@
 import { Config } from './Config';
 import { Logger, styles } from './logger';
-import { Stage, summaryLine } from './stage';
+import { Context, Stage, summaryLine } from './stage';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
@@ -17,9 +17,13 @@ export interface RunOptions {
 export async function run(options: RunOptions) {
   const { config, stages } = options;
 
-  let context = { config };
-  const logger = new Logger(!config.pure ? process.stdout : undefined, process.stderr);
+  let context: Context = {
+    config,
+    createdDirs: [],
+    createdFiles: [],
+  };
 
+  const logger = new Logger(!config.pure ? process.stdout : undefined, process.stderr);
   logger.info(
     '',
     `Generating ${styles.componentName(config.name)}\n`,

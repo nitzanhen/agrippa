@@ -36,7 +36,7 @@ export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptio
       return stageResult(
         StageStatus.SUCCESS,
         `Directory ${styles.italic(dirName)} created successfully.`,
-        //{ ...context, createdDirs: [...context.createdDirs, { path }] }
+        { ...context, createdDirs: [...context.createdDirs, { path }] }
       );
     }
     catch (e) {

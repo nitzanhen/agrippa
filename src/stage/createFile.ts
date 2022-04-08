@@ -20,7 +20,7 @@ export const createFile = (file: AgrippaFile): Stage => {
       return stageResult(
         StageStatus.SUCCESS,
         `File ${styles.italic(filename)} created successfully.`,
-        //{ ...context, createdFiles: [...context.createdFiles, file] }
+        { ...context, createdFiles: [...context.createdFiles, file] }
       );
     }
 

@@ -1,9 +1,12 @@
+import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
 import { Config } from '../Config';
 import { styles } from '../logger';
 
 
 export interface Context {
   config: Config;
+  createdFiles: AgrippaFile[];
+  createdDirs: AgrippaDir[];
 }
 
 export type Stage = (context: Context, logger: Console) => Promise<StageResult>;
