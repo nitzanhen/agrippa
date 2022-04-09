@@ -69,7 +69,7 @@ export class ReactPlugin implements ComposerPlugin {
   onCompose(blocks: Blocks, imports: Imports) {
     const options = this.config.reactOptions!;
     if (options.importReact) {
-      imports.add({ module: 'react', importType: 'default', importAs: 'React' });
+      imports.add({ module: 'react', defaultImport: 'React' });
     }
 
     const declaration = this.getComponentDeclaration();
@@ -81,3 +81,5 @@ export class ReactPlugin implements ComposerPlugin {
     });
   }
 }
+
+export default 3;
