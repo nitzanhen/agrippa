@@ -83,5 +83,3 @@ export class ReactPlugin implements ComposerPlugin {
     });
   }
 }
-
-export default 3;
