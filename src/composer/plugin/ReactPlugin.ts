@@ -5,7 +5,9 @@ import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
 import { ComposerPlugin } from './ComposerPlugin';
 
-/** @todo doc */
+/** 
+ * ComponentComposer plugin for React components.
+ */
 export class ReactPlugin implements ComposerPlugin {
   id = 'react';
   rootTag = 'div';
