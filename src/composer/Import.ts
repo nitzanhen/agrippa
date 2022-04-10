@@ -28,7 +28,7 @@ export namespace Import {
 
     const namedString = namedImports?.length ? `{ ${namedImports?.join(', ')}} ` : null;
 
-    return `import ${defaultImport ?? ''}${cstr(!!defaultImport && !!namedString, ', ')}${namedString ?? ''} from ${module}`;
+    return `import ${defaultImport ?? ''}${cstr(!!defaultImport && !!namedString, ', ')}${namedString ?? ''} from '${module}'`;
   }
 
 
