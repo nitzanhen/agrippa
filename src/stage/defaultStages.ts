@@ -57,7 +57,7 @@ export function defaultIndexFile(config: Config): AgrippaFile {
 }
 
 export function defaultStages(config: Config): Stage[] {
-  const { name, kebabName, typescript, styling, styleFileOptions } = config;
+  const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = config;
 
   const dirPath = getDirPath(config);
 
@@ -66,10 +66,6 @@ export function defaultStages(config: Config): Stage[] {
     : `${kebabName}${styleFileOptions?.module ? '.module' : ''}.${styling}`;
 
   const stylesFilePath = join(dirPath, stylesFileName);
-
-  /** @todo replace with config flag (with default value set to this) */
-  const createStylesFile = ['css', 'scss', 'styled-components'].includes(styling);
-
 
   return [
     ...createDir({

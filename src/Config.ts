@@ -27,6 +27,7 @@ export interface Config {
   typescriptOptions?: {};
 
   styling?: string;
+  createStylesFile: boolean,
   styleFileOptions?: {
     extension: string;
     module: boolean;
@@ -89,6 +90,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     typescriptOptions: tsconfig ? {} : undefined,
 
     styling,
+    createStylesFile,
     styleFileOptions: createStylesFile ? {
       extension: stylesFileExtension,
       module: true,
