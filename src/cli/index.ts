@@ -18,7 +18,7 @@ async function main() {
       exportType: 'named',
       declaration: 'const'
     },
-    environment: 'react-native',
+    environment: 'solidjs',
     typescript: true,
     styling: 'scss',
     styleFileOptions: {
@@ -36,6 +36,7 @@ async function main() {
     reactNativeOptions: {
       importReact: true
     },
+    solidjsOptions: {},
 
     pure: false
   };
