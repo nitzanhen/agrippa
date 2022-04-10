@@ -1,6 +1,6 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { ComponentComposer, ImportPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { ComponentComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Config } from '../Config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
@@ -13,6 +13,7 @@ export const getEnvironmentPlugin = (config: Config) => {
     case 'react': return new ReactPlugin(config);
     case 'react-native': return new ReactNativePlugin(config);
     case 'solidjs': return new SolidPlugin(config);
+    case 'preact': return new PreactPlugin(config);
     default: return null;
   }
 };

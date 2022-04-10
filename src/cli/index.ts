@@ -18,7 +18,7 @@ async function main() {
       exportType: 'named',
       declaration: 'const'
     },
-    environment: 'solidjs',
+    environment: 'preact',
     typescript: true,
     styling: 'styled-components',
     styleFileOptions: {
@@ -37,6 +37,7 @@ async function main() {
       importReact: true
     },
     solidjsOptions: {},
+    preactOptions: {},
 
     pure: false
   };
