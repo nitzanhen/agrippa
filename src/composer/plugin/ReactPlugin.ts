@@ -6,7 +6,7 @@ import { JSXPlugin } from './JSXPlugin';
  * ComponentComposer plugin for React components.
  */
 export class ReactPlugin extends JSXPlugin {
-  id = 'react';
+  readonly id = 'react';
   rootTag = 'div';
 
   private reactOptions: NonNullable<Config['reactOptions']>;

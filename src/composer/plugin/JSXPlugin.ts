@@ -15,7 +15,7 @@ const DECLARATION_BLOCK_PRECEDENCE = 10;
 export abstract class JSXPlugin implements ComposerPlugin {
   abstract rootTag: string;
 
-  abstract id?: string;
+  abstract readonly id?: string;
 
   constructor(protected config: Config) { }
 

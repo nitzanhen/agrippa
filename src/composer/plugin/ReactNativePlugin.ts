@@ -3,7 +3,7 @@ import { Imports } from '../Imports';
 import { JSXPlugin } from './JSXPlugin';
 
 export class ReactNativePlugin extends JSXPlugin {
-  id = 'react-native';
+  readonly id = 'react-native';
   rootTag = 'View';
 
   private reactNativeOptions: NonNullable<Config['reactNativeOptions']>;

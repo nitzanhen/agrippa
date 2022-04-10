@@ -1,9 +1,8 @@
 import { Config } from '../../Config';
-import { Imports } from '../Imports';
 import { JSXPlugin } from './JSXPlugin';
 
 export class SolidPlugin extends JSXPlugin {
-  id = 'solidjs';
+  readonly id = 'solidjs';
   rootTag = 'div';
 
   private solidjsOptions: NonNullable<Config['solidjsOptions']>;
@@ -12,12 +11,12 @@ export class SolidPlugin extends JSXPlugin {
     super(config);
 
     const solidjsOptions = config.solidjsOptions;
-    if(!solidjsOptions) {
+    if (!solidjsOptions) {
       throw TypeError('SolidPlugin requires Config.solidjsOptions to be set');
     }
 
     this.solidjsOptions = solidjsOptions;
   }
 
-  declareImports(): void {}
+  declareImports(): void { }
 }
