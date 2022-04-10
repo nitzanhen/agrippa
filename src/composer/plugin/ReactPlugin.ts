@@ -1,85 +1,30 @@
 import { Config } from '../../Config';
-import { indent, joinLines } from '../../utils';
-import { createArrowFunction, declareConst, declareFunction } from '../../utils/codegen';
-import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
-import { ComposerPlugin } from './ComposerPlugin';
+import { JSXPlugin } from './JSXPlugin';
 
 /** 
  * ComponentComposer plugin for React components.
  */
-export class ReactPlugin implements ComposerPlugin {
+export class ReactPlugin extends JSXPlugin {
   id = 'react';
   rootTag = 'div';
-  
 
-  constructor(protected config: Config) { }
+  private reactOptions: NonNullable<Config['reactOptions']>;
 
-  /** @todo figure out the correct place/manner to provide TS functionality */
-  // get propsInterfaceName() {
-  //   return this.config.name + 'Props';
-  // }
+  constructor(protected config: Config) {
+    super(config);
 
-  getComponentParams() {
-    //return `props: ${this.propsInterfaceName}`;
-    return 'props';
-  }
-
-  getComponentBody() {
-
-    return joinLines(
-      '',
-      'return (',
-      indent(`<${this.rootTag}></${this.rootTag}>`),
-      ');'
-    );
-  }
-
-  getComponentConstDeclaration() {
-    const { name, componentOptions: { exportType } } = this.config;
-
-    return declareConst(
-      name,
-      createArrowFunction(
-        this.getComponentParams(),
-        this.getComponentBody()
-      ),
-      exportType === 'named'
-    );
-  }
-
-
-  getComponentFunctionDeclaration() {
-    const { name, componentOptions: { exportType } } = this.config;
-
-    return declareFunction(
-      name,
-      this.getComponentParams(),
-      this.getComponentBody(),
-      exportType === 'named'
-    );
-  }
-
-  getComponentDeclaration() {
-    const { componentOptions: { declaration } } = this.config;
-
-    return declaration === 'const'
-      ? this.getComponentConstDeclaration()
-      : this.getComponentFunctionDeclaration();
-  }
-
-  onCompose(blocks: Blocks, imports: Imports) {
-    const options = this.config.reactOptions!;
-    if (options.importReact) {
-      imports.add({ module: 'react', defaultImport: 'React' });
+    const { reactOptions } = config;
+    if (!reactOptions) {
+      throw TypeError('ReactPlugin requires Config.reactOptions to be set');
     }
 
-    const declaration = this.getComponentDeclaration();
+    this.reactOptions = reactOptions;
+  }
 
-    blocks.add({
-      key: 'declaration',
-      precedence: 10, /** @todo replace with some constant, somewhere */
-      data: declaration,
-    });
+  declareImports(imports: Imports): void {
+    if (this.reactOptions.importReact) {
+      imports.add({ module: 'react', defaultImport: 'React' });
+    }
   }
 }

@@ -1,23 +1,28 @@
-import { Blocks } from '../Blocks';
+import { Config } from '../../Config';
 import { Imports } from '../Imports';
-import { ReactPlugin } from './ReactPlugin';
+import { JSXPlugin } from './JSXPlugin';
 
-export class ReactNativePlugin extends ReactPlugin {
+export class ReactNativePlugin extends JSXPlugin {
+  id = 'react-native';
   rootTag = 'View';
 
-  onCompose(blocks: Blocks, imports: Imports): void {
-    const options = this.config.reactNativeOptions!;
-    if (options.importReact) {
+  private reactNativeOptions: NonNullable<Config['reactNativeOptions']>;
+
+  constructor(protected config: Config) {
+    super(config);
+
+    const { reactNativeOptions } = config;
+    if (!reactNativeOptions) {
+      throw TypeError('ReactPlugin requires Config.reactNativeOptions to be set');
+    }
+
+    this.reactNativeOptions = reactNativeOptions;
+  }
+
+  declareImports(imports: Imports): void {
+    if (this.reactNativeOptions.importReact) {
       imports.add({ module: 'react', defaultImport: 'React' });
     }
     imports.add({ module: 'react-native', namedImports: ['View'] });
-
-    const declaration = this.getComponentDeclaration();
-
-    blocks.add({
-      key: 'declaration',
-      precedence: 10, /** @todo replace with some constant, somewhere */
-      data: declaration,
-    });
   }
 }
