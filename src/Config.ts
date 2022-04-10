@@ -17,7 +17,9 @@ export interface Config {
   },
   solidjsOptions?: {},
   preactOptions?: {},
-  reactNativeOptions?: {},
+  reactNativeOptions?: {
+    importReact: boolean;
+  },
 
   typescript: boolean;
   typescriptOptions?: {};

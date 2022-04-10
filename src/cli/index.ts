@@ -30,9 +30,10 @@ async function main() {
     allowOutsideBase: false,
     overwrite: false,
 
-    reactOptions: {
+    reactNativeOptions: {
       importReact: true
     },
+
 
     pure: false
   };

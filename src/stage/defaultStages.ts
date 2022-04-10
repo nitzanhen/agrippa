@@ -1,6 +1,7 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { ComponentComposer, ReactPlugin } from '../composer';
+import { ComponentComposer } from '../composer';
+import { ReactNativePlugin } from '../composer/plugin/ReactNativePlugin';
 import { Config } from '../Config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
@@ -18,7 +19,7 @@ export function defaultComponentFile(config: Config): AgrippaFile {
   const componentFilePath = join(dirPath, componentFileName);
 
   const composer = new ComponentComposer(config);
-  composer.registerPlugin(new ReactPlugin(config));
+  composer.registerPlugin(new ReactNativePlugin(config));
 
   return new AgrippaFile(componentFilePath, composer.compose());
 }
