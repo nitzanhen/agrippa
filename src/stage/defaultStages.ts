@@ -1,6 +1,6 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { ComponentComposer, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { ComponentComposer, ImportPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Config } from '../Config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
@@ -17,7 +17,7 @@ export const getEnvironmentPlugin = (config: Config) => {
   }
 };
 
-export function defaultComponentFile(config: Config): AgrippaFile {
+export function defaultComponentFile(config: Config, styleFilePath?: string): AgrippaFile {
   const { name, typescript } = config;
 
   const dirPath = getDirPath(config);
@@ -31,6 +31,9 @@ export function defaultComponentFile(config: Config): AgrippaFile {
   const environmentPlugin = getEnvironmentPlugin(config);
   if (environmentPlugin) {
     composer.registerPlugin(environmentPlugin);
+  }
+  if (styleFilePath) {
+    composer.registerPlugin(new ImportPlugin({ module: styleFilePath }));
   }
 
   return new AgrippaFile(componentFilePath, composer.compose());
@@ -71,10 +74,9 @@ export function defaultStages(config: Config): Stage[] {
     ...createDir({
       path: dirPath,
       files: [
-        defaultComponentFile(config),
+        defaultComponentFile(config, createStylesFile ? `./${stylesFileName}` : undefined),
         createStylesFile && new AgrippaFile(stylesFilePath, ''),
         defaultIndexFile(config)
-
       ].filter((f): f is AgrippaFile => !!f)
     })
   ];

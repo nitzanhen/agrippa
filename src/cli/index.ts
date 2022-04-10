@@ -20,9 +20,9 @@ async function main() {
     },
     environment: 'solidjs',
     typescript: true,
-    styling: 'scss',
+    styling: 'styled-components',
     styleFileOptions: {
-      extension: 'scss',
+      extension: 'ts',
       module: true
     },
     baseDir: process.cwd(),
