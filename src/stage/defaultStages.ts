@@ -1,6 +1,6 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { ComponentComposer } from '../composer';
+import { ComponentComposer, ReactPlugin } from '../composer';
 import { ReactNativePlugin } from '../composer/plugin/ReactNativePlugin';
 import { Config } from '../Config';
 import { joinLines } from '../utils/strings';
@@ -8,6 +8,14 @@ import { createDir } from './createDir';
 import { Stage } from './Stage';
 
 const getDirPath = ({ baseDir, destination, name }: Config) => resolve(baseDir ?? process.cwd(), destination, name);
+
+export const getEnvironmentPlugin = (config: Config) => {
+  switch (config.environment) {
+    case 'react': return new ReactPlugin(config);
+    case 'react-native': return new ReactNativePlugin(config);
+    default: return null;
+  }
+};
 
 export function defaultComponentFile(config: Config): AgrippaFile {
   const { name, typescript } = config;
@@ -19,7 +27,11 @@ export function defaultComponentFile(config: Config): AgrippaFile {
   const componentFilePath = join(dirPath, componentFileName);
 
   const composer = new ComponentComposer(config);
-  composer.registerPlugin(new ReactNativePlugin(config));
+
+  const environmentPlugin = getEnvironmentPlugin(config);
+  if (environmentPlugin) {
+    composer.registerPlugin(environmentPlugin);
+  }
 
   return new AgrippaFile(componentFilePath, composer.compose());
 }

@@ -18,7 +18,7 @@ async function main() {
       exportType: 'named',
       declaration: 'const'
     },
-    environment: 'react',
+    environment: 'react-native',
     typescript: true,
     styling: 'scss',
     styleFileOptions: {
@@ -28,12 +28,14 @@ async function main() {
     baseDir: process.cwd(),
     destination: '.',
     allowOutsideBase: false,
-    overwrite: false,
+    overwrite: true,
 
+    reactOptions: {
+      importReact: true
+    },
     reactNativeOptions: {
       importReact: true
     },
-
 
     pure: false
   };
