@@ -1,6 +1,6 @@
 import { Config } from '../../config';
 import { indent, joinLines } from '../../utils';
-import { createArrowFunction, declareConst, declareFunction, declareInterface, declareType } from '../../utils/codegen';
+import { createArrowFunction, createDefaultExport, declareConst, declareFunction, declareInterface, declareType } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
 import { ComposerPlugin } from './ComposerPlugin';
@@ -11,6 +11,9 @@ const DECLARATION_BLOCK_PRECEDENCE = 10;
 
 const TS_PROPS_BLOCK_KEY = 'ts-prop-declaration';
 const TS_PROPS_BLOCK_PRECEDENCE = 5;
+
+const DEFAULT_EXPORT_BLOCK_KEY = 'default-export';
+const DEFAULT_EXPORT_BLOCK_PRECEDENCE = 100;
 
 /**
  * Base composer plugin for JSX components.
@@ -103,7 +106,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
 
 
   onCompose(blocks: Blocks, imports: Imports): void {
-    const { typescript } = this.config;
+    const { typescript, componentOptions: { exportType }, name } = this.config;
 
     this.declareImports(imports);
 
@@ -120,5 +123,13 @@ export abstract class JSXPlugin implements ComposerPlugin {
       precedence: DECLARATION_BLOCK_PRECEDENCE,
       data: this.getComponentDeclaration()
     });
+
+    if (exportType === 'default') {
+      blocks.add({
+        key: DEFAULT_EXPORT_BLOCK_KEY,
+        precedence: DEFAULT_EXPORT_BLOCK_PRECEDENCE,
+        data: createDefaultExport(name)
+      });
+    }
   }
 }
