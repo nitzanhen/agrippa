@@ -26,7 +26,7 @@ export namespace Import {
   export function stringify(i: Import) {
     const { module, namedImports, defaultImport } = i;
 
-    const namedString = namedImports?.length ? `{ ${namedImports?.join(', ')}} ` : null;
+    const namedString = namedImports?.length ? `{ ${namedImports?.join(', ')} }` : null;
 
     return `import ${defaultImport ?? ''}${cstr(!!defaultImport && !!namedString, ', ')}${namedString ?? ''}${cstr(!!defaultImport || !!namedString, ' from ')}'${module}';`;
   }
