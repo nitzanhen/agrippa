@@ -1,22 +1,39 @@
+import merge from 'deepmerge';
 import { DeepPartial, kebabCase } from '../utils';
 import { Config } from './Config';
-import merge from 'deepmerge';
 
 export interface InputConfig extends DeepPartial<Config> {
   name: string;
 }
 
+export const defaultEnvironment = (packageJson: any): Config['environment'] => {
+  const dependencies = packageJson.dependencies as Record<string, string>;
+
+  if ('react-native' in dependencies) {
+    return 'react-native';
+  }
+  else if ('preact' in dependencies) {
+    return 'preact';
+  }
+  else if ('solid-js' in dependencies) {
+    return 'solidjs';
+  }
+  else if ('react' in dependencies) {
+    return 'react';
+  }
+
+  return 'custom';
+};
+
 export function createConfig(input: InputConfig, envFiles: Record<string, any>): Config {
   const { packageJson, tsconfig } = envFiles;
-  const { name } = input;
+  const { name, styling } = input;
 
-  const environment = 'custom' as Config['environment']; // todo
+  const environment = defaultEnvironment(packageJson);
 
   const importReact = tsconfig?.compilerOptions?.jsx
     ? !/^react-jsx/.test(tsconfig.compilerOptions.jsx)
     : true;
-
-  const styling = undefined as string | undefined; // todo
 
   const createStylesFile = (['css', 'scss', 'styled-components'] as any[]).includes(styling);
   const stylesFileExtension = (() => {
