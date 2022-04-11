@@ -1,4 +1,4 @@
-import { Config } from '../../Config';
+import { Config } from '../../config';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
 

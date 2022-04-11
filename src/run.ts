@@ -1,4 +1,4 @@
-import { Config } from './Config';
+import { Config } from './config/Config';
 import { Logger, styles } from './logger';
 import { Context, Stage, summaryLine } from './stage';
 import { indent } from './utils/strings';

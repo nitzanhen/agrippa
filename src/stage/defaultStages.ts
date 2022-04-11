@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
 import { ComponentComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
-import { Config } from '../Config';
+import { Config } from '../config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
 import { Stage } from './Stage';

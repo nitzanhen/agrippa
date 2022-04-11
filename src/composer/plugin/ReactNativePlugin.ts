@@ -1,4 +1,4 @@
-import { Config } from '../../Config';
+import { Config } from '../../config';
 import { Imports } from '../Imports';
 import { JSXPlugin } from './JSXPlugin';
 

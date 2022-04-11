@@ -1,4 +1,4 @@
-import { Config } from '../../Config';
+import { Config } from '../../config';
 import { indent, joinLines } from '../../utils';
 import { createArrowFunction, declareConst, declareFunction } from '../../utils/codegen';
 import { Blocks } from '../Blocks';

@@ -1,4 +1,4 @@
-import { Config } from '../../Config';
+import { Config } from '../../config';
 import { JSXPlugin } from './JSXPlugin';
 
 export class PreactPlugin extends JSXPlugin {

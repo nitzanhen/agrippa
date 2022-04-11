@@ -1,5 +1,5 @@
 import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
-import { Config } from '../Config';
+import { Config } from '../config';
 import { styles } from '../logger';
 
 

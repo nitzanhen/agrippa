@@ -1,4 +1,4 @@
-import { createConfig } from '../Config';
+import { createConfig } from '../config';
 import { loadFiles } from '../loadFiles';
 import { run } from '../run';
 import { defaultStages } from '../stage';
