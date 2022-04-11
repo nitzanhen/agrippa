@@ -1,37 +1,6 @@
 import { cstr, indent } from './strings';
 
 /**
- * @todo
- * Create an import string.
- * @param module where to import from 
- * @param whatToImport the name of the module object to be imported
- * @param importType whether to create a named or default import
- * 
- * @example
- * createImport('react', 'React', 'default') => import React from 'react';
- * createImport('./styles.css') => import './styles.css';
- */
-// export function createImport(module: string): string;
-// export function createImport(module: string, importType: 'default', whatToImport: string): string;
-// export function createImport(module: string, importType: 'named', namedImports: string | string[]): string;
-// export function createImport(module: string, importType: 'composite', whatToImport: [defaultImport: string, ...namedImports: string[]]): string;
-// export function createImport(module: string, importType?: 'named' | 'default' | 'composite', whatToImport?: string | string[]): string {
-//   if (!whatToImport) {
-//     return `import '${module}';`;
-//   }
-//   else if (importType === 'composite') {
-//     const [defaultImport, ...namedImports] = whatToImport as string[];
-//     return `import ${defaultImport}, { ${namedImports.join(', ')} } from '${module}';`;
-//   }
-//   else if (importType === 'named') {
-//     const namedImports = Array.isArray(whatToImport) ? whatToImport.join(', ') : whatToImport;
-//     return `import { ${namedImports} } from '${module}';`;
-//   }
-
-//   return `import ${whatToImport} from '${module}';`;
-// }
-
-/**
  * Create a const declaration string
  * 
  * @param name the name to give the const
