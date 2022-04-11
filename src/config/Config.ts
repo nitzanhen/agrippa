@@ -23,7 +23,9 @@ export interface Config {
   },
 
   typescript: boolean;
-  typescriptOptions?: {};
+  typescriptOptions?: {
+    propDeclaration: 'interface' | 'type' | null
+  };
 
   styling?: string;
   createStylesFile: boolean,

@@ -65,7 +65,9 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     } : undefined,
 
     typescript: !!tsconfig,
-    typescriptOptions: tsconfig ? {} : undefined,
+    typescriptOptions: tsconfig ? {
+      propDeclaration: 'interface'
+    } : undefined,
 
     styling,
     createStylesFile,
