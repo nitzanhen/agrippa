@@ -78,9 +78,9 @@ export const createDefaultExport = (name: string) => `export default ${name};`;
  * createComment('single', 'hello!!!') => // 'hello!!!'
  */
 export const createComment = (type: 'single' | 'multi' | 'jsdoc', content: string) => ({
-  single: (content: string) => `// ${content}`,
-  multi: (content: string) => ['/*', ' * ' + content, ' */'].join('\n'),
-  jsdoc: (content: string) => ['/**', ' * ' + content, ' */'].join('\n'),
+  single: (content: string) => content.split('\n').map(ln => '// ' + ln).join('\n'),
+  multi: (content: string) => ['/*', ...content.split('\n').map(ln => '* ' + ln), ' */'].join('\n'),
+  jsdoc: (content: string) => ['/**', ...content.split('\n').map(ln => '* ' + ln), ' */'].join('\n'),
 })[type](content);
 
 /**
