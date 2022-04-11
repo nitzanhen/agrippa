@@ -21,7 +21,7 @@ export class Blocks {
     return this.blocks.get(key);
   }
 
-  add({ key, precedence, data, separator = '\n' }: SemiPartial<Block, 'separator'>) {
+  add({ key, precedence, data, separator = '\n\n' }: SemiPartial<Block, 'separator'>) {
     this.blocks.set(key, { key, precedence, data, separator });
   }
 
