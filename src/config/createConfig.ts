@@ -29,7 +29,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
   const { packageJson, tsconfig } = envFiles;
   const { name, styling } = input;
 
-  const environment = defaultEnvironment(packageJson);
+  const environment = input.environment ?? defaultEnvironment(packageJson);
 
   const importReact = tsconfig?.compilerOptions?.jsx
     ? !/^react-jsx/.test(tsconfig.compilerOptions.jsx)

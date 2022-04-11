@@ -10,7 +10,8 @@ async function main() {
 
   const config = createConfig({
     name: 'NiceComponent',
-    'styling': 'scss',
+    environment: 'react',
+    styling: 'scss',
     overwrite: true
   }, envFiles);
 
