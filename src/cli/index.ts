@@ -8,22 +8,14 @@ async function main() {
 
   const envFiles = await loadFiles();
 
-  const config = createConfig({
+  await run({
     name: 'NiceComponent',
     environment: 'react-native',
     styling: 'react-native',
     overwrite: true
-  }, envFiles);
-
-  console.log(config);
-
-  const stages = defaultStages(config);
-
-  await run({
-    envFiles,
-    config,
-    stages
-  });
+  },
+    { envFiles }
+  );
 }
 
 main().catch(console.error);

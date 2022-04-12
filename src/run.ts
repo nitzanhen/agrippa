@@ -1,21 +1,26 @@
+import { createConfig, InputConfig } from './config';
 import { Config } from './config/Config';
+import { loadFiles } from './loadFiles';
 import { Logger, styles } from './logger';
-import { Context, Stage, summaryLine } from './stage';
+import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
-  envFiles: Record<string, any>;
-  config: Config;
-  stages: Stage[]
+  envFiles?: Record<string, any>;
+  stages?: Stage[]
 }
-
 
 /**
  * Main Agrippa process.
  * Generates directories, files and file contents based on the given params.
  */
-export async function run(options: RunOptions) {
-  const { config, stages } = options;
+export async function run(inputConfig: InputConfig, options: RunOptions) {
+
+  const envFiles = options.envFiles ?? (await loadFiles());
+
+  const config = createConfig(inputConfig, envFiles);
+
+  const stages = options.stages ?? defaultStages(config);
 
   let context: Context = {
     config,
