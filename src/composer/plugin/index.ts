@@ -5,3 +5,4 @@ export * from './SolidPlugin';
 export * from './PreactPlugin';
 export * from './ImportPlugin';
 export * from './CommentPlugin';
+export * from './PropTypesPlugin';
