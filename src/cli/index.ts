@@ -10,8 +10,8 @@ async function main() {
 
   const config = createConfig({
     name: 'NiceComponent',
-    environment: 'react',
-    styling: 'scss',
+    environment: 'react-native',
+    styling: 'react-native',
     overwrite: true
   }, envFiles);
 
