@@ -105,7 +105,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
   }
 
 
-  onCompose(blocks: Blocks, imports: Imports): void {
+  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     const { typescript, componentOptions: { exportType }, name } = this.config;
 
     this.declareImports(imports);

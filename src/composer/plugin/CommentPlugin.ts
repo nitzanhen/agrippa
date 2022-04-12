@@ -1,5 +1,7 @@
+import { Config } from '../../config';
 import { Blocks } from '../Blocks';
 import { Comment } from '../Comment';
+import { Imports } from '../Imports';
 import { ComposerPlugin } from './ComposerPlugin';
 
 /**
@@ -16,7 +18,7 @@ export class CommentPlugin implements ComposerPlugin {
     protected readonly precedence: number
   ) { }
 
-  onCompose(blocks: Blocks): void {
+  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     blocks.add({
       key: this.key,
       precedence: this.precedence,

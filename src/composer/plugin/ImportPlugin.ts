@@ -1,6 +1,7 @@
+import { Config } from '../../config';
 import { Blocks } from '../Blocks';
 import { Import } from '../Import';
-import {  Imports } from '../Imports';
+import { Imports } from '../Imports';
 import { ComposerPlugin } from './ComposerPlugin';
 
 /**
@@ -14,7 +15,7 @@ export class ImportPlugin implements ComposerPlugin {
     this.import = i;
   }
 
-  onCompose(_: Blocks, imports: Imports): void {
+  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     imports.add(this.import);
   }
 }
