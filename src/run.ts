@@ -1,5 +1,4 @@
 import { createConfig, InputConfig } from './config';
-import { Config } from './config/Config';
 import { loadFiles } from './loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';

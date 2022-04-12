@@ -1,10 +1,10 @@
 import { Config } from '../../config';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
-import { ComposerPlugin } from './ComposerPlugin';
-import { DECLARATION_BLOCK_PRECEDENCE } from './JSXPlugin';
 import { Comment } from '../Comment';
 import { cstr } from '../../utils';
+import { ComposerPlugin } from './ComposerPlugin';
+import { DECLARATION_BLOCK_PRECEDENCE } from './JSXPlugin';
 
 /** @todo find a better place for these */
 export const TS_CHECK_BLOCK_KEY = 'ts-check';
@@ -14,7 +14,7 @@ export const DECLARATION_JSDOC_BLOCK_KEY = 'declaration-jsdoc';
 export const DECLARATION_JSDOC_BLOCK_PRECEDENCE = DECLARATION_BLOCK_PRECEDENCE - 1;
 
 export const PROPS_JSDOC_BLOCK_KEY = 'props-jsdoc';
-export const PROPS_JSDOC_BLOCK_PRECEDENCE = 5
+export const PROPS_JSDOC_BLOCK_PRECEDENCE = 5;
 
 export interface JSDocPluginOptions {
   generateTypes?: boolean;
@@ -71,17 +71,17 @@ export class JSDocPlugin implements ComposerPlugin {
         key: PROPS_JSDOC_BLOCK_KEY,
         precedence: PROPS_JSDOC_BLOCK_PRECEDENCE,
         data: Comment.stringify({ type: 'jsdoc', content: `@typedef {Object} ${this.propInterfaceName}` })
-      })
+      });
     }
 
-    const commentContent = this.getCommentContent?.(this.config) ?? ''
-    const commentString = commentContent + cstr(this.generateTypes, `\n@param {${this.propInterfaceName}} props`)
+    const commentContent = this.getCommentContent?.(this.config) ?? '';
+    const commentString = commentContent + cstr(this.generateTypes, `\n@param {${this.propInterfaceName}} props`);
 
     blocks.add({
       key: DECLARATION_JSDOC_BLOCK_KEY,
       precedence: DECLARATION_JSDOC_BLOCK_PRECEDENCE,
       data: Comment.stringify({ type: 'jsdoc', content: commentString }),
       separator: '\n'
-    })
+    });
   }
 }

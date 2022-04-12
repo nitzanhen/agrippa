@@ -1,7 +1,5 @@
-import { createConfig } from '../config';
 import { loadFiles } from '../loadFiles';
 import { run } from '../run';
-import { defaultStages } from '../stage';
 
 
 async function main() {

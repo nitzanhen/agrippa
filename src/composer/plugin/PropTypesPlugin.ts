@@ -12,7 +12,7 @@ export class PropTypesPlugin implements ComposerPlugin {
   id = 'prop-types';
 
   protected getPropTypesDeclaration(name: string) {
-    return createAssignment(name, 'propTypes', '{}')
+    return createAssignment(name, 'propTypes', '{}');
   }
 
   onCompose(blocks: Blocks, imports: Imports, config: Config): void {
@@ -27,6 +27,6 @@ export class PropTypesPlugin implements ComposerPlugin {
       key: PROP_TYPES_BLOCK_KEY,
       precedence: PROP_TYPES_BLOCK_PRECEDENCE,
       data: this.getPropTypesDeclaration(name)
-    })
+    });
   }
 }

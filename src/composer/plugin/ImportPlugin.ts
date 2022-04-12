@@ -15,6 +15,7 @@ export class ImportPlugin implements ComposerPlugin {
     this.import = i;
   }
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     imports.add(this.import);
   }

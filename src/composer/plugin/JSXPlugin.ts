@@ -104,7 +104,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
       : this.getComponentFunctionDeclaration();
   }
 
-
+  // eslint-disable-next-line unused-imports/no-unused-vars
   onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     const { typescript, componentOptions: { exportType }, name } = this.config;
 

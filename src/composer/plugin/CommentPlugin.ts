@@ -18,6 +18,7 @@ export class CommentPlugin implements ComposerPlugin {
     protected readonly precedence: number
   ) { }
 
+  // eslint-disable-next-line unused-imports/no-unused-vars
   onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     blocks.add({
       key: this.key,
