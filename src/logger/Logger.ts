@@ -51,8 +51,12 @@ export class Logger extends console.Console {
    * @todo description.
    */
   consume() {
-    return this.logs.join('\n');
+    const logs = this.logs;
+    this.logs = [];
+    return logs.join('\n');
   }
 
-
 }
+
+/** @todo */
+export const logger = new Logger(process.stdout, process.stderr);
