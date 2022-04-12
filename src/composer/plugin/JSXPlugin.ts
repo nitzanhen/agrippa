@@ -6,14 +6,14 @@ import { Imports } from '../Imports';
 import { ComposerPlugin } from './ComposerPlugin';
 
 /** @todo find a better place for these */
-const DECLARATION_BLOCK_KEY = 'declaration';
-const DECLARATION_BLOCK_PRECEDENCE = 10;
+export const DECLARATION_BLOCK_KEY = 'declaration';
+export const DECLARATION_BLOCK_PRECEDENCE = 10;
 
-const TS_PROPS_BLOCK_KEY = 'ts-prop-declaration';
-const TS_PROPS_BLOCK_PRECEDENCE = 5;
+export const TS_PROPS_BLOCK_KEY = 'ts-prop-declaration';
+export const TS_PROPS_BLOCK_PRECEDENCE = 5;
 
-const DEFAULT_EXPORT_BLOCK_KEY = 'default-export';
-const DEFAULT_EXPORT_BLOCK_PRECEDENCE = 20;
+export const DEFAULT_EXPORT_BLOCK_KEY = 'default-export';
+export const DEFAULT_EXPORT_BLOCK_PRECEDENCE = 20;
 
 /**
  * Base composer plugin for JSX components.
