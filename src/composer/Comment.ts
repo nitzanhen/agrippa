@@ -27,15 +27,15 @@ export namespace Comment {
     switch (c.type) {
       case 'single': return c.content
         .split('\n')
-        .map(ln => `// ${ln}\n`)
+        .map(ln => `// ${ln}`)
         .join('');
       case 'block': return pipe(c.content)
         (data => data.split('\n').map(ln => ' * ' + ln).join('\n'))
-        (body => `/*\n${body}\n */\n`)
+        (body => `/*\n${body}\n */`)
         .go();
       case 'jsdoc': return pipe(c.content)
       (data => data.split('\n').map(ln => ' * ' + ln).join('\n'))
-      (body => `/**\n${body}\n */\n`)
+      (body => `/**\n${body}\n */`)
       .go();
     }
   }
