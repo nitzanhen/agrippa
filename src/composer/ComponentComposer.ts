@@ -16,7 +16,7 @@ export class ComponentComposer {
     this.config = config;
   }
 
-  public registerPlugin(plugin: ComposerPlugin) {
+  public addPlugin(plugin: ComposerPlugin) {
     const keyIndex = plugin.id ? this.plugins.findIndex(p => p.id === plugin.id) : -1;
     if (keyIndex === -1) {
       this.plugins.push(plugin);

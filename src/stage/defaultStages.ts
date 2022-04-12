@@ -31,10 +31,10 @@ export function defaultComponentFile(config: Config, styleFilePath?: string): Ag
 
   const environmentPlugin = getEnvironmentPlugin(config);
   if (environmentPlugin) {
-    composer.registerPlugin(environmentPlugin);
+    composer.addPlugin(environmentPlugin);
   }
   if (styleFilePath) {
-    composer.registerPlugin(new ImportPlugin({ module: styleFilePath }));
+    composer.addPlugin(new ImportPlugin({ module: styleFilePath }));
   }
 
   return new AgrippaFile(componentFilePath, composer.compose());
