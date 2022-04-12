@@ -13,7 +13,7 @@ const TS_PROPS_BLOCK_KEY = 'ts-prop-declaration';
 const TS_PROPS_BLOCK_PRECEDENCE = 5;
 
 const DEFAULT_EXPORT_BLOCK_KEY = 'default-export';
-const DEFAULT_EXPORT_BLOCK_PRECEDENCE = 100;
+const DEFAULT_EXPORT_BLOCK_PRECEDENCE = 20;
 
 /**
  * Base composer plugin for JSX components.
