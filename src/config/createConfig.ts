@@ -1,10 +1,12 @@
 import merge from 'deepmerge';
 import { DeepPartial, kebabCase } from '../utils';
 import { Config } from './Config';
+import { Styling } from './Styling';
 
 export interface InputConfig extends DeepPartial<Config> {
   name: string;
 }
+
 
 export const defaultEnvironment = (packageJson: any): Config['environment'] => {
   const dependencies = packageJson.dependencies as Record<string, string>;
@@ -22,7 +24,7 @@ export const defaultEnvironment = (packageJson: any): Config['environment'] => {
     return 'react';
   }
 
-  return 'custom';
+  return '';
 };
 
 export function createConfig(input: InputConfig, envFiles: Record<string, any>): Config {
@@ -35,7 +37,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     ? !/^react-jsx/.test(tsconfig.compilerOptions.jsx)
     : true;
 
-  const createStylesFile = (['css', 'scss', 'styled-components'] as any[]).includes(styling);
+  const createStylesFile = ([Styling.CSS, Styling.SCSS, Styling.STYLED_COMPONENTS] as any[]).includes(styling);
   const stylesFileExtension = (() => {
     switch (styling) {
       case 'css': return 'css';

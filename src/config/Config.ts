@@ -1,3 +1,5 @@
+import { Environment } from './Environment';
+import { Styling } from './Styling';
 
 
 /** @todo descriptions */
@@ -12,7 +14,7 @@ export interface Config {
     declaration: 'const' | 'function';
   }
 
-  environment: 'react' | 'solidjs' | 'preact' | 'react-native' | 'custom';
+  environment: Environment | string;
   reactOptions?: {
     importReact: boolean;
   },
@@ -27,7 +29,7 @@ export interface Config {
     propDeclaration: 'interface' | 'type' | null
   };
 
-  styling?: string;
+  styling?: Styling | string;
   createStylesFile: boolean,
   styleFileOptions?: {
     extension: string;
