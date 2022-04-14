@@ -20,7 +20,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
   const config = createConfig(inputConfig, envFiles);
 
   const stages = options.stages ?? defaultStages(config);
-
+  
   let context: Context = {
     config,
     createdDirs: [],

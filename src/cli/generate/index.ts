@@ -3,6 +3,7 @@ import { InputConfig } from '../../config';
 import { Environment } from '../../config/Environment';
 import { Styling } from '../../config/Styling';
 import { run } from '../../run';
+import { pascalCase } from '../../utils';
 
 const builder = async (yargs: yargs.Argv) =>
   yargs.positional('name', {
@@ -79,9 +80,10 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const environment = Environment.fromString(argv.environment!) ?? argv.environment;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
+    const name = pascalCase(argv.name);
 
     const inputConfig: InputConfig = {
-      name: argv.name,
+      name,
       environment,
 
       typescript: argv.typescript,
