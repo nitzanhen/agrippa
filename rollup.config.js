@@ -2,6 +2,7 @@ import { join } from 'path';
 import { defineConfig } from 'rollup';
 import eslint from '@rollup/plugin-eslint';
 import esbuild from 'rollup-plugin-esbuild';
+import json from '@rollup/plugin-json';
 import pkgJson from './package.json';
 
 const src = join(__dirname, 'src');
@@ -19,6 +20,7 @@ export default defineConfig([
     external: externals,
     plugins: [
       eslint({ throwOnError: true }),
+      json(),
       esbuild(),
     ],
     output: [{
@@ -37,6 +39,7 @@ export default defineConfig([
     external: externals,
     plugins: [
       eslint({ throwOnError: true }),
+      json(),
       esbuild(),
     ],
     output: {

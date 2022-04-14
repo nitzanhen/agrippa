@@ -1,5 +1,4 @@
-
 /**
  * This is *Agrippa's* package.json.
  */
-export const pkgJson = require('../../package.json');
+export { default as pkgJson } from '../../package.json';

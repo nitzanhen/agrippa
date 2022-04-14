@@ -44,6 +44,7 @@
   "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
     "@rollup/plugin-eslint": "^8.0.1",
+    "@rollup/plugin-json": "^4.1.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.4",
     "@types/semver": "^7.3.8",
