@@ -83,7 +83,8 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     allowOutsideBase: false,
 
     overwrite: false,
-    pure: false
+    pure: false,
+    debug: false
   };
 
   return assignDefaults(defaults, input as Config);

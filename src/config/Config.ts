@@ -42,4 +42,5 @@ export interface Config {
 
   overwrite: boolean;
   pure: boolean;
+  debug: boolean;
 }

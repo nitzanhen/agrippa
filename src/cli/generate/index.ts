@@ -102,7 +102,7 @@ export const generateCommand: GenerateCommand = {
       destination: argv.destination,
       allowOutsideBase: argv.allowOutsideBase,
 
-      //debug: argv.debug,
+      debug: argv.debug,
       overwrite: argv.overwrite,
       pure: false,
     };
