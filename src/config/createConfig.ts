@@ -1,5 +1,5 @@
-import merge from 'deepmerge';
 import { DeepPartial, kebabCase } from '../utils';
+import { assignDefaults } from '../utils/object';
 import { Config } from './Config';
 import { Styling } from './Styling';
 
@@ -86,5 +86,5 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     pure: false
   };
 
-  return merge(defaults, input as Config);
+  return assignDefaults(defaults, input as Config);
 }
