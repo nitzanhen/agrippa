@@ -13,7 +13,7 @@ export interface RunOptions {
  * Main Agrippa process.
  * Generates directories, files and file contents based on the given params.
  */
-export async function run(inputConfig: InputConfig, options: RunOptions) {
+export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   const envFiles = options.envFiles ?? (await loadFiles());
 
