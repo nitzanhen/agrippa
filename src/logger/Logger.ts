@@ -26,6 +26,20 @@ export interface Logger {
  */
 export class Logger extends EventEmitter {
 
+  /** 
+   * Returns a logger with a listener attached that pipes this logger's logs to the console.
+   * All logs are sent to `stdout`, except for `Log`s of the `'error'` type, which are sent
+   * to `stderr` instead.
+   */
+  static consoleLogger(isDebug = false): Logger {
+    const logger = new Logger(isDebug);
+    logger.on('log', ({ type, message }) =>
+      void (type === 'error' ? console.error : console.log)(message)
+    );
+
+    return logger;
+  }
+
   public isDebug;
   protected logs: Logger.Log[] = [];
 
@@ -38,7 +52,9 @@ export class Logger extends EventEmitter {
   }
 
   protected format(args: unknown[], style: (x: unknown) => unknown = x => x) {
-    return formatWithOptions({ colors: true }, ...args.map(m => style(m)));
+    return args.map(msg => formatWithOptions({ colors: true }, msg))
+      .map(msg => style(msg))
+      .join('\n');
   }
 
 
@@ -86,5 +102,3 @@ export class Logger extends EventEmitter {
   }
 
 }
-
-export const globalLogger = new Logger();

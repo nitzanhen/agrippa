@@ -6,8 +6,6 @@ export enum Environment {
   REACT_NATIVE = 'react-native',
 }
 
-
-
 export namespace Environment {
 
   const values = [

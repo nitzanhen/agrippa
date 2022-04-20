@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { italic, magenta } from 'chalk';
+import { italic, magenta, bold } from 'chalk';
 import { diff, gt, lt } from 'semver';
 import { Logger } from '../logger';
 import { pkgJson } from './pkgJson';
@@ -11,17 +11,21 @@ import { pkgJson } from './pkgJson';
  * (The reason for this is that we want to call lookForUpdates() when agrippa launches, but defer the logging
  * to the end of the run.)
  */
-export const lookForUpdates = async (): Promise<(logger: Logger) => void> => {
+export const lookForUpdates = async (logger: Logger): Promise<() => void> => {
+  logger.debug('lookForUpdates: pinging the npm registry');
+  const sendTime = Date.now();
   const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
+  const endTime = Date.now();
+  logger.debug(`lookForUpdates: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
   const latestVersion = res.data.version;
   const currentVersion = pkgJson.version;
 
-  return (logger) => {
+  return () => {
     if (gt(latestVersion, currentVersion)) {
       const df = diff(latestVersion, currentVersion);
-      logger.warn(
-        `New ${df} version available: ${latestVersion}!`,
-        `please update now by typing ${magenta('npm i -g agrippa')} into the terminal`
+      logger.info(
+        bold(`New ${df} version available: ${latestVersion}!`),
+        bold(`please update now by typing ${magenta('npm i -g agrippa')} into the terminal`),
       );
     }
     else if (lt(latestVersion, currentVersion)) {

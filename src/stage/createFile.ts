@@ -9,7 +9,7 @@ import { joinLines } from '../utils';
 import { Stage, stageResult, StageStatus } from './Stage';
 
 export const createFile = (file: AgrippaFile): Stage => {
-  return async (context, logger) => {
+  return async function fileStage(context, logger) {
     const { config } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = config;
     const { data, path } = file;
@@ -39,7 +39,7 @@ export const createFile = (file: AgrippaFile): Stage => {
         return stageResult(StageStatus.ERROR, `File ${italic(filename)} already exists.`);
       }
 
-      // File exists, but --overwrite was passed; log for info and continure.
+      // File exists, but --overwrite was passed; log for info and continue.
       logger.info('File exists, and was overwritten.');
     }
 

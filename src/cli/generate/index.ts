@@ -1,10 +1,13 @@
+import { italic } from 'chalk';
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { InputConfig } from '../../config';
 import { Environment } from '../../config/Environment';
 import { Styling } from '../../config/Styling';
-import { globalLogger } from '../../logger';
+import { Logger } from '../../logger';
 import { run } from '../../run';
 import { pascalCase } from '../../utils';
+
+const cliLogger = Logger.consoleLogger();
 
 const builder = async (yargs: yargs.Argv) =>
   yargs.positional('name', {
@@ -71,10 +74,12 @@ const builder = async (yargs: yargs.Argv) =>
       }
     })
     .middleware(({ debug = false }) => {
-      process.env.IS_DEBUG = JSON.stringify(debug);
-      globalLogger.isDebug = debug;
+      if (debug) {
+        process.env.IS_DEBUG = JSON.stringify(true);
+        cliLogger.isDebug = true;
 
-      globalLogger.debug('Debug mode is on');
+        cliLogger.debug('', 'Agrippa CLI: Debug mode is ON');
+      }
     }, true);
 
 type GenerateCommand = (typeof builder) extends BuilderCallback<{}, infer R> ? CommandModule<{}, R> : never
@@ -88,6 +93,9 @@ export const generateCommand: GenerateCommand = {
     const environment = Environment.fromString(argv.environment!) ?? argv.environment;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
     const name = pascalCase(argv.name);
+
+    cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(name)} in environment ${italic(environment)}`);
+    cliLogger.debug('argv:', argv);
 
     const inputConfig: InputConfig = {
       name,
@@ -114,6 +122,6 @@ export const generateCommand: GenerateCommand = {
       pure: false,
     };
 
-    await run(inputConfig);
+    await run(inputConfig, { logger: cliLogger });
   }
 };
