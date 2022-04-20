@@ -1,12 +1,10 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
-import { lookForUpdates } from '../utils/lookForUpdates';
 import { generateCommand } from './generate';
 // import { initCommand } from './init';
 
 // logger.info(`\nAgrippa v${pkgJson.version}`);
 
-const updatePromise = lookForUpdates();
 
 // Init yargs
 yargs(hideBin(process.argv))
@@ -17,8 +15,6 @@ yargs(hideBin(process.argv))
   .strict()
   .demandCommand(1, 'Please specify a command')
   .parseAsync()
-  .then(() => updatePromise)
-  .then(updateCallback => updateCallback())
   .catch(console.error);
 
 

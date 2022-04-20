@@ -1,7 +1,8 @@
 import { createConfig, InputConfig } from './config';
 import { loadFiles } from './loadFiles';
-import { globalLogger, Logger, styles } from './logger';
+import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
+import { lookForUpdates } from './utils/lookForUpdates';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
@@ -15,6 +16,8 @@ export interface RunOptions {
  */
 export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
+  const updatePromise = lookForUpdates();
+
   const envFiles = options.envFiles ?? (await loadFiles());
 
   const config = createConfig(inputConfig, envFiles);
@@ -27,12 +30,14 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
     createdFiles: [],
   };
 
+  const logger = new Logger(config.debug);
+
   // Initialize logger
   if (!config.pure) {
-    globalLogger.on('log', ({ type, message }) => void (type === 'error' ? console.error : console.log)(message));
+    logger.on('log', ({ type, message }) => void (type === 'error' ? console.error : console.log)(message));
   }
 
-  globalLogger.info(
+  logger.info(
     '',
     `Generating ${styles.componentName(config.name)}\n`,
     //`Environment: ${styles.tag(getEnvironmentTags(config))}`,
@@ -43,13 +48,15 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
     const result = await stage(context, stageLogger);
     const stageLogs = stageLogger.consume();
-    globalLogger.info(summaryLine(result));
-    globalLogger.info(indent(styles.comment(stageLogs), 2, ' ') + '\n');
+    logger.info(summaryLine(result));
+    logger.info(indent(styles.comment(stageLogs), 2, ' ') + '\n');
 
     context = result.newContext ?? context;
   }
 
+  (await updatePromise)(logger);
+
   return {
-    logs: globalLogger.consume()
+    logs: logger.consume()
   };
 }
