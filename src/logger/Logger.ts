@@ -1,62 +1,90 @@
-import { Writable } from 'stream';
+import EventEmitter from 'events';
 import { formatWithOptions } from 'util';
+import { styles } from './styles';
 
-const emptyWritable = () => new Writable({ write() { } });
+export namespace Logger {
+  export type LogType = 'info' | 'debug' | 'warning' | 'error'
 
-/** @todo reduce boilerplate in overrides, add description */
-export class Logger extends console.Console {
+  export interface Log {
+    type: LogType;
+    message: string;
+  }
+}
 
-  private logs: string[] = [];
+export interface LoggerEvents extends Record<Logger.LogType, (message: string) => void> {
+  'log': (log: Logger.Log) => void;
+}
 
-  constructor(
-    out: NodeJS.WritableStream = emptyWritable(),
-    err?: NodeJS.WritableStream
-  ) {
-    super(out, err, false);
+export interface Logger {
+  on<E extends keyof LoggerEvents>(event: E, listener: LoggerEvents[E]): this;
+  emit<E extends keyof LoggerEvents>(event: E, ...args: Parameters<LoggerEvents[E]>): boolean;
+}
+
+/** 
+ * Logger class for Agrippa. This is a simple EventEmitter, with event for each of
+ * the defined `Logger.LogType`s, as well as a generic `'log'` event.
+ */
+export class Logger extends EventEmitter {
+
+  public isDebug;
+  protected logs: Logger.Log[] = [];
+
+  constructor(isDebug = false) {
+    super();
+    this.isDebug = isDebug;
+
+    // To prevent Node.js crash on first error
+    // this.on('error', () => {});
   }
 
-  private format(...args: unknown[]) {
-    return formatWithOptions({ colors: true }, ...args);
+  protected format(args: unknown[], style: (x: unknown) => unknown = x => x) {
+    return formatWithOptions({ colors: true }, ...args.map(m => style(m)));
   }
 
-  /** @override */
-  log(...data: any[]): void {
-    const s = this.format(...data);
-    super.log(s);
-    this.logs.push(s);
+
+  log(type: Logger.LogType, message: string): void {
+    const logObject = { type, message };
+
+    this.logs.push(logObject);
+    this.emit('log', logObject);
+
+    this.emit(type, message);
   }
 
-  /** @override */
+  debug(...data: any[]): void {
+    if (this.isDebug) {
+      const message = this.format(data, styles.debug);
+      this.log('debug', message);
+    }
+  }
+
   info(...data: any[]): void {
-    const s = this.format(...data);
-    super.info(s);
-    this.logs.push(s);
+    const message = this.format(data);
+    this.log('info', message);
   }
 
-  /** @override */
   warn(...data: any[]): void {
-    const s = this.format(...data);
-    super.warn(s);
-    this.logs.push(s);
+    const message = this.format(data, styles.warning);
+    this.log('warning', message);
   }
 
-  /** @override */
   error(...data: any[]): void {
-    const s = this.format(...data);
-    super.error(s);
-    this.logs.push(s);
+    const message = this.format(data, styles.error);
+    this.log('error', message);
+
   }
 
   /**
-   * @todo description.
+   * Consumes this logger: aggregates all accumulated logs to one string, which is returned, 
+   * and clears the inner logs. Typically, a logger is shouldn't used after being `consume`d, 
+   * but currently it does not break the logger's functionality.
    */
   consume() {
     const logs = this.logs;
     this.logs = [];
-    return logs.join('\n');
+    return logs.map(l => l.message).join('\n');
   }
 
 }
 
-/** @todo */
-export const logger = new Logger(process.stdout, process.stderr);
+export const globalLogger = new Logger();

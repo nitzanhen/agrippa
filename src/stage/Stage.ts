@@ -1,6 +1,6 @@
 import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
 import { Config } from '../config';
-import { styles } from '../logger';
+import { Logger, styles } from '../logger';
 
 
 export interface Context {
@@ -9,7 +9,7 @@ export interface Context {
   createdDirs: AgrippaDir[];
 }
 
-export type Stage = (context: Context, logger: Console) => Promise<StageResult>;
+export type Stage = (context: Context, logger: Logger) => Promise<StageResult>;
 
 export interface StageResult {
   status: StageStatus,

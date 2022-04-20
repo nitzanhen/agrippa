@@ -2,6 +2,7 @@ import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { InputConfig } from '../../config';
 import { Environment } from '../../config/Environment';
 import { Styling } from '../../config/Styling';
+import { globalLogger } from '../../logger';
 import { run } from '../../run';
 import { pascalCase } from '../../utils';
 
@@ -68,7 +69,13 @@ const builder = async (yargs: yargs.Argv) =>
       '$schema': {
         type: 'string'
       }
-    });
+    })
+    .middleware(({ debug = false }) => {
+      process.env.IS_DEBUG = JSON.stringify(debug);
+      globalLogger.isDebug = debug;
+
+      globalLogger.debug('Debug mode is on');
+    }, true);
 
 type GenerateCommand = (typeof builder) extends BuilderCallback<{}, infer R> ? CommandModule<{}, R> : never
 
