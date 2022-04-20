@@ -3,6 +3,7 @@ import { loadFiles } from './loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { lookForUpdates } from './utils/lookForUpdates';
+import { pkgJson } from './utils/pkgJson';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
@@ -50,6 +51,8 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
   // Print header & some critical warnings, if any
 
   logger.info(
+    '',
+    `Agrippa v${pkgJson.version}`,
     '',
     `Generating ${styles.componentName(config.name)}\n`,
     //`Environment: ${styles.tag(getEnvironmentTags(config))}`,
