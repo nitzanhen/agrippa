@@ -8,7 +8,16 @@ import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
 import { Stage, stageResult, StageStatus } from './Stage';
 
-export const createFile = (file: AgrippaFile): Stage => {
+interface CreateFileOptions {
+  file: AgrippaFile;
+  /** 
+   * If passed, stores the new directory's path under the context's `variables` 
+   * record with the passed value as key. Only stores the value if the stage succeeds.
+   */
+  varKey?: string;
+}
+
+export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
   return async function fileStage(context, logger) {
     const { config } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = config;
@@ -49,7 +58,11 @@ export const createFile = (file: AgrippaFile): Stage => {
       return stageResult(
         StageStatus.SUCCESS,
         `File ${styles.italic(filename)} created successfully.`,
-        { ...context, createdFiles: [...context.createdFiles, file] }
+        {
+          ...context,
+          createdFiles: [...context.createdFiles, file],
+          variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
+        }
       );
     }
     catch (e) {

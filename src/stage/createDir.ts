@@ -11,9 +11,14 @@ import { Stage, stageResult, StageStatus } from './Stage';
 export interface CreateDirOptions extends AgrippaDir {
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
   recursive?: boolean;
+  /** 
+   * If passed, stores the new directory's path under the context's `variables` 
+   * record with the passed value as key. Only stores the value if the stage succeeds.
+   */
+  varKey?: string;
 }
 
-export const createDir = ({ path, recursive = true }: CreateDirOptions): Stage => {
+export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions): Stage => {
   return async function dirStage(context, logger) {
     const { config } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = config;
@@ -49,7 +54,11 @@ export const createDir = ({ path, recursive = true }: CreateDirOptions): Stage =
       return stageResult(
         StageStatus.SUCCESS,
         `Directory ${styles.italic(dirName)} created successfully.`,
-        { ...context, createdDirs: [...context.createdDirs, { path }] }
+        {
+          ...context,
+          createdDirs: [...context.createdDirs, { path }],
+          variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
+        }
       );
     }
     catch (e) {

@@ -69,15 +69,21 @@ export function defaultStages(config: Config): Stage[] {
   const stylesFilePath = join(dirPath, stylesFileName);
 
   return [
-    createDir({ path: dirPath }),
-    createFile(
-      defaultComponentFile(config, createStylesFile ? stylesFilePath : undefined)
-    ),
-    createStylesFile && createFile(
-      new AgrippaFile(stylesFilePath, '')
-    ),
-    createFile(
-      defaultIndexFile(config)
-    )
+    createDir({ 
+      path: dirPath,
+      varKey: 'dirPath'
+    }),
+    createFile({
+      file: defaultComponentFile(config, createStylesFile ? stylesFilePath : undefined),
+      varKey: 'componentPath'
+    }),
+    createStylesFile && createFile({
+      file: new AgrippaFile(stylesFilePath, ''),
+      varKey: 'stylesPath'
+    }),
+    createFile({
+      file: defaultIndexFile(config),
+      varKey: 'indexPath'
+    })
   ].filter((f): f is Stage => !!f);
 }
