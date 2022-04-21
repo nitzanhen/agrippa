@@ -4,6 +4,7 @@ import { ComponentComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, React
 import { Config } from '../config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
+import { createFile } from './createFile';
 import { Stage } from './Stage';
 
 const getDirPath = ({ baseDir, destination, name }: Config) => resolve(baseDir ?? process.cwd(), destination, name);
@@ -68,13 +69,15 @@ export function defaultStages(config: Config): Stage[] {
   const stylesFilePath = join(dirPath, stylesFileName);
 
   return [
-    ...createDir({
-      path: dirPath,
-      files: [
-        defaultComponentFile(config, createStylesFile ? `./${stylesFileName}` : undefined),
-        createStylesFile && new AgrippaFile(stylesFilePath, ''),
-        defaultIndexFile(config)
-      ].filter((f): f is AgrippaFile => !!f)
-    })
-  ];
+    createDir({ path: dirPath }),
+    createFile(
+      defaultComponentFile(config, createStylesFile ? stylesFilePath : undefined)
+    ),
+    createStylesFile && createFile(
+      new AgrippaFile(stylesFilePath, '')
+    ),
+    createFile(
+      defaultIndexFile(config)
+    )
+  ].filter((f): f is Stage => !!f);
 }

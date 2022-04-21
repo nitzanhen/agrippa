@@ -1,23 +1,20 @@
 import { existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
-import { basename, resolve } from 'path';
+import { basename } from 'path';
 import { bold, italic } from 'chalk';
-import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
+import { AgrippaDir } from '../AgrippaFile';
 import { styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
-import { createFile } from './createFile';
 import { Stage, stageResult, StageStatus } from './Stage';
 
 export interface CreateDirOptions extends AgrippaDir {
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
   recursive?: boolean;
-  /** Files to generate under this directory. File paths should be relative to this directory, e.g. `./index.ts` */
-  files?: AgrippaFile[]
 }
 
-export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptions): Stage[] => {
-  const dirStage: Stage = async (context, logger) => {
+export const createDir = ({ path, recursive = true }: CreateDirOptions): Stage => {
+  return async function dirStage(context, logger) {
     const { config } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = config;
 
@@ -64,10 +61,4 @@ export const createDir = ({ path, recursive = true, files = [] }: CreateDirOptio
       );
     }
   };
-
-  const fileStages = files
-    .map(({ path: filePath, data }) => new AgrippaFile(resolve(path, filePath), data))
-    .map(createFile);
-
-  return [dirStage, ...fileStages];
 };
