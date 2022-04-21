@@ -7,6 +7,7 @@ export interface Context {
   config: Config;
   createdFiles: AgrippaFile[];
   createdDirs: AgrippaDir[];
+  variables: Record<string, any>;
 }
 
 export type Stage = (context: Context, logger: Logger) => Promise<StageResult>;
@@ -34,6 +35,6 @@ export enum StageStatus {
 export const stageResult = (status: StageStatus, summary: string, newContext?: Context): StageResult => ({ status, summary, newContext });
 
 /** @todo find a better place for this? */
-export const summaryLine = ({ status, summary }: StageResult) => styles[status].bold(`${ stageStatusBullets[status]} ${summary}`);
+export const summaryLine = ({ status, summary }: StageResult) => styles[status].bold(`${stageStatusBullets[status]} ${summary}`);
 
 

@@ -30,6 +30,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
     config,
     createdDirs: [],
     createdFiles: [],
+    variables: {}
   };
 
   const logger = options.logger ?? (
