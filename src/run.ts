@@ -30,7 +30,10 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
     config,
     createdDirs: [],
     createdFiles: [],
-    variables: {}
+    variables: {
+      'ComponentName': config.name,
+      'component-name': config.kebabName
+    }
   };
 
   const logger = options.logger ?? (
