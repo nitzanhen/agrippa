@@ -127,13 +127,13 @@ export const generateCommand: GenerateCommand = {
       pure: false,
     };
 
-    const postCommandStage = argv.postCommand && runCommand(argv.postCommand);
+    const postCommandStage = (argv.postCommand && runCommand(argv.postCommand)) || undefined;
 
     await run(
       inputConfig,
       {
         logger: cliLogger,
-        stages: defStages => postCommandStage ? [...defStages, postCommandStage] : defStages
+        stages: postCommandStage && (defStages => [...defStages, postCommandStage])
       }
     );
   }
