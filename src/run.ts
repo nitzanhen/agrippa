@@ -77,8 +77,15 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
     const result = await stage(context, stageLogger);
     const stageLogs = stageLogger.consume();
-    logger.info(summaryLine(result));
-    logger.info(indent(styles.comment(stageLogs), 2, ' ') + '\n');
+
+    if (!stage.silent) {
+      logger.info(summaryLine(result));
+      logger.info(indent(styles.comment(stageLogs), 2, ' ') + '\n');
+    }
+    else {
+      logger.debug(stageLogs);
+    }
+
 
     context = result.newContext ?? context;
   }

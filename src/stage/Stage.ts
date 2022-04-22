@@ -10,7 +10,11 @@ export interface Context {
   variables: Record<string, any>;
 }
 
-export type Stage = (context: Context, logger: Logger) => Promise<StageResult>;
+export interface Stage {
+  /** If set, logs are not printed for this stage (only as debug output) */
+  silent?: boolean;
+  (context: Context, logger: Logger): Promise<StageResult>;
+}
 
 export interface StageResult {
   status: StageStatus,
