@@ -20,7 +20,10 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   // Initialize config, stages, context & logger
 
-  const envFiles = options.envFiles ?? (await loadFiles());
+  const envFiles = {
+    ...(await loadFiles()),
+    ...(options.envFiles ?? {})
+  };
 
   const config = createConfig(inputConfig, envFiles);
 
