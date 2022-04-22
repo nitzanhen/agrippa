@@ -5,6 +5,7 @@ import { Environment } from '../../config/Environment';
 import { Styling } from '../../config/Styling';
 import { Logger } from '../../logger';
 import { run } from '../../run';
+import { runCommand } from '../../stage/runCommand';
 import { pascalCase } from '../../utils';
 
 const cliLogger = Logger.consoleLogger();
@@ -66,6 +67,10 @@ const builder = async (yargs: yargs.Argv) =>
         choices: ['const', 'function'] as const,
         desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
       },
+      'post-command': {
+        alias: 'postCommand',
+        type: 'string',
+      },
       'debug': {
         type: 'boolean'
       },
@@ -122,6 +127,14 @@ export const generateCommand: GenerateCommand = {
       pure: false,
     };
 
-    await run(inputConfig, { logger: cliLogger });
+    const postCommandStage = argv.postCommand && runCommand(argv.postCommand);
+
+    await run(
+      inputConfig,
+      {
+        logger: cliLogger,
+        stages: defStages => postCommandStage ? [...defStages, postCommandStage] : defStages
+      }
+    );
   }
 };

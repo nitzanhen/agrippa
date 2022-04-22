@@ -8,7 +8,7 @@ import { indent } from './utils/strings';
 
 export interface RunOptions {
   envFiles?: Record<string, any>;
-  stages?: Stage[]
+  stages?: ((defaultStages: Stage[]) => Stage[]);
   logger?: Logger
 }
 
@@ -24,7 +24,8 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   const config = createConfig(inputConfig, envFiles);
 
-  const stages = options.stages ?? defaultStages(config);
+  const defStages = defaultStages(config);
+  const stages = options.stages?.(defStages) ?? defStages;
 
   let context: Context = {
     config,
