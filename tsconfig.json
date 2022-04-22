@@ -5,6 +5,8 @@
       "ESNext",
       "dom"
     ],
+    "declaration": true,
+    "declarationMap": true,
     "outDir": "dist",
     "module": "esnext",
     "moduleResolution": "node",
