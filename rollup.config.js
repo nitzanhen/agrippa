@@ -17,6 +17,9 @@ const globals = {};
 
 // eslint-disable-next-line
 const envConfig = dotenv.config({ override: false }).parsed;
+if (!envConfig) {
+  throw new Error('missing .env!');
+}
 const env = pipe(envConfig)
   (entries)
   (map(([key, v]) => tuple(`process.env.${key}`, JSON.stringify(v))))
