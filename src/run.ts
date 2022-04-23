@@ -4,6 +4,7 @@ import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
+import { reportUsageStatistics } from './utils/reportUsageStatistics';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
@@ -96,9 +97,11 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   logger.debug('Pipeline execution complete.');
 
+  await reportUsageStatistics(config, logger);
+
   // Print an "Update is Available" message, if there's a new version available.
   (await updatePromise)();
-
+  
   return {
     logs: logger.consume()
   };
