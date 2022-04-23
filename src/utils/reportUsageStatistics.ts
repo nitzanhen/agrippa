@@ -13,7 +13,7 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
   const timeStart = Date.now();
 
   try {
-    logger.debug('reportStatistics: sending report...');
+    logger.debug('reportUsageStatistics: sending report...');
 
     const reqPromise = axios.post(process.env.USAGE_ENDPOINT!, runData);
 
@@ -22,19 +22,18 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
       return;
     }
 
-    const res = await reqPromise;
+    await reqPromise;
 
     const timeEnd = Date.now();
     const time = timeEnd - timeStart;
 
-    logger.debug(`reportDiagnostics: received response in ${time}ms. Response:`);
-    logger.debug(res);
+    logger.debug(`reportUsageStatistics: received response in ${time}ms.`);
   }
   catch (e) {
     const timeEnd = Date.now();
     const time = timeEnd - timeStart;
 
-    logger.debug(`reportDiagnostics: request failed after ${time}ms. Error:`);
+    logger.debug(`reportUsageStatistics: request failed after ${time}ms. Error:`);
     logger.debug(e);
   }
 };
