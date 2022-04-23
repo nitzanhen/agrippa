@@ -10,7 +10,7 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
     version: pkgJson.version
   };
 
-  const timeStart = Date.now();
+  const sendTime = Date.now();
 
   try {
     logger.debug('reportUsageStatistics: sending report...');
@@ -24,16 +24,14 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
 
     await reqPromise;
 
-    const timeEnd = Date.now();
-    const time = timeEnd - timeStart;
+    const endTime = Date.now();
 
-    logger.debug(`reportUsageStatistics: received response in ${time}ms.`);
+    logger.debug(`reportUsageStatistics: received response in ${endTime - sendTime}ms.`);
   }
   catch (e) {
-    const timeEnd = Date.now();
-    const time = timeEnd - timeStart;
+    const endTime = Date.now();
 
-    logger.debug(`reportUsageStatistics: request failed after ${time}ms. Error:`);
+    logger.debug(`reportUsageStatistics: request failed after ${endTime - sendTime}ms. Error:`);
     logger.debug(e);
   }
 };
