@@ -6,6 +6,8 @@ COPY package.json package.json
 COPY yarn.lock yarn.lock
 COPY src src
 COPY tsconfig*.json .
+COPY rollup.config.js rollup.config.js
+COPY .env .env
 
 # Build and pack agrippa
 
