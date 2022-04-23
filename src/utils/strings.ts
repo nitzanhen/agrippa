@@ -1,4 +1,14 @@
 
+/** Simple util to render a string conditionally, or *null* if it is not met */
+export const ostr = (condition: boolean, string: string) => {
+  return condition ? string : null;
+};
+
+/** Simple util to render a string conditionally, or *an empty string* if it is not met */
+export const cstr = (condition: boolean, string: string) => {
+  return condition ? string : '';
+};
+
 /** Indents every line of the given string by `token`, `num` times.  */
 export const indent = (str: string, num: number = 1, token = '\t') => {
   return str
@@ -21,7 +31,7 @@ export const isKebabCase = (str: string) => str.split('-').every(isLowerCase);
 
 export const isCamelCase = (str: string) => !str || /^[a-z][A-Za-z]*$/.test(str);
 
-export const isPascalCase = (str: string) =>  !str || /^[A-Z][A-Za-z]*$/.test(str);
+export const isPascalCase = (str: string) => !str || /^[A-Z][A-Za-z]*$/.test(str);
 
 export const pascalCase = (str: string) => {
   if (isPascalCase(str)) {
@@ -50,14 +60,4 @@ export const kebabCase = (str: string) => {
   }
 
   throw RangeError('Improper string formatting');
-};
-
-/** Simple util to render a string conditionally, or *null* if it is not met */
-export const ostr = (condition: boolean, string: string) => {
-  return condition ? string : null;
-};
-
-/** Simple util to render a string conditionally, or *an empty string* if it is not met */
-export const cstr = (condition: boolean, string: string) => {
-  return condition ? string : '';
 };

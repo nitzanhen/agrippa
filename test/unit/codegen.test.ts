@@ -1,21 +1,6 @@
-import { createArrowFunction, createAssignment, createComment, createDefaultExport, createImport, declareConst, declareFunction, declareInterface, declareType } from '../../src/utils/codegenUtils';
+import { createArrowFunction, createAssignment, createDefaultExport, declareConst, declareFunction, declareInterface, declareType } from '../../src/utils/codegen';
 
-describe('utils/codegenUtils.ts', () => {
-
-  test('createImport', () => {
-    expect(createImport('styles.css')).toBe("import 'styles.css';");
-    expect(createImport('module')).toBe("import 'module';");
-
-    expect(createImport('react', 'default', 'React')).toBe("import React from 'react';");
-    expect(createImport('jsonwebtoken', 'default', 'jwt')).toBe("import jwt from 'jsonwebtoken';");
-
-    expect(createImport('react', 'named', 'useMemo')).toBe("import { useMemo } from 'react';");
-    expect(createImport('@material-ui/core', 'named', 'makeStyles')).toBe("import { makeStyles } from '@material-ui/core';");
-
-    expect(createImport('react', 'composite', ['React', 'memo', 'useEffect'])).toBe("import React, { memo, useEffect } from 'react';");
-    expect(createImport('m1', 'composite', ['defaultImport', 'ni1', 'ni2'])).toBe("import defaultImport, { ni1, ni2 } from 'm1';");
-  });
-
+describe('utils/codegen.ts', () => {
   test('declareConst', () => {
     expect(declareConst('classes', 'useStyles()')).toBe('const classes = useStyles();');
     expect(declareConst('computed', 'useMemo(() => 3)')).toBe('const computed = useMemo(() => 3);');
@@ -94,17 +79,6 @@ describe('utils/codegenUtils.ts', () => {
   test('createDefaultExport', () => {
     expect(createDefaultExport('Component')).toBe('export default Component;');
     expect(createDefaultExport('memo(Component)')).toBe('export default memo(Component);');
-  });
-
-  test('createComment', () => {
-    expect(createComment('single', 'hello')).toBe('// hello');
-    expect(createComment('single', 'this is a comment')).toBe('// this is a comment');
-
-    expect(createComment('multi', 'hello')).toBe('/*\n * hello\n */');
-    expect(createComment('multi', 'this is a comment')).toBe('/*\n * this is a comment\n */');
-
-    expect(createComment('jsdoc', 'hello')).toBe('/**\n * hello\n */');
-    expect(createComment('jsdoc', 'this is a comment')).toBe('/**\n * this is a comment\n */');
   });
 
   test('createAssignment', () => {

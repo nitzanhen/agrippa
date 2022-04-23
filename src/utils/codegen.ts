@@ -69,20 +69,6 @@ export const createArrowFunction = (params: string = '', body: string = '') =>
  */
 export const createDefaultExport = (name: string) => `export default ${name};`;
 
-/** 
- * Create a comment string. 
- * @param type which comment to create.
- * @param content should be a single line of text. 
- * 
- * @example
- * createComment('single', 'hello!!!') => // 'hello!!!'
- */
-export const createComment = (type: 'single' | 'multi' | 'jsdoc', content: string) => ({
-  single: (content: string) => content.split('\n').map(ln => '// ' + ln).join('\n'),
-  multi: (content: string) => ['/*', ...content.split('\n').map(ln => '* ' + ln), ' */'].join('\n'),
-  jsdoc: (content: string) => ['/**', ...content.split('\n').map(ln => '* ' + ln), ' */'].join('\n'),
-})[type](content);
-
 /**
  * Creates an assignment string.
  * The key is taken to be a simple key, such that dot notation is uses.
