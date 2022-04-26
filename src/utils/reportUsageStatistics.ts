@@ -19,6 +19,7 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
 
     if (!config.debug) {
       // If not in debug mode, don't even wait for the resuest to finish
+      reqPromise.catch(() => null);
       return;
     }
 
