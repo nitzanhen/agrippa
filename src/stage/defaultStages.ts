@@ -69,12 +69,12 @@ export function defaultStages(config: Config): Stage[] {
   const stylesFilePath = join(dirPath, stylesFileName);
 
   return [
-    createDir({ 
+    createDir({
       path: dirPath,
       varKey: 'dirPath'
     }),
     createFile({
-      file: defaultComponentFile(config, createStylesFile ? stylesFilePath : undefined),
+      file: defaultComponentFile(config, createStylesFile ? `./${stylesFileName}` : undefined),
       varKey: 'componentPath'
     }),
     createStylesFile && createFile({
