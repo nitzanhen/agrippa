@@ -15,6 +15,9 @@ const dist = join(__dirname, 'dist');
 const externals = ['fs/promises', 'path', 'process', 'util', ...Object.keys(pkgJson.dependencies)];
 const globals = {};
 
+const isDev = process.env.ROLLUP_WATCH === 'true';
+
+
 // eslint-disable-next-line
 const envConfig = dotenv.config({ override: false }).parsed;
 if (!envConfig) {
@@ -25,6 +28,8 @@ const env = pipe(envConfig)
   (map(([key, v]) => tuple(`process.env.${key}`, JSON.stringify(v))))
   (toObject)
   .go();
+
+env['process.env.NODE_ENV'] = JSON.stringify(isDev ? 'development' : 'production');
 
 const plugins = [
   eslint({

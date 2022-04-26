@@ -25,9 +25,7 @@
   "scripts": {
     "dev": "rollup -c rollup.config.js --watch",
     "prebuild": "rimraf bin && rimraf dist",
-    "build:lib": "rollup -c rollup.config.js",
-    "build:types": "tsup src/index.ts --dts-only",
-    "build": "yarn build:lib",
+    "build": "rollup -c rollup.config.js",
     "test:unit": "jest",
     "test:integration": "(docker build -f ./Dockerfile.integration -t agrippa_test .) && (docker run -it --name agrippa_test --rm agrippa_test)",
     "test": "yarn test:unit && yarn test:integration",
