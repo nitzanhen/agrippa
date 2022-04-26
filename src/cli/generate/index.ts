@@ -24,6 +24,7 @@ const builder = async (yargs: yargs.Argv) =>
       },
       environment: {
         type: 'string',
+        alias: 'env',
         desc: 'Which environment to generate the components for'
       },
       styling: {
