@@ -17,11 +17,6 @@ const builder = async (yargs: yargs.Argv) =>
     demandOption: true
   })
     .options({
-      typescript: {
-        type: 'boolean',
-        alias: 'ts',
-        desc: 'Whether to use Typescript'
-      },
       environment: {
         type: 'string',
         alias: 'env',
@@ -36,6 +31,19 @@ const builder = async (yargs: yargs.Argv) =>
         type: 'boolean',
         desc: 'Whether to generate a scoped `module` stylesheet. Relevant only for `css` or `scss` styling options.'
       },
+
+      typescript: {
+        type: 'boolean',
+        alias: 'ts',
+        desc: 'Whether to use Typescript'
+      },
+      'ts-props-declaration': {
+        alias: 'tsPropsDeclaration',
+        choices: ['interface', 'type'] as const,
+        desc: 'For TS components, whether to declare props as an interface or a type',
+      },
+
+
       'import-react': {
         alias: 'importReact',
         type: 'boolean',
@@ -113,6 +121,9 @@ export const generateCommand: GenerateCommand = {
       environment,
 
       typescript: argv.typescript,
+      typescriptOptions: {
+        propDeclaration: argv['ts-props-declaration']
+      },
 
       componentOptions: {
         exportType: argv.exportType,

@@ -57,9 +57,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
   getTSPropsDeclaration() {
     const { typescript } = this.config;
     if (!typescript) {
-      /** @todo */
-      //logger.debug('getPropInterfaceDeclaration() called but typescript is false. This shouldn\'t be possible.');
-      return null;
+      throw new Error('getTSPropsDeclaration() called but typescript is false. This shouldn\'t be possible.');
     }
 
     const { propDeclaration } = this.typescriptOptions!;
