@@ -8,6 +8,8 @@ export interface Block {
   precedence: number;
 }
 
+type BlockInput = SemiPartial<Block, 'separator'>;
+
 
 export class Blocks {
   protected readonly blocks: Map<string, Block>;
@@ -21,8 +23,12 @@ export class Blocks {
     return this.blocks.get(key);
   }
 
-  add({ key, precedence, data, separator = '\n\n' }: SemiPartial<Block, 'separator'>) {
+  add({ key, precedence, data, separator = '\n\n' }: BlockInput) {
     this.blocks.set(key, { key, precedence, data, separator });
+  }
+
+  delete(key: string) {
+    return this.blocks.delete(key);
   }
 
   join() {

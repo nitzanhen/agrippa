@@ -9,6 +9,14 @@ export class Imports {
 
   public constructor() { };
 
+  public get(module: Import['module']) {
+    return this.imports.get(module);
+  }
+
+  public delete(module: Import['module']) {
+    return this.imports.delete(module);
+  }
+
   public add(newImport: Import) {
     const module = newImport.module;
     const oldImport = this.imports.get(module);
