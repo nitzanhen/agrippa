@@ -1,6 +1,7 @@
 import { DeepPartial, kebabCase } from '../utils';
 import { assignDefaults } from '../utils/object';
 import { Config } from './Config';
+import { Environment } from './Environment';
 import { Styling } from './Styling';
 
 export interface InputConfig extends DeepPartial<Config> {
@@ -55,16 +56,14 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
       declaration: 'const'
     },
 
-    /** @todo change these hard-coded strings for enums */
-
     environment,
-    reactOptions: environment === 'react' || environment === 'react-native' ? {
+    reactOptions: environment === Environment.REACT || environment === Environment.REACT_NATIVE ? {
       importReact,
       propTypes: false
     } : undefined,
-    solidjsOptions: environment === 'solidjs' ? {} : undefined,
-    preactOptions: environment === 'preact' ? {} : undefined,
-    reactNativeOptions: environment === 'react-native' ? {} : undefined,
+    solidjsOptions: environment === Environment.SOLIDJS ? {} : undefined,
+    preactOptions: environment === Environment.PREACT ? {} : undefined,
+    reactNativeOptions: environment === Environment.REACT_NATIVE ? {} : undefined,
 
     typescript: !!tsconfig,
     typescriptOptions: tsconfig ? {
