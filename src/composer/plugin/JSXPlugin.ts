@@ -25,9 +25,9 @@ export abstract class JSXPlugin implements ComposerPlugin {
   protected typescriptOptions: Config['typescriptOptions'];
 
   constructor(protected config: Config) {
-    const { typescriptOptions } = config;
+    const { typescript, typescriptOptions } = config;
 
-    if (!typescriptOptions) {
+    if (typescript && !typescriptOptions) {
       throw TypeError('JSXPlugin requires Config.typescriptOptions to be set whenever Config.typescript is set');
     }
 

@@ -66,7 +66,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     reactNativeOptions: environment === Environment.REACT_NATIVE ? {} : undefined,
 
     typescript: !!tsconfig,
-    typescriptOptions: tsconfig ? {
+    typescriptOptions: input.typescript ? {
       propDeclaration: 'interface'
     } : undefined,
 
