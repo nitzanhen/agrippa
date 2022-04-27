@@ -42,5 +42,6 @@ export interface Config {
 
   overwrite: boolean;
   pure: boolean;
+  reportUsageStatistics: boolean;
   debug: boolean;
 }

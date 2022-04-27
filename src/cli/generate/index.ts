@@ -75,6 +75,11 @@ const builder = async (yargs: yargs.Argv) =>
       'debug': {
         type: 'boolean'
       },
+      'report-usage-statistics': {
+        type: 'boolean',
+        alias: 'reportUsageStatistics',
+        desc: 'Whether to report (anonymous) usage statistics or not.'
+      },
       '$schema': {
         type: 'string'
       }
@@ -125,6 +130,7 @@ export const generateCommand: GenerateCommand = {
 
       debug: argv.debug,
       overwrite: argv.overwrite,
+      reportUsageStatistics: argv.reportUsageStatistics,
       pure: false,
     };
 

@@ -99,7 +99,9 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   logger.debug('Pipeline execution complete.');
 
-  await reportUsageStatistics(config, logger);
+  if (config.reportUsageStatistics) {
+    await reportUsageStatistics(config, logger);
+  }
 
   // Print an "Update is Available" message, if there's a new version available.
   (await updatePromise)();
