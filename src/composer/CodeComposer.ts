@@ -7,7 +7,7 @@ import { ComposerPlugin } from './plugin';
 /**
  * @todo description
  */
-export class ComponentComposer {
+export class CodeComposer {
 
   protected plugins: ComposerPlugin[] = [];
   protected readonly config: Config;

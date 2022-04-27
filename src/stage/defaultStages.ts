@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { ComponentComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
-import { Config } from '../config';
+import { CodeComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { Config, Environment } from '../config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
 import { createFile } from './createFile';
@@ -11,10 +11,10 @@ const getDirPath = ({ baseDir, destination, name }: Config) => resolve(baseDir ?
 
 export const getEnvironmentPlugin = (config: Config) => {
   switch (config.environment) {
-    case 'react': return new ReactPlugin(config);
-    case 'react-native': return new ReactNativePlugin(config);
-    case 'solidjs': return new SolidPlugin(config);
-    case 'preact': return new PreactPlugin(config);
+    case Environment.REACT: return new ReactPlugin(config);
+    case Environment.REACT_NATIVE: return new ReactNativePlugin(config);
+    case Environment.SOLIDJS: return new SolidPlugin(config);
+    case Environment.PREACT: return new PreactPlugin(config);
     default: return null;
   }
 };
@@ -28,7 +28,7 @@ export function defaultComponentFile(config: Config, styleFilePath?: string): Ag
   const componentFileName = `${name}.${componentFileExtension}`;
   const componentFilePath = join(dirPath, componentFileName);
 
-  const composer = new ComponentComposer(config);
+  const composer = new CodeComposer(config);
 
   const environmentPlugin = getEnvironmentPlugin(config);
   if (environmentPlugin) {
