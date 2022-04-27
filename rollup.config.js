@@ -4,7 +4,6 @@ import eslint from '@rollup/plugin-eslint';
 import esbuild from 'rollup-plugin-esbuild';
 import ts from 'rollup-plugin-ts';
 import json from '@rollup/plugin-json';
-import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import pkgJson from './package.json';
@@ -22,13 +21,6 @@ const plugins = [
   eslint({
     throwOnError: true,
     include: 'src'
-  }),
-  replace({
-    values: {
-      'process.env.DEV': isDev,
-      'process.env.PROD': isProd
-    },
-    preventAssignment: true
   }),
   isProd && ts(),
   json(),
