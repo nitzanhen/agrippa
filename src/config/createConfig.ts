@@ -84,6 +84,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     overwrite: false,
     pure: false,
     reportUsageStatistics: true,
+    lookForUpdates: true,
     debug: false
   };
 

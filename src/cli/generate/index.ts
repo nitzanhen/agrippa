@@ -88,6 +88,11 @@ const builder = async (yargs: yargs.Argv) =>
       'debug': {
         type: 'boolean'
       },
+      'look-for-updates': {
+        type: 'boolean',
+        alias: 'lookForUpdates',
+        desc: 'Whether to look for updates when running Agrippa or not.'
+      },
       'report-usage-statistics': {
         type: 'boolean',
         alias: 'reportUsageStatistics',
@@ -152,6 +157,7 @@ export const generateCommand: GenerateCommand = {
       debug: argv.debug,
       overwrite: argv.overwrite,
       reportUsageStatistics: argv.reportUsageStatistics,
+      lookForUpdates: argv.lookForUpdates,
       pure: false,
     };
 

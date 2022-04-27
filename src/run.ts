@@ -48,7 +48,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
       : Logger.consoleLogger(config.debug)
   );
 
-  const updatePromise = lookForUpdates(logger);
+  const updatePromise = config.lookForUpdates ? lookForUpdates(logger) : null;
 
   logger.debug(
     `Logger initialized with params pure=${config.pure}, debug=${config.debug}`,
@@ -102,9 +102,17 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
   if (config.reportUsageStatistics) {
     await reportUsageStatistics(config, logger);
   }
+  else {
+    logger.debug('`config.reportUsageStatistics` is `false`, not sending usage statistics');
+  }
 
-  // Print an "Update is Available" message, if there's a new version available.
-  (await updatePromise)();
+  if (config.lookForUpdates) {
+    // Print an "Update is Available" message, if there's a new version available.
+    (await updatePromise)?.();
+  }
+  else {
+    logger.debug('`config.lookForUpdates` is `false`, not pinging the npm registry');
+  }
 
   return {
     logs: logger.consume()
