@@ -115,6 +115,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
   }
 
   return {
+    ...context,
     logs: logger.consume()
   };
 }
