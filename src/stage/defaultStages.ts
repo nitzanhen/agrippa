@@ -1,6 +1,6 @@
 import { join, resolve } from 'path';
 import { AgrippaFile } from '../AgrippaFile';
-import { CodeComposer, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Config, Environment } from '../config';
 import { joinLines } from '../utils/strings';
 import { createDir } from './createDir';
@@ -36,6 +36,10 @@ export function defaultComponentFile(config: Config, styleFilePath?: string): Ag
   }
   if (styleFilePath) {
     composer.addPlugin(new ImportPlugin({ module: styleFilePath }));
+  }
+
+  if (config.reactOptions?.propTypes) {
+    composer.addPlugin(new PropTypesPlugin());
   }
 
   return new AgrippaFile(componentFilePath, composer.compose());

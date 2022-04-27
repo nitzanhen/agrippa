@@ -55,16 +55,16 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
       declaration: 'const'
     },
 
+    /** @todo change these hard-coded strings for enums */
+
     environment,
-    reactOptions: environment === 'react' ? {
-      importReact
+    reactOptions: environment === 'react' || environment === 'react-native' ? {
+      importReact,
+      propTypes: false
     } : undefined,
     solidjsOptions: environment === 'solidjs' ? {} : undefined,
     preactOptions: environment === 'preact' ? {} : undefined,
-    reactNativeOptions: environment === 'react-native' ? {
-      /** @todo */
-      importReact: false
-    } : undefined,
+    reactNativeOptions: environment === 'react-native' ? {} : undefined,
 
     typescript: !!tsconfig,
     typescriptOptions: tsconfig ? {

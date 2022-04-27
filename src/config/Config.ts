@@ -17,12 +17,11 @@ export interface Config {
   environment: Environment | string;
   reactOptions?: {
     importReact: boolean;
+    propTypes: boolean;
   },
   solidjsOptions?: {},
   preactOptions?: {},
-  reactNativeOptions?: {
-    importReact: boolean;
-  },
+  reactNativeOptions?: {},
 
   typescript: boolean;
   typescriptOptions?: {
