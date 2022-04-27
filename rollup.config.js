@@ -7,8 +7,6 @@ import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import dotenv from 'dotenv';
-import { entries, map, pipe, toObject, tuple } from 'rhax';
 import pkgJson from './package.json';
 
 const src = join(__dirname, 'src');
@@ -19,19 +17,6 @@ const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.depend
 const isDev = process.env.ROLLUP_WATCH === 'true';
 const isProd = !isDev;
 
-// eslint-disable-next-line
-const envConfig = dotenv.config({ override: false }).parsed;
-if (!envConfig) {
-  throw new Error('missing .env!');
-}
-const env = pipe(envConfig)
-  (entries)
-  (map(([key, v]) => tuple(`process.env.${key}`, JSON.stringify(v))))
-  (toObject)
-  .go();
-
-env['process.env.IS_DEV'] = JSON.stringify(isDev);
-
 const plugins = [
   nodeResolve(),
   eslint({
@@ -39,7 +24,10 @@ const plugins = [
     include: 'src'
   }),
   replace({
-    values: env,
+    values: {
+      'process.env.DEV': isDev,
+      'process.env.PROD': isProd
+    },
     preventAssignment: true
   }),
   isProd && ts(),

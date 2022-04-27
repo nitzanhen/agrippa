@@ -4,11 +4,13 @@ import { Config } from '../config';
 import { Logger } from '../logger';
 import { pkgJson } from './pkgJson';
 
+const REPORT_USAGE_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/';
+
 export const reportUsageStatistics = async (config: Config, logger: Logger): Promise<void> => {
   const runData = {
     ...pick(config, 'environment', 'typescript', 'styling'),
     version: pkgJson.version,
-    dev: process.env.IS_DEV
+    dev: config.debug
   };
 
   const sendTime = Date.now();
@@ -16,7 +18,7 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
   try {
     logger.debug('reportUsageStatistics: sending report...');
 
-    const reqPromise = axios.post(process.env.USAGE_ENDPOINT!, runData);
+    const reqPromise = axios.post(REPORT_USAGE_ENDPOINT, runData);
 
     if (!config.debug) {
       // If not in debug mode, don't even wait for the resuest to finish
