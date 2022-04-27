@@ -33,9 +33,7 @@ const env = pipe(envConfig)
 env['process.env.IS_DEV'] = JSON.stringify(isDev);
 
 const plugins = [
-  nodeResolve({
-
-  }),
+  nodeResolve(),
   eslint({
     throwOnError: true,
     include: 'src'
@@ -59,6 +57,11 @@ export default defineConfig([
     output: [{
       file: join(dist, 'index.mjs'),
       format: 'es',
+    },
+    {
+      file: join(dist, 'index.js'),
+      format: 'umd',
+      name: 'agrippa',
     }]
   },
   {
@@ -69,7 +72,7 @@ export default defineConfig([
     output: {
       file: join(__dirname, 'bin', 'index.js'),
       banner: '#!/usr/bin/env node',
-      format: 'es'
+      format: 'umd'
     },
 
   }
