@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Config, Styling } from '../../config';
 import { declareConst } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
@@ -34,7 +34,7 @@ export class ReactNativePlugin extends JSXPlugin {
     imports.add({ module: 'react-native', namedImports: ['View'] });
 
 
-    if (this.config.styling === 'react-native') {
+    if (this.config.styling === Styling.REACT_NATIVE) {
       imports.add({ module: 'react-native', namedImports: ['StyleSheet'] });
     }
   }
@@ -42,10 +42,12 @@ export class ReactNativePlugin extends JSXPlugin {
   onCompose(blocks: Blocks, imports: Imports, config: Config): void {
     super.onCompose(blocks, imports, config);
 
-    blocks.add({
-      key: RN_STYLING_BLOCK_KEY,
-      precedence: RN_STYLING_BLOCK_PRECEDENCE,
-      data: declareConst('styles', 'StyleSheet.create({})')
-    });
+    if (this.config.styling === Styling.REACT_NATIVE) {
+      blocks.add({
+        key: RN_STYLING_BLOCK_KEY,
+        precedence: RN_STYLING_BLOCK_PRECEDENCE,
+        data: declareConst('styles', 'StyleSheet.create({})')
+      });
+    }
   }
 }

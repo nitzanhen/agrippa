@@ -3,7 +3,8 @@ export enum Styling {
   CSS = 'css',
   SCSS = 'scss',
   JSS = 'jss',
-  STYLED_COMPONENTS = 'styled-components'
+  STYLED_COMPONENTS = 'styled-components',
+  REACT_NATIVE = 'react-native'
 }
 
 export namespace Styling {
@@ -12,7 +13,8 @@ export namespace Styling {
     Styling.CSS,
     Styling.SCSS,
     Styling.JSS,
-    Styling.STYLED_COMPONENTS
+    Styling.STYLED_COMPONENTS,
+    Styling.REACT_NATIVE
   ];
 
   export function fromString(str: string): Styling | null {
