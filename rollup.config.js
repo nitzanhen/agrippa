@@ -17,7 +17,6 @@ const globals = {};
 
 const isDev = process.env.ROLLUP_WATCH === 'true';
 
-
 // eslint-disable-next-line
 const envConfig = dotenv.config({ override: false }).parsed;
 if (!envConfig) {
@@ -40,7 +39,7 @@ const plugins = [
     values: env,
     preventAssignment: true
   }),
-  ts(),
+  !isDev && ts(),
   json(),
   esbuild(),
 ];
