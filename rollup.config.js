@@ -5,6 +5,8 @@ import esbuild from 'rollup-plugin-esbuild';
 import ts from 'rollup-plugin-ts';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
+import { terser } from 'rollup-plugin-terser';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import dotenv from 'dotenv';
 import { entries, map, pipe, toObject, tuple } from 'rhax';
 import pkgJson from './package.json';
@@ -12,10 +14,10 @@ import pkgJson from './package.json';
 const src = join(__dirname, 'src');
 const dist = join(__dirname, 'dist');
 
-const externals = [Object.keys(pkgJson.dependencies)];
-const globals = {};
+const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.dependencies)];
 
 const isDev = process.env.ROLLUP_WATCH === 'true';
+const isProd = !isDev;
 
 // eslint-disable-next-line
 const envConfig = dotenv.config({ override: false }).parsed;
@@ -31,6 +33,9 @@ const env = pipe(envConfig)
 env['process.env.IS_DEV'] = JSON.stringify(isDev);
 
 const plugins = [
+  nodeResolve({
+
+  }),
   eslint({
     throwOnError: true,
     include: 'src'
@@ -39,9 +44,10 @@ const plugins = [
     values: env,
     preventAssignment: true
   }),
-  !isDev && ts(),
+  isProd && ts(),
   json(),
   esbuild(),
+  isProd && terser()
 ];
 
 export default defineConfig([
@@ -53,11 +59,6 @@ export default defineConfig([
     output: [{
       file: join(dist, 'index.mjs'),
       format: 'es',
-    }, {
-      file: join(dist, 'index.js'),
-      format: 'umd',
-      name: 'agrippa',
-      globals
     }]
   },
   {
@@ -68,7 +69,7 @@ export default defineConfig([
     output: {
       file: join(__dirname, 'bin', 'index.js'),
       banner: '#!/usr/bin/env node',
-      format: 'umd'
+      format: 'es'
     },
 
   }
