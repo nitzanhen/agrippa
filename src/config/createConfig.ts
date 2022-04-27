@@ -10,19 +10,19 @@ export interface InputConfig extends DeepPartial<Config> {
 
 
 export const defaultEnvironment = (packageJson: any): Config['environment'] => {
-  const dependencies = packageJson.dependencies as Record<string, string>;
+  const dependencies: Record<string, string> = packageJson?.dependencies ?? {};
 
   if ('react-native' in dependencies) {
-    return 'react-native';
+    return Environment.REACT_NATIVE;
   }
   else if ('preact' in dependencies) {
-    return 'preact';
+    return Environment.PREACT;
   }
   else if ('solid-js' in dependencies) {
-    return 'solidjs';
+    return Environment.SOLIDJS;
   }
   else if ('react' in dependencies) {
-    return 'react';
+    return Environment.REACT;
   }
 
   return '';
