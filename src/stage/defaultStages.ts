@@ -35,7 +35,10 @@ export function defaultComponentFile(config: Config, styleFilePath?: string): Ag
     composer.addPlugin(environmentPlugin);
   }
   if (styleFilePath) {
-    composer.addPlugin(new ImportPlugin({ module: styleFilePath }));
+    composer.addPlugin(new ImportPlugin({
+      module: styleFilePath,
+      defaultImport: config.styleFileOptions?.module ? 'classes' : undefined
+    }));
   }
 
   if (config.reactOptions?.propTypes) {
