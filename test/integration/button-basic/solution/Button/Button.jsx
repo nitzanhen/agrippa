@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Button = () => {
+export const Button = (props) => {
 	
 	return (
 		<div></div>
