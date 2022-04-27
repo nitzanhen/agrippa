@@ -1,5 +1,5 @@
 {
   "name": "button-ts-types",
   "description": "A simple button test with tsPropsDeclaration=types",
-  "command": "agrippa gen ts-types-button --ts --tsPropsDeclaration type"
+  "command": "agrippa gen ts-types-button --env react --ts --tsPropsDeclaration type"
 }
