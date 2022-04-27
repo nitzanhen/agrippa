@@ -2,9 +2,9 @@ import chalk from 'chalk';
 
 export const styles = {
   componentName: chalk.hex('#FCD558').bold,
-  tag: chalk.hex('#00D8FF').bold.italic,
+  tag: chalk.hex('#00D8FF').bold,
   error: chalk.red,
-  warning: chalk.yellow,
+  warning: chalk.hex('#FFD307'),
   debug: chalk.cyan,
   success: chalk.green,
   comment: chalk.gray,

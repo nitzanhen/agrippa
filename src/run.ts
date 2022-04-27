@@ -2,6 +2,7 @@ import { createConfig, InputConfig } from './config';
 import { loadFiles } from './loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
+import { getStackTags } from './utils/getStackTags';
 import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
 import { reportUsageStatistics } from './utils/reportUsageStatistics';
@@ -59,20 +60,13 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   // Print header & some critical warnings, if any
 
-  /** @todo find a way to make this configurable */
-  const stackTags = [
-    config.environment,
-    config.styling,
-    config.typescript && 'TypeScript'
-  ].filter((tag): tag is string => !!tag)
-    .join(' ');
-
   logger.info(
     '',
     `Agrippa v${pkgJson.version}`,
     '',
     `Generating ${styles.componentName(config.name)}\n`,
-    `Stack: ${styles.tag(stackTags)}`,
+    `Stack: ${styles.tag(getStackTags(config).join(' '))}`,
+    ''
   );
 
   if (!config.environment) {
