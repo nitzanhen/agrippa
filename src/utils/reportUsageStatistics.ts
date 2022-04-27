@@ -4,13 +4,11 @@ import { Config } from '../config';
 import { Logger } from '../logger';
 import { pkgJson } from './pkgJson';
 
-
-
 export const reportUsageStatistics = async (config: Config, logger: Logger): Promise<void> => {
   const runData = {
     ...pick(config, 'environment', 'typescript', 'styling'),
     version: pkgJson.version,
-    dev: process.env.NODE_ENV === 'development'
+    dev: process.env.IS_DEV
   };
 
   const sendTime = Date.now();

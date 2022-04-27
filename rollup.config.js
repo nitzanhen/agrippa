@@ -12,7 +12,7 @@ import pkgJson from './package.json';
 const src = join(__dirname, 'src');
 const dist = join(__dirname, 'dist');
 
-const externals = ['fs/promises', 'path', 'process', 'util', ...Object.keys(pkgJson.dependencies)];
+const externals = [Object.keys(pkgJson.dependencies)];
 const globals = {};
 
 const isDev = process.env.ROLLUP_WATCH === 'true';
@@ -29,7 +29,7 @@ const env = pipe(envConfig)
   (toObject)
   .go();
 
-env['process.env.NODE_ENV'] = JSON.stringify(isDev ? 'development' : 'production');
+env['process.env.IS_DEV'] = JSON.stringify(isDev);
 
 const plugins = [
   eslint({

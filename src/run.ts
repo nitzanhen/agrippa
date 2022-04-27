@@ -59,12 +59,20 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   // Print header & some critical warnings, if any
 
+  /** @todo find a way to make this configurable */
+  const stackTags = [
+    config.environment,
+    config.styling,
+    config.typescript && 'TypeScript'
+  ].filter((tag): tag is string => !!tag)
+    .join(' ');
+
   logger.info(
     '',
     `Agrippa v${pkgJson.version}`,
     '',
     `Generating ${styles.componentName(config.name)}\n`,
-    //`Environment: ${styles.tag(getEnvironmentTags(config))}`,
+    `Stack: ${styles.tag(stackTags)}`,
   );
 
   if (!config.environment) {
@@ -101,7 +109,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   // Print an "Update is Available" message, if there's a new version available.
   (await updatePromise)();
-  
+
   return {
     logs: logger.consume()
   };
