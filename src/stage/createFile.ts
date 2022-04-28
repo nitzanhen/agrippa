@@ -22,8 +22,18 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
     const { pure, baseDir, allowOutsideBase, overwrite } = config;
     const { data, path } = file;
 
+    const successContext = {
+      ...context,
+      createdFiles: [...context.createdFiles, file],
+      variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
+    };
+
     if (pure) {
-      return stageResult(StageStatus.NA, 'No file created (pure mode)');
+      return stageResult(
+        StageStatus.NA,
+        'No file created (pure mode)',
+        successContext
+      );
     }
 
     const filename = basename(path);
@@ -57,11 +67,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
       return stageResult(
         StageStatus.SUCCESS,
         `File ${italic(filename)} created successfully.`,
-        {
-          ...context,
-          createdFiles: [...context.createdFiles, file],
-          variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
-        }
+        successContext
       );
     }
     catch (e) {

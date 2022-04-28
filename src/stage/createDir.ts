@@ -24,8 +24,18 @@ export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions):
 
     const dirName = basename(path);
 
+    const successContext = {
+      ...context,
+      createdDirs: [...context.createdDirs, { path }],
+      variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
+    };
+
     if (pure) {
-      return stageResult(StageStatus.NA, 'No directory created (pure mode)');
+      return stageResult(
+        StageStatus.NA,
+        'No directory created (pure mode)',
+        successContext
+      );
     }
 
     if (baseDir && !isSubDirectory(baseDir, path) && !allowOutsideBase) {
@@ -53,11 +63,7 @@ export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions):
       return stageResult(
         StageStatus.SUCCESS,
         `Directory ${italic(dirName)} created successfully.`,
-        {
-          ...context,
-          createdDirs: [...context.createdDirs, { path }],
-          variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
-        }
+        successContext
       );
     }
     catch (e) {
