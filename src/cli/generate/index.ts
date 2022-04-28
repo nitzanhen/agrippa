@@ -1,9 +1,8 @@
-import { italic } from 'chalk';
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { InputConfig } from '../../config';
 import { Environment } from '../../config/Environment';
 import { Styling } from '../../config/Styling';
-import { Logger } from '../../logger';
+import { italic, Logger } from '../../logger';
 import { run } from '../../run';
 import { runCommand } from '../../stage/runCommand';
 import { pascalCase } from '../../utils';

@@ -1,9 +1,8 @@
 import { existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
 import { basename } from 'path';
-import { bold, italic } from 'chalk';
 import { AgrippaDir } from '../AgrippaFile';
-import { styles } from '../logger';
+import { bold, italic, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
 import { Stage, stageResult, StageStatus } from './Stage';
@@ -53,7 +52,7 @@ export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions):
 
       return stageResult(
         StageStatus.SUCCESS,
-        `Directory ${styles.italic(dirName)} created successfully.`,
+        `Directory ${italic(dirName)} created successfully.`,
         {
           ...context,
           createdDirs: [...context.createdDirs, { path }],

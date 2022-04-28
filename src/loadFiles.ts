@@ -1,7 +1,9 @@
 import { readFile } from 'fs/promises';
 import findUp from 'find-up';
 import { pipe, filter, entries, map, tuple, toObject } from 'rhax';
-import { parse as parseJson } from 'json5';
+import JSON5 from 'json5';
+
+const { parse: parseJson } = JSON5;
 
 const defaultFileQueries = {
   packageJson: 'package.json',

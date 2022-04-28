@@ -9,6 +9,10 @@ export const styles = {
   success: chalk.green,
   comment: chalk.gray,
   path: chalk.gray.italic,
+  bold: chalk.bold,
   italic: chalk.italic,
-  NA: chalk.hex('#B6B6B6')
+  NA: chalk.hex('#B6B6B6'),
+  command: chalk.magenta
 };
+
+export const { bold, italic } = styles;

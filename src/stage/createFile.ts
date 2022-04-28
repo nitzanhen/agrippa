@@ -1,9 +1,8 @@
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { basename } from 'path';
-import { bold, italic } from 'chalk';
 import { AgrippaFile } from '../AgrippaFile';
-import { styles } from '../logger';
+import { bold, italic, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
 import { Stage, stageResult, StageStatus } from './Stage';
@@ -57,7 +56,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
 
       return stageResult(
         StageStatus.SUCCESS,
-        `File ${styles.italic(filename)} created successfully.`,
+        `File ${italic(filename)} created successfully.`,
         {
           ...context,
           createdFiles: [...context.createdFiles, file],

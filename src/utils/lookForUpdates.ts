@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { italic, magenta, bold } from 'chalk';
-import { diff, gt, lt } from 'semver';
-import { Logger } from '../logger';
+import semver from 'semver';
+import { bold, italic, Logger, styles } from '../logger';
 import { pkgJson } from './pkgJson';
+
+const { diff, gt, lt } = semver;
 
 /**
  * Checks if a newer version of Agrippa exists.
@@ -25,7 +26,7 @@ export const lookForUpdates = async (logger: Logger): Promise<() => void> => {
       const df = diff(latestVersion, currentVersion);
       logger.info(
         bold(`New ${df} version available: ${latestVersion}!`),
-        bold(`please update now by typing ${magenta('npm i -g agrippa')} into the terminal`),
+        bold(`please update now by typing ${styles.command('npm i -g agrippa')} into the terminal`),
       );
     }
     else if (lt(latestVersion, currentVersion)) {
