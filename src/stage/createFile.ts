@@ -1,10 +1,10 @@
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { basename } from 'path';
-import { AgrippaFile } from './AgrippaFile';
 import { bold, italic, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
+import { AgrippaFile } from './AgrippaFile';
 import { Stage, stageResult, StageStatus } from './Stage';
 
 interface CreateFileOptions {

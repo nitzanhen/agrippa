@@ -1,6 +1,6 @@
-import { AgrippaFile } from './AgrippaFile';
 import { Config } from '../config';
 import { Logger, styles } from '../logger';
+import { AgrippaFile } from './AgrippaFile';
 import { AgrippaDir } from './AgrippaDir';
 
 
