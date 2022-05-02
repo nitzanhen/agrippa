@@ -18,8 +18,3 @@ export class AgrippaFile {
     return basename(this.path, this.extension);
   }
 }
-
-/** @todo find a better place for this */
-export interface AgrippaDir {
-  path: string;
-}

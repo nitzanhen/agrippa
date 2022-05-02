@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import { AgrippaFile } from '../AgrippaFile';
+import { AgrippaFile } from './AgrippaFile';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Config, Environment } from '../config';
 import { joinLines } from '../utils/strings';

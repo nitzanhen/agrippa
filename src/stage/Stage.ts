@@ -1,6 +1,7 @@
-import { AgrippaDir, AgrippaFile } from '../AgrippaFile';
+import { AgrippaFile } from './AgrippaFile';
 import { Config } from '../config';
 import { Logger, styles } from '../logger';
+import { AgrippaDir } from './AgrippaDir';
 
 
 export interface Context {

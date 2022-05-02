@@ -1,11 +1,11 @@
 import { existsSync } from 'fs';
 import { mkdir } from 'fs/promises';
 import { basename } from 'path';
-import { AgrippaDir } from '../AgrippaFile';
 import { bold, italic, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
 import { Stage, stageResult, StageStatus } from './Stage';
+import { AgrippaDir } from './AgrippaDir';
 
 export interface CreateDirOptions extends AgrippaDir {
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
@@ -26,7 +26,7 @@ export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions):
 
     const successContext = {
       ...context,
-      createdDirs: [...context.createdDirs, { path }],
+      createdDirs: [...context.createdDirs, new AgrippaDir(path)],
       variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
     };
 
