@@ -4,7 +4,8 @@ module.exports = {
   testEnvironment: 'node',
   modulePathIgnorePatterns: ['<rootDir>/bin/'],
   roots: [
-    'test/unit'
+    'test/unit',
+    'test/integration'
   ],
   globals: {
     'ts-jest': {
