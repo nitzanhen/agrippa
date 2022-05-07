@@ -1,4 +1,4 @@
-import { DeepPartial, kebabCase } from '../utils';
+import { DeepPartial, kebabCase, pascalCase } from '../utils';
 import { assignDefaults } from '../utils/object';
 import { Config } from './Config';
 import { Environment } from './Environment';
@@ -30,7 +30,9 @@ export const defaultEnvironment = (packageJson: any): Config['environment'] => {
 
 export function createConfig(input: InputConfig, envFiles: Record<string, any>): Config {
   const { packageJson, tsconfig } = envFiles;
-  const { name, styling } = input;
+  const { styling } = input;
+
+  const name = pascalCase(input.name);
 
   const environment = input.environment ?? defaultEnvironment(packageJson);
 

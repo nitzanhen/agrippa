@@ -5,7 +5,6 @@ import { Styling } from '../../config/Styling';
 import { italic, Logger } from '../../logger';
 import { run } from '../../run';
 import { runCommand } from '../../stage/runCommand';
-import { pascalCase } from '../../utils';
 
 const cliLogger = Logger.consoleLogger();
 
@@ -120,13 +119,12 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const environment = Environment.fromString(argv.environment!) ?? argv.environment;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
-    const name = pascalCase(argv.name);
 
     cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(name)} in environment ${italic(environment)}`);
     cliLogger.debug('argv:', argv);
 
     const inputConfig: InputConfig = {
-      name,
+      name: argv.name,
       environment,
 
       typescript: argv.typescript,
