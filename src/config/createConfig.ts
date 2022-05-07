@@ -33,6 +33,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
   const { styling } = input;
 
   const name = pascalCase(input.name);
+  input.name = name;
 
   const environment = input.environment ?? defaultEnvironment(packageJson);
 
