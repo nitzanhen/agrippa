@@ -32,6 +32,10 @@ const testCases: IntegrationTestCase[] = [
       }
     },
     output: {
+      config: {
+        name: 'ReactComponent',
+        environment: 'react',
+      },
       createdDirs: [
         new AgrippaDir(
           join(cwd, 'ReactComponent')
@@ -75,6 +79,11 @@ const testCases: IntegrationTestCase[] = [
       }
     },
     output: {
+      config: {
+        name: 'ReactTsComponent',
+        environment: 'react',
+        typescript: true,
+      },
       createdDirs: [
         new AgrippaDir(
           join(cwd, 'ReactTsComponent')
