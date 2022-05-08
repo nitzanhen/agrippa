@@ -23,7 +23,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
   // Initialize config, stages, context & logger
 
   const envFiles = {
-    ...(await loadFiles()),
+    ...(!inputConfig.pure ? await loadFiles() : {}),
     ...(options.envFiles ?? {})
   };
 
