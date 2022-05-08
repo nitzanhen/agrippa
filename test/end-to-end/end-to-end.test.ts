@@ -124,7 +124,7 @@ const caseNames = readdirSync(__dirname, { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
   .map(dirent => dirent.name);
 
-describe.each(caseNames)('Case %#: %s', (name) => {
+describe.each(caseNames)('Case $#: %s', (name) => {
   const { solution, output } = runCase(name);
 
   // Compare solution & output

@@ -4,7 +4,7 @@ import { run } from '../dist/index.mjs';
 
 async function main() {
   const result = await run({
-    name: 'test',
+    name: 'basic-component',
     environment: 'react',
     pure: true,
     reportUsageStatistics: false,
