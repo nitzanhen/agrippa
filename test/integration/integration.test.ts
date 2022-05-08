@@ -27,7 +27,7 @@ describe.each(testCases)('Case $#: $name', ({ input, output: expectedOutput }) =
 
   const testConfig = expectedOutput.config ? test : test.skip;
   testConfig(`Resolved config matches test data${cstr(!expectedOutput.config, ' (no config data)')}`, () => {
-    expect(output.config).toEqual(expectedOutput.config);
+    expect(expectedOutput.config).toMatchObject(output.config);
   });
 
   const testDirs = expectedOutput.createdDirs ? test : test.skip;
@@ -42,7 +42,7 @@ describe.each(testCases)('Case $#: $name', ({ input, output: expectedOutput }) =
 
   const testVariables = expectedOutput.variables ? test : test.skip;
   testVariables(`Resolved variables match test data${cstr(!expectedOutput.variables, ' (no variable data)')}`, () => {
-    expect(output.variables).toEqual(expectedOutput.variables);
+    expect(expectedOutput.variables).toMatchObject(output.variables);
   });
 });
 
