@@ -7,10 +7,6 @@
     "email": "code@nitzanhen.net",
     "url": "https://github.com/NitzanHen"
   },
-  "source": [
-    "src/index.ts",
-    "src/cli/bin.ts"
-  ],
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
