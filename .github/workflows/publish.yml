@@ -25,7 +25,7 @@ jobs:
           node-version: '16.x'
       
       - name: Install
-        run: yanr install --frozen-lockfile
+        run: yarn install --frozen-lockfile
       
       # preversion script takes care of linting, building and testing
       - name: Publish
