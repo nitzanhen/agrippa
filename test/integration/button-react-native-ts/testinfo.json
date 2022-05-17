@@ -1,5 +1,0 @@
-{
-  "name": "button-react-native-ts",
-  "description": "A simple Button test in a React Native project with Typescript",
-  "command": "agrippa gen react-native-button --react-native --ts"
-}

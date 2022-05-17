@@ -1,6 +1,5 @@
-import { formatWithOptions } from 'util';
 
-import { capitalize, cstr, emptyLine, format, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from '../../src/utils/strings';
+import { capitalize, cstr, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from '../../src/utils/strings';
 
 describe('strings', () => {
 
@@ -125,15 +124,5 @@ describe('strings', () => {
 
     expect(kebabCase('First')).toBe('first');
     expect(kebabCase('first')).toBe('first');
-  });
-
-  test('format', () => {
-    ['a', { a: 3 }, 3, [true, false, {}]].forEach((x) => {
-      expect(format(x)).toBe(formatWithOptions({ colors: true }, x));
-    });
-  });
-
-  test('emptyLine', () => {
-    expect(emptyLine()).toBe('');
   });
 });

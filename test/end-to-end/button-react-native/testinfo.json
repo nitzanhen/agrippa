@@ -1,0 +1,5 @@
+{
+  "name": "button-react-native",
+  "description": "A simple Button test in a React Native project",
+  "command": "agrippa gen react-native-button --env react-native"
+}

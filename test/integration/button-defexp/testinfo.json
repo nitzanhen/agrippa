@@ -1,5 +1,0 @@
-{
-  "name": "button-defexp",
-  "description": "A simple Button test with default exports",
-  "command": "agrippa gen def-exp-button --export-type default"
-}

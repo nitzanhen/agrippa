@@ -1,0 +1,5 @@
+{
+  "name": "button-jss-ts",
+  "description": "A simple Button test with JSS & Typescript",
+  "command": "agrippa gen jss-ts-button --env react --styling jss --ts"
+}

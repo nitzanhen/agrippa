@@ -86,7 +86,8 @@
     ],
     "no-underscore-dangle": "off",
     "no-restricted-globals": "off",
-    "semi": "warn"
+    "semi": "warn",
+    "import/no-named-as-default-member": "off"
   },
   "settings": {
     "import/parsers": {

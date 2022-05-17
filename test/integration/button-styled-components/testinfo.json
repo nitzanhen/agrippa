@@ -1,5 +1,0 @@
-{
-  "name": "button-styled-components",
-  "description": "A simple Button test using styled-components",
-  "command": "agrippa gen styled-components-button --styling styled-components"
-}

@@ -1,5 +1,0 @@
-{
-  "name": "button-scss",
-  "description": "A simple Button test in an SCSS project",
-  "command": "agrippa gen scss-button --styling scss"
-}

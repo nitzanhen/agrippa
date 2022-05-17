@@ -1,5 +1,0 @@
-{
-  "name": "button-jss-ts",
-  "description": "A simple Button test with JSS & Typescript",
-  "command": "agrippa gen jss-ts-button --styling jss --ts"
-}

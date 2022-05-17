@@ -1,5 +1,0 @@
-{
-  "name": "button-css",
-  "description": "A simple CSS styling test",
-  "command": "agrippa gen css-button --styling css"
-}

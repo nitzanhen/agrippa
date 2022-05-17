@@ -1,22 +1,29 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "lib": [
-      "ESNext"
+      "ESNext",
+      "dom"
     ],
-    "rootDir": "src",
-    "outDir": "bin",
-    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
+    "outDir": "dist",
+    "module": "esnext",
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "useUnknownInCatchVariables": false,
-    "downlevelIteration": true
+    "downlevelIteration": true,
   },
   "include": [
     "src",
-    "src/init/rc-template.json",
+    "package.json",
+  ],
+  "exclude": [
+    "bin",
+    "dist"
   ]
 }
