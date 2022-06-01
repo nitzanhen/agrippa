@@ -17,4 +17,14 @@ export class AgrippaFile {
   get fileName() {
     return basename(this.path, this.extension);
   }
+
+  toJSON(): string {
+    return JSON.stringify({
+      path: this.path,
+      data: this.data,
+      directory: this.directory,
+      extension: this.extension,
+      fileName: this.fileName
+    });
+  }
 }
