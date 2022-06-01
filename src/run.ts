@@ -71,8 +71,7 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   if (!config.environment) {
     logger.warn(
-      'No environment flag was received, and Agrippa was unable to detect the environment automatically.',
-      'Please check your configuration.',
+      'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
       ''
     );
   }
