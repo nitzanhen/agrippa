@@ -120,7 +120,7 @@ export const generateCommand: GenerateCommand = {
     const environment = Environment.fromString(argv.environment!) ?? argv.environment;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
 
-    cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(name)} in environment ${italic(environment)}`);
+    cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(argv.name)} in environment ${italic(environment)}`);
     cliLogger.debug('argv:', argv);
 
     const inputConfig: InputConfig = {
