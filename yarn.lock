@@ -3652,9 +3652,9 @@ reusify@^1.0.4:
   integrity sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
 
 rhax@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/rhax/-/rhax-2.0.1.tgz#7d3ed2926627369be4527d8d1798ecf6f88eadfa"
-  integrity sha512-+G4tXAbtXrdABTd3VpKbws3p8FItHgBxNaxusFlq9J4sr5KyOrq2u3wMiDeHgpo3EeXFG7PCsl6Sj7WU+RdFcw==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/rhax/-/rhax-2.2.0.tgz#3a0a7518b75f44979e7a014486119c53dd6b019c"
+  integrity sha512-hzCH33+eiiIqu5EiP7wgoItH/zEdOKDYpsBgOCLMKtCyA5onv7rCpfkinfdWhMiP1T84wwP3dR414ttHeLx5pw==
 
 rimraf@^3.0.0, rimraf@^3.0.2:
   version "3.0.2"
@@ -4323,9 +4323,9 @@ yargs@^16.2.0:
     yargs-parser "^20.2.2"
 
 yargs@^17.0.1:
-  version "17.4.1"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.4.1.tgz#ebe23284207bb75cee7c408c33e722bfb27b5284"
-  integrity sha512-WSZD9jgobAg3ZKuCQZSa3g9QOJeCCqLoLAykiWgmXnDo9EPnn4RPf5qVTtzgOx66o6/oqhcA5tHtJXpG8pMt3g==
+  version "17.5.1"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-17.5.1.tgz#e109900cab6fcb7fd44b1d8249166feb0b36e58e"
+  integrity sha512-t6YAJcxDkNX7NFYiVtKvWUz8l+PaKTLiL63mJYWR2GnHq2gjEWISzsLp9wg3aY36dY1j+gfIEL3pIF+XlJJfbA==
   dependencies:
     cliui "^7.0.2"
     escalade "^3.1.1"
