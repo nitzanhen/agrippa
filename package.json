@@ -1,7 +1,7 @@
 {
   "name": "agrippa",
   "description": "The CLI for component generation",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "author": {
     "name": "Nitzan Hen",
     "email": "code@nitzanhen.net",
