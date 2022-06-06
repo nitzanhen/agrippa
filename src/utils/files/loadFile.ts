@@ -2,8 +2,10 @@ import { readFile } from 'fs/promises';
 import { extname, resolve } from 'path';
 import { cwd } from 'process';
 import { pathToFileURL } from 'url';
-import { parse as parseJson } from 'json5';
+import JSON5 from 'json5';
 import findUp from 'find-up';
+
+const parseJson = JSON5.parse;
 
 /**
  * Lists file types supported by loadFile, by their extension.

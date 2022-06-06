@@ -1,5 +1,5 @@
 import { createConfig, InputConfig } from './config';
-import { loadFiles } from './loadFiles';
+import { loadFiles } from './utils/files/loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { getStackTags } from './utils/getStackTags';

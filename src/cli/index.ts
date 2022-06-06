@@ -5,16 +5,16 @@ import { initCommand } from './init';
 
 // logger.info(`\nAgrippa v${pkgJson.version}`);
 
+const y = yargs();
 
 // Init yargs
-yargs(hideBin(process.argv))
+y
   .command(generateCommand)
   .command(initCommand)
-  .wrap(yargs.terminalWidth())
   .recommendCommands()
   .strict()
   .demandCommand(1, 'Please specify a command')
-  .parseAsync()
+  .parseAsync(hideBin(process.argv))
   .catch(console.error);
 
 

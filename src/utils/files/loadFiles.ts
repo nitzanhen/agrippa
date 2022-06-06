@@ -1,6 +1,6 @@
 import findUp from 'find-up';
 import { pipe, filter, entries, map, tuple, toObject } from 'rhax';
-import { loadFile } from './utils/files/loadFile';
+import { loadFile } from './loadFile';
 
 const defaultFileQueries = {
   packageJson: 'package.json',
