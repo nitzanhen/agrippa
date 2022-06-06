@@ -3,6 +3,7 @@ import { extname, resolve } from 'path';
 import { cwd } from 'process';
 import { pathToFileURL } from 'url';
 import { parse as parseJson } from 'json5';
+import findUp from 'find-up';
 
 /**
  * Lists file types supported by loadFile, by their extension.
@@ -49,4 +50,19 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
     case FileType.JS: return (await import(pathToFileURL(resolvedPath).toString())).default;
     case FileType.MJS: return (await import(pathToFileURL(resolvedPath).toString())).default;
   }
+}
+
+/**
+ * Searches for a file by the given query; if found it is loaded (using `loadFile`), otherwise `null` is returned.
+ * 
+ * @param query the query to search by; this is forwarded to `findUp`.
+ * @param type optional file type; see `loadFile()`.
+ */
+export async function loadFileQuery<T = any>(query: string | string[], type?: (FileType | string)): Promise<T | null> {
+  const path = await findUp(query);
+  if(!path) {
+    return null;
+  }
+
+  return loadFile(path, type);
 }
