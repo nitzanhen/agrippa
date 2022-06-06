@@ -5,7 +5,7 @@ import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { getStackTags } from './utils/getStackTags';
 import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
-import { reportUsageStatistics } from './utils/reportUsageStatistics';
+import { reportTelemetry } from './utils/reportTelemetry';
 import { indent } from './utils/strings';
 
 export interface RunOptions {
@@ -98,11 +98,11 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   logger.debug('Pipeline execution complete.');
 
-  if (config.reportUsageStatistics) {
-    await reportUsageStatistics(config, logger);
+  if (config.reportTelemetry) {
+    await reportTelemetry(config, logger);
   }
   else {
-    logger.debug('`config.reportUsageStatistics` is `false`, not sending usage statistics');
+    logger.debug('`config.reportTelemetry` is `false`, not sending usage statistics');
   }
 
   if (config.lookForUpdates) {

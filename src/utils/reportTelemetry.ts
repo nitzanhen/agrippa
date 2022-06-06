@@ -4,9 +4,9 @@ import { Config } from '../config';
 import { Logger } from '../logger';
 import { pkgJson } from './pkgJson';
 
-const REPORT_USAGE_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/';
+const TELEMETRY_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/';
 
-export const reportUsageStatistics = async (config: Config, logger: Logger): Promise<void> => {
+export const reportTelemetry = async (config: Config, logger: Logger): Promise<void> => {
   const runData = {
     ...pick(config, 'environment', 'typescript', 'styling'),
     version: pkgJson.version,
@@ -18,7 +18,7 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
   try {
     logger.debug('reportUsageStatistics: sending report...');
 
-    const reqPromise = axios.post(REPORT_USAGE_ENDPOINT, runData);
+    const reqPromise = axios.post(TELEMETRY_ENDPOINT, runData);
 
     if (!config.debug) {
       // If not in debug mode, don't even wait for the resuest to finish
@@ -40,4 +40,4 @@ export const reportUsageStatistics = async (config: Config, logger: Logger): Pro
   }
 };
 
-reportUsageStatistics.silent = true;
+reportTelemetry.silent = true;

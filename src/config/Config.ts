@@ -35,7 +35,7 @@ export interface GenerateOptions {
 
   overwrite: boolean;
   pure: boolean;
-  reportUsageStatistics: boolean;
+  reportTelemetry: boolean;
   lookForUpdates: boolean;
   debug: boolean;
 }

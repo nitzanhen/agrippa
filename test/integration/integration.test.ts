@@ -8,7 +8,7 @@ import testCases from './test-cases';
 const configOverrides: Partial<InputConfig> = {
   pure: true,
   lookForUpdates: false,
-  reportUsageStatistics: false
+  reportTelemetry: false
 };
 
 describe.each(testCases)('Case $#: $name', ({ input, output: expectedOutput }) => {
