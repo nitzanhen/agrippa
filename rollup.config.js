@@ -12,16 +12,13 @@ const dist = join(__dirname, 'dist');
 
 const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.dependencies)];
 
-const isDev = process.env.ROLLUP_WATCH === 'true';
-const isProd = !isDev;
-
 const plugins = [
   nodeResolve(),
   eslint({
     throwOnError: true,
     include: 'src'
   }),
-  isProd && ts(),
+  ts(),
   json(),
   esbuild()
 ];

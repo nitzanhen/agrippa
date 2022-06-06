@@ -1,14 +1,11 @@
-import { readFile } from 'fs/promises';
 import findUp from 'find-up';
 import { pipe, filter, entries, map, tuple, toObject } from 'rhax';
-import JSON5 from 'json5';
-
-const { parse: parseJson } = JSON5;
+import { loadFile } from './utils/files/loadFile';
 
 const defaultFileQueries = {
   packageJson: 'package.json',
   tsconfig: 'tsconfig.json',
-  agrippaConfig: '.agripparc.json',
+  agrippaConfig: 'agrippa.config.mjs',
 };
 
 /**
@@ -17,7 +14,7 @@ const defaultFileQueries = {
  * By default, Agrippa searches for:
  * - "package.json" file (key `packageJson`) 
  * - "tsconfig.json" (key `tsconfig`)
- * - ".agripparc.json" (key `agrippaConfig`)
+ * - "agrippa.config.mjs" (key `agrippaConfig`)
  * 
  * This can be customized using the `customFileQueries` parameter.
  * 
@@ -36,7 +33,7 @@ export async function loadFiles(customFileQueries: Record<string, string | strin
   const filePromises = pipe(fileQueries)
     (entries)
     (map(([name, query]) => findUp(query)
-      .then(async path => path ? parseJson(await readFile(path, 'utf8')) : null)
+      .then(async path => path ? loadFile(path) : null)
       .then(f => tuple(name, f))
     ))
     .go();
