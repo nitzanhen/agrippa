@@ -2,8 +2,9 @@ import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import { cwd } from 'process';
 import { Argv, BuilderCallback, CommandModule } from 'yargs';
-import { Logger } from '../../logger';
-import { loadFile } from '../../utils/files/loadFile';
+import { Logger, styles } from '../../logger';
+import { loadFileQuery } from '../../utils/files/loadFile';
+import { pkgJson } from '../../utils/pkgJson';
 import { getConfigTemplate } from './getConfigTemplate';
 
 const cliLogger = Logger.consoleLogger();
@@ -22,23 +23,43 @@ export const initCommand: InitCommand = {
   describe: "Initialize Agrippa's configuration for this project",
   builder,
   handler: async argv => {
+
+    cliLogger.info(
+      '',
+      `Agrippa v${pkgJson.version}`,
+      '',
+    );
+
     const bare = argv.bare
-      ?? await loadFile('./package.json').then(
+      ?? await loadFileQuery('package.json').then(
         pkg => !('agrippa' in pkg.devDependencies || 'agrippa' in pkg.dependencies)
       );
+
+    if (bare) {
+      cliLogger.warn(
+        `${argv.bare
+          ? 'The `--bare` flag was passed'
+          : 'Agrippa was not detected as a local dependency'
+        }. It's highly recommended to install agrippa as a dev dependency, rather than using it as a global package.`,
+        'Generating a "bare" config...',
+        ''
+      );
+    }
+
+    const path = join(cwd(), 'agrippa.config.mjs');
+    cliLogger.info(`Generating a fresh Agrippa config at ${styles.path(path)}...\n`);
 
     const fileContents = getConfigTemplate(bare!);
 
     try {
-      const path = join(cwd(), 'agrippa.config.mjs');
 
       await writeFile(path, fileContents, { flag: 'wx' });
 
-      cliLogger.info(`\nGenerated a fresh Agrippa config at ${path}\n`);
+      cliLogger.info(styles.success('Successfully generated!\n'));
     }
     catch (e) {
       if (e.code === 'EEXIST') {
-        cliLogger.error('\nAn Agrippa config file `agrippa.config.mjs` already exists.\n');
+        cliLogger.error('An Agrippa config file `agrippa.config.mjs` already exists at the current working directory.\n');
       }
       else {
         throw e;

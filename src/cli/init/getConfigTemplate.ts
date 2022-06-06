@@ -7,20 +7,15 @@ export function getConfigTemplate(bare: boolean) {
   return bare
     ? joinLines(
       '',
-      '',
       'export default {',
-      '  options: {',
-      '',
-      '  }',
+      '  options: {}',
       '};'
     )
     : joinLines(
       "import { defineConfig } from 'agrippa';",
       '',
       'export default defineConfig({',
-      '  options: {',
-      '',
-      '  }',
+      '  options: {}',
       '});',
     );
 }
