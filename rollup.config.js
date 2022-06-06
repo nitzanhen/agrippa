@@ -12,13 +12,13 @@ const dist = join(__dirname, 'dist');
 
 const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.dependencies)];
 
-const plugins = [
+const plugins = ({ tsc = false } = {}) => [
   nodeResolve(),
   eslint({
     throwOnError: true,
     include: 'src'
   }),
-  ts(),
+  tsc && ts(),
   json(),
   esbuild()
 ];
@@ -28,26 +28,31 @@ export default defineConfig([
     // main step
     input: join(src, 'index.ts'),
     external: externals,
-    plugins,
-    output: [{
-      file: join(dist, 'index.mjs'),
-      format: 'es',
-    },
-    {
+    plugins: plugins({ tsc: true }),
+    output: {
       file: join(dist, 'index.js'),
-      format: 'umd',
-      name: 'agrippa',
-    }]
+      format: 'es',
+    }
+  },
+  {
+    // cjs step
+    input: join(src, 'index.ts'),
+    external: externals,
+    plugins: plugins(),
+    output: {
+      file: join(dist, 'index.cjs'),
+      format: 'cjs',
+    }
   },
   {
     // bin step
     input: join(src, 'cli', 'index.ts'),
     external: externals,
-    plugins,
+    plugins: plugins(),
     output: {
       file: join(__dirname, 'bin', 'index.js'),
       banner: '#!/usr/bin/env node',
-      format: 'umd'
+      format: 'es'
     },
 
   }
