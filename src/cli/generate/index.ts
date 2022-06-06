@@ -91,10 +91,10 @@ const builder = async (yargs: yargs.Argv) =>
         alias: 'lookForUpdates',
         desc: 'Whether to look for updates when running Agrippa or not.'
       },
-      'report-usage-statistics': {
+      'report-telemetry': {
         type: 'boolean',
-        alias: 'reportUsageStatistics',
-        desc: 'Whether to report (anonymous) usage statistics or not.'
+        alias: 'reportTelemetry',
+        desc: 'Whether to report (anonymous!) telemetry or not.'
       },
       /** @todo remove */
       '$schema': {
@@ -154,7 +154,7 @@ export const generateCommand: GenerateCommand = {
 
       debug: argv.debug,
       overwrite: argv.overwrite,
-      reportUsageStatistics: argv.reportUsageStatistics,
+      reportTelemetry: argv.reportTelemetry,
       lookForUpdates: argv.lookForUpdates,
       pure: false,
     };
