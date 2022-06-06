@@ -9,11 +9,6 @@ import { getConfigTemplate } from './getConfigTemplate';
 const cliLogger = Logger.consoleLogger();
 
 const builder = (yargs: Argv) => yargs.options({
-  migrate: {
-    type: 'boolean',
-    desc: 'If passed, Agrippa will attempt to migrate from an old (JSON) config',
-    default: false
-  },
   bare: {
     type: 'boolean',
     desc: 'If passed, Agrippa will generate a config that does not import agrippa. This is used for global installations.',
