@@ -30,7 +30,7 @@ export default defineConfig([
     external: externals,
     plugins: plugins({ tsc: true }),
     output: {
-      file: join(dist, 'index.js'),
+      file: join(dist, 'index.mjs'),
       format: 'es',
     }
   },
@@ -50,7 +50,7 @@ export default defineConfig([
     external: externals,
     plugins: plugins(),
     output: {
-      file: join(__dirname, 'bin', 'index.js'),
+      file: join(__dirname, 'bin', 'index.mjs'),
       banner: '#!/usr/bin/env node',
       format: 'es'
     },

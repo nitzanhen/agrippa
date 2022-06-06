@@ -7,13 +7,12 @@
     "email": "code@nitzanhen.net",
     "url": "https://github.com/NitzanHen"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     }
   },
@@ -22,7 +21,7 @@
     "bin"
   ],
   "bin": {
-    "agrippa": "bin/index.js"
+    "agrippa": "bin/index.mjs"
   },
   "license": "MIT",
   "scripts": {
