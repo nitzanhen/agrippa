@@ -68,6 +68,10 @@ describe('strings', () => {
 
     expect(isKebabCase('First')).toBe(false);
     expect(isKebabCase('first')).toBe(true);
+
+    expect(isKebabCase('name-2')).toBe(true);
+    expect(isKebabCase('name2')).toBe(true);
+    expect(isKebabCase('Name2')).toBe(false);
   });
 
   test('isCamelCase', () => {
@@ -82,6 +86,10 @@ describe('strings', () => {
 
     expect(isCamelCase('First')).toBe(false);
     expect(isCamelCase('first')).toBe(true);
+
+    expect(isCamelCase('name-2')).toBe(false);
+    expect(isCamelCase('name2')).toBe(true);
+    expect(isCamelCase('Name2')).toBe(false);
   });
 
   test('isPascalCase', () => {
@@ -96,6 +104,10 @@ describe('strings', () => {
 
     expect(isPascalCase('First')).toBe(true);
     expect(isPascalCase('first')).toBe(false);
+
+    expect(isPascalCase('name-2')).toBe(false);
+    expect(isPascalCase('name2')).toBe(false);
+    expect(isPascalCase('Name2')).toBe(true);
   });
 
   test('pascalCase', () => {
@@ -110,6 +122,10 @@ describe('strings', () => {
 
     expect(pascalCase('First')).toBe('First');
     expect(pascalCase('first')).toBe('First');
+
+    expect(pascalCase('name-2')).toBe('Name2');
+    expect(pascalCase('name2')).toBe('Name2');
+    expect(pascalCase('Name2')).toBe('Name2');
   });
 
   test('kebabCase', () => {
@@ -124,5 +140,9 @@ describe('strings', () => {
 
     expect(kebabCase('First')).toBe('first');
     expect(kebabCase('first')).toBe('first');
+
+    expect(kebabCase('name-2')).toBe('name-2');
+    expect(kebabCase('name2')).toBe('name2');
+    expect(kebabCase('Name2')).toBe('name2');
   });
 });
