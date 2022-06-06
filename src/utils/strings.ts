@@ -29,9 +29,9 @@ export const capitalize = (str: string) => str && (str[0].toLocaleUpperCase() + 
 
 export const isKebabCase = (str: string) => str.split('-').every(isLowerCase);
 
-export const isCamelCase = (str: string) => !str || /^[a-z][A-Za-z]*$/.test(str);
+export const isCamelCase = (str: string) => !str || /^[a-z][A-Za-z\d]*$/.test(str);
 
-export const isPascalCase = (str: string) => !str || /^[A-Z][A-Za-z]*$/.test(str);
+export const isPascalCase = (str: string) => !str || /^[A-Z][A-Za-z\d]*$/.test(str);
 
 export const pascalCase = (str: string) => {
   if (isPascalCase(str)) {
