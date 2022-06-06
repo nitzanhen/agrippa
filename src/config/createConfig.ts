@@ -1,6 +1,7 @@
 import { DeepPartial, kebabCase, pascalCase } from '../utils';
 import { assignDefaults } from '../utils/object';
 import { Config } from './Config';
+import { ConfigDefinition } from './defineConfig';
 import { Environment } from './Environment';
 import { Styling } from './Styling';
 
@@ -30,6 +31,11 @@ export const defaultEnvironment = (packageJson: any): Config['environment'] => {
 
 export function createConfig(input: InputConfig, envFiles: Record<string, any>): Config {
   const { packageJson, tsconfig } = envFiles;
+  const agrippaConfig = envFiles.agrippaConfig as ConfigDefinition | null;
+
+  /** Merge the given input with the resolve config options */
+  input = assignDefaults(agrippaConfig?.options ?? {}, input);
+
   const { styling } = input;
 
   const name = pascalCase(input.name);

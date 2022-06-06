@@ -1,7 +1,7 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { generateCommand } from './generate';
-// import { initCommand } from './init';
+import { initCommand } from './init';
 
 // logger.info(`\nAgrippa v${pkgJson.version}`);
 
@@ -9,7 +9,7 @@ import { generateCommand } from './generate';
 // Init yargs
 yargs(hideBin(process.argv))
   .command(generateCommand)
-  //.command(initCommand)
+  .command(initCommand)
   .wrap(yargs.terminalWidth())
   .recommendCommands()
   .strict()

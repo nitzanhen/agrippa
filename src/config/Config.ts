@@ -1,14 +1,8 @@
 import { Environment } from './Environment';
 import { Styling } from './Styling';
 
-
 /** @todo descriptions */
-export interface Config {
-  /** Component's name, *in pascal case* */
-  name: string,
-  /** Component's name in kebab case */
-  kebabName: string
-
+export interface GenerateOptions {
   componentOptions: {
     exportType: 'named' | 'default';
     declaration: 'const' | 'function';
@@ -44,4 +38,11 @@ export interface Config {
   reportUsageStatistics: boolean;
   lookForUpdates: boolean;
   debug: boolean;
+}
+
+export interface Config extends GenerateOptions {
+  /** Component's name, *in pascal case* */
+  name: string,
+  /** Component's name in kebab case */
+  kebabName: string  
 }

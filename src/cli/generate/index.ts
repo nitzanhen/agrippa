@@ -96,6 +96,7 @@ const builder = async (yargs: yargs.Argv) =>
         alias: 'reportUsageStatistics',
         desc: 'Whether to report (anonymous) usage statistics or not.'
       },
+      /** @todo remove */
       '$schema': {
         type: 'string'
       }
@@ -109,7 +110,7 @@ const builder = async (yargs: yargs.Argv) =>
       }
     }, true);
 
-type GenerateCommand = (typeof builder) extends BuilderCallback<{}, infer R> ? CommandModule<{}, R> : never
+type GenerateCommand = (typeof builder) extends BuilderCallback<{}, infer R> ? CommandModule<{}, R> : never;
 
 export const generateCommand: GenerateCommand = {
   command: 'generate <name> [options]',

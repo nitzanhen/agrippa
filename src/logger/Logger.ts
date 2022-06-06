@@ -47,8 +47,8 @@ export class Logger extends EventEmitter {
     super();
     this.isDebug = isDebug;
 
-    // To prevent Node.js crash on first error
-    // this.on('error', () => {});
+    // To prevent Node.js crash on a logged error
+    this.on('error', () => {});
   }
 
   protected format(args: unknown[], style: (x: unknown) => unknown = x => x) {
