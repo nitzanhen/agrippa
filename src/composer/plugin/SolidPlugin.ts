@@ -1,18 +1,18 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { JSXPlugin } from './JSXPlugin';
 
 export class SolidPlugin extends JSXPlugin {
   readonly id = 'solidjs';
   rootTag = 'div';
 
-  private solidjsOptions: NonNullable<Config['solidjsOptions']>;
+  private solidjsOptions: NonNullable<Options['solidjsOptions']>;
 
-  constructor(protected config: Config) {
-    super(config);
+  constructor(protected options: Options) {
+    super(options);
 
-    const solidjsOptions = config.solidjsOptions;
+    const solidjsOptions = options.solidjsOptions;
     if (!solidjsOptions) {
-      throw TypeError('SolidPlugin requires Config.solidjsOptions to be set');
+      throw TypeError('SolidPlugin requires Options.solidjsOptions to be set');
     }
 
     this.solidjsOptions = solidjsOptions;

@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { Blocks } from '../Blocks';
 import { Import } from '../Import';
 import { Imports } from '../Imports';
@@ -16,7 +16,7 @@ export class ImportPlugin implements ComposerPlugin {
   }
 
   // eslint-disable-next-line unused-imports/no-unused-vars
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void {
     imports.add(this.import);
   }
 }

@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { createAssignment } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
@@ -15,8 +15,8 @@ export class PropTypesPlugin implements ComposerPlugin {
     return createAssignment(name, 'propTypes', '{}');
   }
 
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
-    const { name } = config;
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void {
+    const { name } = options;
 
     imports.add({
       module: 'prop-types',

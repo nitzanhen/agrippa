@@ -18,8 +18,8 @@ interface CreateFileOptions {
 
 export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
   return async function fileStage(context, logger) {
-    const { config } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = config;
+    const { options } = context;
+    const { pure, baseDir, allowOutsideBase, overwrite } = options;
     const { data, path } = file;
 
     const successContext = {

@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { Blocks } from '../Blocks';
 import { Comment } from '../Comment';
 import { Imports } from '../Imports';
@@ -19,7 +19,7 @@ export class CommentPlugin implements ComposerPlugin {
   ) { }
 
   // eslint-disable-next-line unused-imports/no-unused-vars
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void {
     blocks.add({
       key: this.key,
       precedence: this.precedence,

@@ -1,17 +1,17 @@
 import { DeepPartial } from '../utils';
-import { GenerateOptions } from './Config';
+import { Options } from './Options';
 
 /**
  * Defines the structure of the default export of `agrippa.config.mjs`.
  */
-export interface ConfigDefinition {
-  options?: DeepPartial<GenerateOptions>
+export interface Config {
+  options?: DeepPartial<Options>
 };
 
 /**
  * `defineConfig` is used in `agrippa.config.mjs` files, 
  * for better typing intellisense.
  */
-export function defineConfig(config: ConfigDefinition): ConfigDefinition {
+export function defineConfig(config: Config): Config {
   return config;
 }

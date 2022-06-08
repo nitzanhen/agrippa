@@ -1,5 +1,5 @@
 export * from './run';
-export * from './config';
+export * from './options';
 export * from './composer';
 export * from './logger';
 export * from './stage';

@@ -1,4 +1,4 @@
-import { Config, Environment, Styling } from '../config';
+import { Options, Environment, Styling } from '../options';
 import { capitalize } from './strings';
 
 const environmentTags: Record<string, string> = {
@@ -21,8 +21,8 @@ const stylingTags: Record<string, string> = {
  * 
  * @todo find a way to make this configurable from outside/plugins.
  */
-export function getStackTags(config: Config): string[] {
-  const { environment, styling, typescript } = config;
+export function getStackTags(options: Options): string[] {
+  const { environment, styling, typescript } = options;
   const envTag = environmentTags[environment] ?? capitalize(environment);
   const typescriptTag = typescript ? 'TypeScript' : undefined;
   const stylingTag = styling && stylingTags[styling];

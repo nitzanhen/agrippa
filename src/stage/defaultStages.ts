@@ -1,57 +1,57 @@
 import { join, resolve } from 'path';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
-import { Config, Environment } from '../config';
+import { Options, Environment } from '../options';
 import { joinLines } from '../utils/strings';
 import { AgrippaFile } from './AgrippaFile';
 import { createDir } from './createDir';
 import { createFile } from './createFile';
 import { Stage } from './Stage';
 
-const getDirPath = ({ baseDir, destination, name }: Config) => resolve(baseDir ?? process.cwd(), destination, name);
+const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
 
-export const getEnvironmentPlugin = (config: Config) => {
-  switch (config.environment) {
-    case Environment.REACT: return new ReactPlugin(config);
-    case Environment.REACT_NATIVE: return new ReactNativePlugin(config);
-    case Environment.SOLIDJS: return new SolidPlugin(config);
-    case Environment.PREACT: return new PreactPlugin(config);
+export const getEnvironmentPlugin = (options: Options) => {
+  switch (options.environment) {
+    case Environment.REACT: return new ReactPlugin(options);
+    case Environment.REACT_NATIVE: return new ReactNativePlugin(options);
+    case Environment.SOLIDJS: return new SolidPlugin(options);
+    case Environment.PREACT: return new PreactPlugin(options);
     default: return null;
   }
 };
 
-export function defaultComponentFile(config: Config, styleFilePath?: string): AgrippaFile {
-  const { name, typescript } = config;
+export function defaultComponentFile(options: Options, styleFilePath?: string): AgrippaFile {
+  const { name, typescript } = options;
 
-  const dirPath = getDirPath(config);
+  const dirPath = getDirPath(options);
 
   const componentFileExtension = typescript ? 'tsx' : 'jsx';
   const componentFileName = `${name}.${componentFileExtension}`;
   const componentFilePath = join(dirPath, componentFileName);
 
-  const composer = new CodeComposer(config);
+  const composer = new CodeComposer(options);
 
-  const environmentPlugin = getEnvironmentPlugin(config);
+  const environmentPlugin = getEnvironmentPlugin(options);
   if (environmentPlugin) {
     composer.addPlugin(environmentPlugin);
   }
   if (styleFilePath) {
     composer.addPlugin(new ImportPlugin({
       module: styleFilePath,
-      defaultImport: config.styleFileOptions?.module ? 'classes' : undefined
+      defaultImport: options.styleFileOptions?.module ? 'classes' : undefined
     }));
   }
 
-  if (config.reactOptions?.propTypes) {
+  if (options.reactOptions?.propTypes) {
     composer.addPlugin(new PropTypesPlugin());
   }
 
   return new AgrippaFile(componentFilePath, composer.compose());
 }
 
-export function defaultIndexFile(config: Config): AgrippaFile {
-  const { name, componentOptions: { exportType }, typescript } = config;
+export function defaultIndexFile(options: Options): AgrippaFile {
+  const { name, componentOptions: { exportType }, typescript } = options;
 
-  const dirPath = getDirPath(config);
+  const dirPath = getDirPath(options);
 
   const fileName = `index.${typescript ? 'ts' : 'js'}`;
   const path = join(dirPath, fileName);
@@ -64,10 +64,10 @@ export function defaultIndexFile(config: Config): AgrippaFile {
   return new AgrippaFile(path, code);
 }
 
-export function defaultStages(config: Config): Stage[] {
-  const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = config;
+export function defaultStages(options: Options): Stage[] {
+  const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = options;
 
-  const dirPath = getDirPath(config);
+  const dirPath = getDirPath(options);
 
   const stylesFileName = styling === 'styled-components'
     ? `${name}.styles.${typescript ? 'ts' : 'js'}`
@@ -81,7 +81,7 @@ export function defaultStages(config: Config): Stage[] {
       varKey: 'dirPath'
     }),
     createFile({
-      file: defaultComponentFile(config, createStylesFile ? `./${stylesFileName}` : undefined),
+      file: defaultComponentFile(options, createStylesFile ? `./${stylesFileName}` : undefined),
       varKey: 'componentPath'
     }),
     createStylesFile && createFile({
@@ -89,7 +89,7 @@ export function defaultStages(config: Config): Stage[] {
       varKey: 'stylesPath'
     }),
     createFile({
-      file: defaultIndexFile(config),
+      file: defaultIndexFile(options),
       varKey: 'indexPath'
     })
   ].filter((f): f is Stage => !!f);

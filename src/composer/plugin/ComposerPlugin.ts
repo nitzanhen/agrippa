@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
 
@@ -15,5 +15,5 @@ export interface ComposerPlugin {
   /**
    * compose() hook; called when Composer.compose() is called to form the component code.
    */
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void;
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void;
 }
