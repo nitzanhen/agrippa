@@ -6,12 +6,14 @@ import { joinLines } from '../../utils';
 export function getConfigTemplate(bare: boolean) {
   return bare
     ? joinLines(
+      '// @ts-check',
       '',
       'export default {',
       '  options: {}',
       '};'
     )
     : joinLines(
+      '// @ts-check',
       "import { defineConfig } from 'agrippa';",
       '',
       'export default defineConfig({',
