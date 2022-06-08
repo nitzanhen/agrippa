@@ -95,10 +95,6 @@ const builder = async (yargs: yargs.Argv) =>
         type: 'boolean',
         alias: 'reportTelemetry',
         desc: 'Whether to report (anonymous!) telemetry or not.'
-      },
-      /** @todo remove */
-      '$schema': {
-        type: 'string'
       }
     })
     .middleware(({ debug = false }) => {
