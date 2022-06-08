@@ -1,4 +1,4 @@
-import { Config, Styling } from '../../config';
+import { Options, Styling } from '../../options';
 import { declareConst } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
@@ -12,15 +12,15 @@ export class ReactNativePlugin extends JSXPlugin {
   readonly id = 'react-native';
   rootTag = 'View';
 
-  private reactOptions: NonNullable<Config['reactOptions']>;
-  private reactNativeOptions: NonNullable<Config['reactNativeOptions']>;
+  private reactOptions: NonNullable<Options['reactOptions']>;
+  private reactNativeOptions: NonNullable<Options['reactNativeOptions']>;
 
-  constructor(protected config: Config) {
-    super(config);
+  constructor(protected options: Options) {
+    super(options);
 
-    const { reactOptions, reactNativeOptions } = config;
+    const { reactOptions, reactNativeOptions } = options;
     if (!reactOptions || !reactNativeOptions) {
-      throw TypeError('ReactPlugin requires Config.reactOptions and Config.reactNativeOptions to be set');
+      throw TypeError('ReactPlugin requires Options.reactOptions and Options.reactNativeOptions to be set');
     }
 
     this.reactOptions = reactOptions;
@@ -34,15 +34,15 @@ export class ReactNativePlugin extends JSXPlugin {
     imports.add({ module: 'react-native', namedImports: ['View'] });
 
 
-    if (this.config.styling === Styling.REACT_NATIVE) {
+    if (this.options.styling === Styling.REACT_NATIVE) {
       imports.add({ module: 'react-native', namedImports: ['StyleSheet'] });
     }
   }
 
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
-    super.onCompose(blocks, imports, config);
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void {
+    super.onCompose(blocks, imports, options);
 
-    if (this.config.styling === Styling.REACT_NATIVE) {
+    if (this.options.styling === Styling.REACT_NATIVE) {
       blocks.add({
         key: RN_STYLING_BLOCK_KEY,
         precedence: RN_STYLING_BLOCK_PRECEDENCE,

@@ -1,8 +1,15 @@
 import { Environment } from './Environment';
 import { Styling } from './Styling';
 
-/** @todo descriptions */
-export interface GenerateOptions {
+/** 
+ * Agrippa generation options. 
+ */
+export interface Options {
+  /** Component's name, *in pascal case* */
+  name: string,
+  /** Component's name in kebab case */
+  kebabName: string  
+
   componentOptions: {
     exportType: 'named' | 'default';
     declaration: 'const' | 'function';
@@ -38,11 +45,4 @@ export interface GenerateOptions {
   reportTelemetry: boolean;
   lookForUpdates: boolean;
   debug: boolean;
-}
-
-export interface Config extends GenerateOptions {
-  /** Component's name, *in pascal case* */
-  name: string,
-  /** Component's name in kebab case */
-  kebabName: string  
 }

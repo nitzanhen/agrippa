@@ -1,16 +1,16 @@
 import { DeepPartial, kebabCase, pascalCase } from '../utils';
 import { assignDefaults } from '../utils/object';
+import { Options } from './Options';
 import { Config } from './Config';
-import { ConfigDefinition } from './defineConfig';
 import { Environment } from './Environment';
 import { Styling } from './Styling';
 
-export interface InputConfig extends DeepPartial<Config> {
+export interface InputOptions extends DeepPartial<Options> {
   name: string;
 }
 
 
-export const defaultEnvironment = (packageJson: any): Config['environment'] => {
+export const defaultEnvironment = (packageJson: any): Options['environment'] => {
   const dependencies: Record<string, string> = packageJson?.dependencies ?? {};
 
   if ('react-native' in dependencies) {
@@ -29,9 +29,9 @@ export const defaultEnvironment = (packageJson: any): Config['environment'] => {
   return '';
 };
 
-export function createConfig(input: InputConfig, envFiles: Record<string, any>): Config {
+export function createOptions(input: InputOptions, envFiles: Record<string, any>): Options {
   const { packageJson, tsconfig } = envFiles;
-  const agrippaConfig = envFiles.agrippaConfig as ConfigDefinition | null;
+  const agrippaConfig = envFiles.agrippaConfig as Config | null;
 
   /** Merge the given input with the resolve config options */
   input = assignDefaults(agrippaConfig?.options ?? {}, input);
@@ -57,7 +57,7 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     }
   })();
 
-  const defaults: Config = {
+  const defaults: Options = {
     name,
     kebabName: kebabCase(name),
     componentOptions: {
@@ -97,5 +97,5 @@ export function createConfig(input: InputConfig, envFiles: Record<string, any>):
     debug: false
   };
 
-  return assignDefaults(defaults, input as Config);
+  return assignDefaults(defaults, input as Options);
 }

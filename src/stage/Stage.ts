@@ -1,11 +1,11 @@
-import { Config } from '../config';
+import { Options } from '../options';
 import { Logger, styles } from '../logger';
 import { AgrippaFile } from './AgrippaFile';
 import { AgrippaDir } from './AgrippaDir';
 
 
 export interface Context {
-  config: Config;
+  options: Options;
   createdFiles: AgrippaFile[];
   createdDirs: AgrippaDir[];
   variables: Record<string, any>;

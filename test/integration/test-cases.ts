@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { AgrippaDir, AgrippaFile, Config, InputConfig, RunOptions } from '../../src';
+import { AgrippaDir, AgrippaFile, Options, InputOptions, RunOptions } from '../../src';
 import { DeepPartial } from '../../src/utils';
 
 export interface IntegrationTestCase {
@@ -7,11 +7,11 @@ export interface IntegrationTestCase {
   description?: string;
   tags?: string[];
   input: {
-    config: InputConfig,
+    config: InputOptions,
     options?: RunOptions
   },
   output: {
-    config?: DeepPartial<Config>
+    config?: DeepPartial<Options>
     createdFiles?: AgrippaFile[],
     createdDirs?: AgrippaDir[],
     variables?: Record<string, any>

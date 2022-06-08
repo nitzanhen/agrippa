@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { pick } from 'rhax';
-import { Config } from '../config';
+import { Options } from '../options';
 import { Logger } from '../logger';
 import { pkgJson } from './pkgJson';
 
 const TELEMETRY_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/';
 
-export const reportTelemetry = async (config: Config, logger: Logger): Promise<void> => {
+export const reportTelemetry = async (options: Options, logger: Logger): Promise<void> => {
   const runData = {
-    ...pick(config, 'environment', 'typescript', 'styling'),
+    ...pick(options, 'environment', 'typescript', 'styling'),
     version: pkgJson.version,
-    dev: config.debug
+    dev: options.debug
   };
 
   const sendTime = Date.now();
@@ -20,7 +20,7 @@ export const reportTelemetry = async (config: Config, logger: Logger): Promise<v
 
     const reqPromise = axios.post(TELEMETRY_ENDPOINT, runData);
 
-    if (!config.debug) {
+    if (!options.debug) {
       // If not in debug mode, don't even wait for the resuest to finish
       reqPromise.catch(() => null);
       return;

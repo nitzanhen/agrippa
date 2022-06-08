@@ -1,7 +1,7 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
-import { InputConfig } from '../../config';
-import { Environment } from '../../config/Environment';
-import { Styling } from '../../config/Styling';
+import { InputOptions } from '../../options';
+import { Environment } from '../../options/Environment';
+import { Styling } from '../../options/Styling';
 import { italic, Logger } from '../../logger';
 import { run } from '../../run';
 import { runCommand } from '../../stage/runCommand';
@@ -124,7 +124,7 @@ export const generateCommand: GenerateCommand = {
     cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(argv.name)} in environment ${italic(environment)}`);
     cliLogger.debug('argv:', argv);
 
-    const inputConfig: InputConfig = {
+    const inputOptions: InputOptions = {
       name: argv.name,
       environment,
 
@@ -162,7 +162,7 @@ export const generateCommand: GenerateCommand = {
     const postCommandStage = (argv.postCommand && runCommand(argv.postCommand)) || undefined;
 
     await run(
-      inputConfig,
+      inputOptions,
       {
         logger: cliLogger,
         stages: postCommandStage && (defStages => [...defStages, postCommandStage])

@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { indent, joinLines } from '../../utils';
 import { createArrowFunction, createDefaultExport, declareConst, declareFunction, declareInterface, declareType } from '../../utils/codegen';
 import { Blocks } from '../Blocks';
@@ -22,13 +22,13 @@ export abstract class JSXPlugin implements ComposerPlugin {
   abstract readonly id?: string;
   abstract rootTag: string;
 
-  protected typescriptOptions: Config['typescriptOptions'];
+  protected typescriptOptions: Options['typescriptOptions'];
 
-  constructor(protected config: Config) {
-    const { typescript, typescriptOptions } = config;
+  constructor(protected options: Options) {
+    const { typescript, typescriptOptions } = options;
 
     if (typescript && !typescriptOptions) {
-      throw TypeError('JSXPlugin requires Config.typescriptOptions to be set whenever Config.typescript is set');
+      throw TypeError('JSXPlugin requires Options.typescriptOptions to be set whenever Options.typescript is set');
     }
 
     this.typescriptOptions = typescriptOptions;
@@ -37,11 +37,11 @@ export abstract class JSXPlugin implements ComposerPlugin {
   abstract declareImports(imports: Imports): void;
 
   get propInterfaceName() {
-    return this.config.name + 'Props';
+    return this.options.name + 'Props';
   }
 
   getComponentParams() {
-    return this.config.typescript ? `props: ${this.propInterfaceName}` : 'props';
+    return this.options.typescript ? `props: ${this.propInterfaceName}` : 'props';
   }
 
   getComponentBody() {
@@ -55,7 +55,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
   }
 
   getTSPropsDeclaration() {
-    const { typescript } = this.config;
+    const { typescript } = this.options;
     if (!typescript) {
       throw new Error('getTSPropsDeclaration() called but typescript is false. This shouldn\'t be possible.');
     }
@@ -70,7 +70,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
   }
 
   getComponentConstDeclaration() {
-    const { name, componentOptions: { exportType } } = this.config;
+    const { name, componentOptions: { exportType } } = this.options;
 
     return declareConst(
       name,
@@ -84,7 +84,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
 
 
   getComponentFunctionDeclaration() {
-    const { name, componentOptions: { exportType } } = this.config;
+    const { name, componentOptions: { exportType } } = this.options;
 
     return declareFunction(
       name,
@@ -95,7 +95,7 @@ export abstract class JSXPlugin implements ComposerPlugin {
   }
 
   getComponentDeclaration(): string {
-    const { componentOptions: { declaration } } = this.config;
+    const { componentOptions: { declaration } } = this.options;
 
     return declaration === 'const'
       ? this.getComponentConstDeclaration()
@@ -103,8 +103,8 @@ export abstract class JSXPlugin implements ComposerPlugin {
   }
 
   // eslint-disable-next-line unused-imports/no-unused-vars
-  onCompose(blocks: Blocks, imports: Imports, config: Config): void {
-    const { typescript, componentOptions: { exportType }, name } = this.config;
+  onCompose(blocks: Blocks, imports: Imports, options: Options): void {
+    const { typescript, componentOptions: { exportType }, name } = this.options;
 
     this.declareImports(imports);
 

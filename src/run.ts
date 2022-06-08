@@ -1,4 +1,4 @@
-import { createConfig, InputConfig } from './config';
+import { createOptions, InputOptions } from './options';
 import { loadFiles } from './utils/files/loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
@@ -18,43 +18,43 @@ export interface RunOptions {
  * Main Agrippa process.
  * Generates directories, files and file contents based on the given params.
  */
-export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
+export async function run(inputOptions: InputOptions, runOptions: RunOptions = {}) {
 
-  // Initialize config, stages, context & logger
+  // Initialize options, stages, context & logger
 
   const envFiles = {
-    ...(!inputConfig.pure ? await loadFiles() : {}),
-    ...(options.envFiles ?? {})
+    ...(!inputOptions.pure ? await loadFiles() : {}),
+    ...(runOptions.envFiles ?? {})
   };
 
-  const config = createConfig(inputConfig, envFiles);
+  const options = createOptions(inputOptions, envFiles);
 
-  const defStages = defaultStages(config);
-  const stages = options.stages?.(defStages) ?? defStages;
+  const defStages = defaultStages(options);
+  const stages = runOptions.stages?.(defStages) ?? defStages;
 
   let context: Context = {
-    config,
+    options,
     createdDirs: [],
     createdFiles: [],
     variables: {
-      'ComponentName': config.name,
-      'component-name': config.kebabName
+      'ComponentName': options.name,
+      'component-name': options.kebabName
     }
   };
 
-  const logger = options.logger ?? (
-    config.pure
-      ? new Logger(config.debug)
-      : Logger.consoleLogger(config.debug)
+  const logger = runOptions.logger ?? (
+    options.pure
+      ? new Logger(options.debug)
+      : Logger.consoleLogger(options.debug)
   );
 
-  const updatePromise = config.lookForUpdates ? lookForUpdates(logger) : null;
+  const updatePromise = options.lookForUpdates ? lookForUpdates(logger) : null;
 
   logger.debug(
-    `Logger initialized with params pure=${config.pure}, debug=${config.debug}`,
+    `Logger initialized with params pure=${options.pure}, debug=${options.debug}`,
     'Core data:',
     'envFiles:', envFiles,
-    'resolved config:', config,
+    'resolved options:', options,
     'stages:', stages
   );
 
@@ -64,12 +64,12 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
     '',
     `Agrippa v${pkgJson.version}`,
     '',
-    `Generating ${styles.componentName(config.name)}\n`,
-    `Stack: ${styles.tag(getStackTags(config).join(' '))}`,
+    `Generating ${styles.componentName(options.name)}\n`,
+    `Stack: ${styles.tag(getStackTags(options).join(' '))}`,
     ''
   );
 
-  if (!config.environment) {
+  if (!options.environment) {
     logger.warn(
       'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
       ''
@@ -98,19 +98,19 @@ export async function run(inputConfig: InputConfig, options: RunOptions = {}) {
 
   logger.debug('Pipeline execution complete.');
 
-  if (config.reportTelemetry) {
-    await reportTelemetry(config, logger);
+  if (options.reportTelemetry) {
+    await reportTelemetry(options, logger);
   }
   else {
-    logger.debug('`config.reportTelemetry` is `false`, not sending usage statistics');
+    logger.debug('`options.reportTelemetry` is `false`, not sending usage statistics');
   }
 
-  if (config.lookForUpdates) {
+  if (options.lookForUpdates) {
     // Print an "Update is Available" message, if there's a new version available.
     (await updatePromise)?.();
   }
   else {
-    logger.debug('`config.lookForUpdates` is `false`, not pinging the npm registry');
+    logger.debug('`options.lookForUpdates` is `false`, not pinging the npm registry');
   }
 
   return {

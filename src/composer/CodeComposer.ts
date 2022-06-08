@@ -1,5 +1,5 @@
 
-import { Config } from '../config';
+import { Options } from '../options';
 import { Blocks } from './Blocks';
 import { Imports } from './Imports';
 import { ComposerPlugin } from './plugin';
@@ -10,10 +10,10 @@ import { ComposerPlugin } from './plugin';
 export class CodeComposer {
 
   protected plugins: ComposerPlugin[] = [];
-  protected readonly config: Config;
+  protected readonly options: Options;
 
-  public constructor(config: Config) {
-    this.config = config;
+  public constructor(options: Options) {
+    this.options = options;
   }
 
   public addPlugin(plugin: ComposerPlugin) {
@@ -31,7 +31,7 @@ export class CodeComposer {
     const imports = new Imports();
 
     for (const plugin of this.plugins) {
-      plugin.onCompose(blocks, imports, this.config);
+      plugin.onCompose(blocks, imports, this.options);
     }
 
     blocks.add(imports.getBlock());

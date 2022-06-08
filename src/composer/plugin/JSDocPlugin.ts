@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { Blocks } from '../Blocks';
 import { Imports } from '../Imports';
 import { Comment } from '../Comment';
@@ -19,7 +19,7 @@ export const PROPS_JSDOC_BLOCK_PRECEDENCE = 5;
 export interface JSDocPluginOptions {
   generateTypes?: boolean;
   includeTsCheck?: boolean;
-  getCommentContent?: (config: Config) => string;
+  getCommentContent?: (options: Options) => string;
 }
 
 /**
@@ -29,10 +29,10 @@ export interface JSDocPluginOptions {
 export class JSDocPlugin implements ComposerPlugin {
   id = 'jsdoc';
 
-  protected readonly config: Config;
+  protected readonly options: Options;
   protected readonly generateTypes: boolean;
   protected readonly includeTsCheck: boolean;
-  protected readonly getCommentContent?: (config: Config) => string;
+  protected readonly getCommentContent?: (options: Options) => string;
 
   /**
    * @param generateTypes Whether to generate 
@@ -40,19 +40,19 @@ export class JSDocPlugin implements ComposerPlugin {
    * By default, has the same value as `generateTypes`.
    */
   constructor(
-    config: Config, {
+    options: Options, {
       getCommentContent,
       generateTypes = false,
       includeTsCheck = generateTypes,
     }: JSDocPluginOptions = {}) {
-    this.config = config;
+    this.options = options;
     this.getCommentContent = getCommentContent;
     this.generateTypes = generateTypes;
     this.includeTsCheck = includeTsCheck;
   }
 
   get propInterfaceName() {
-    return this.config.name + 'Props';
+    return this.options.name + 'Props';
   }
 
 
@@ -74,7 +74,7 @@ export class JSDocPlugin implements ComposerPlugin {
       });
     }
 
-    const commentContent = this.getCommentContent?.(this.config) ?? '';
+    const commentContent = this.getCommentContent?.(this.options) ?? '';
     const commentString = commentContent + cstr(this.generateTypes, `\n@param {${this.propInterfaceName}} props`);
 
     blocks.add({

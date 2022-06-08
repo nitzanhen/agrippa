@@ -19,8 +19,8 @@ export interface CreateDirOptions extends AgrippaDir {
 
 export const createDir = ({ path, recursive = true, varKey }: CreateDirOptions): Stage => {
   return async function dirStage(context, logger) {
-    const { config } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = config;
+    const { options } = context;
+    const { pure, baseDir, allowOutsideBase, overwrite } = options;
 
     const dirName = basename(path);
 

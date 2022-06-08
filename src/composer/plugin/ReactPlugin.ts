@@ -1,4 +1,4 @@
-import { Config } from '../../config';
+import { Options } from '../../options';
 import { Imports } from '../Imports';
 import { JSXPlugin } from './JSXPlugin';
 
@@ -9,14 +9,14 @@ export class ReactPlugin extends JSXPlugin {
   readonly id = 'react';
   rootTag = 'div';
 
-  private reactOptions: NonNullable<Config['reactOptions']>;
+  private reactOptions: NonNullable<Options['reactOptions']>;
 
-  constructor(protected config: Config) {
-    super(config);
+  constructor(protected options: Options) {
+    super(options);
 
-    const { reactOptions } = config;
+    const { reactOptions } = options;
     if (!reactOptions) {
-      throw TypeError('ReactPlugin requires Config.reactOptions to be set');
+      throw TypeError('ReactPlugin requires Options.reactOptions to be set');
     }
 
     this.reactOptions = reactOptions;
