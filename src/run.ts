@@ -10,7 +10,8 @@ import { indent } from './utils/strings';
 import { loadFileQuery } from './files';
 
 export interface RunOptions {
-  envFiles?: Record<string, any>;
+  /** *paths* to envFiles that Agrippa should fetch */
+  envFiles?: Record<string, string>;
   stages?: ((defaultStages: Stage[]) => Stage[]);
   logger?: Logger
 }
@@ -34,15 +35,22 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
 
   logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
-  const config: Config | null = runOptions.envFiles?.agrippaConfig
-    ?? await loadFileQuery({ search: 'agrippa.config.mjs' });
+  const config: Config | null = await loadFileQuery(
+    runOptions.envFiles?.agrippaConfig
+      ? { path: runOptions.envFiles?.agrippaConfig }
+      : { search: 'agrippa.config.mjs' }
+  );
 
   logger.debug('Resolved Agrippa config: ', config);
 
   const envFiles = {
     config,
-    ...(!inputOptions.pure ? await loadFiles(config?.files) : {}),
-    ...(runOptions.envFiles ?? {})
+    ...(!inputOptions.pure
+      ? await loadFiles({
+        ...(config?.files ?? {}),
+        ...(runOptions.envFiles ?? {})
+      })
+      : {}),
   };
 
   logger.debug('Resolved envFiles: ', envFiles);
@@ -52,7 +60,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   logger.debug('Resolved options: ', options);
 
   const defStages = defaultStages(options);
-  const stages = runOptions.stages? runOptions.stages(defStages) : defStages;
+  const stages = runOptions.stages ? runOptions.stages(defStages) : defStages;
 
   logger.debug('Resolved stages: ', stages);
 
