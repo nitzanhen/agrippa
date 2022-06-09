@@ -3,7 +3,7 @@ import { join } from 'path';
 import { cwd } from 'process';
 import { Argv, BuilderCallback, CommandModule } from 'yargs';
 import { Logger, styles } from '../../logger';
-import { loadFileQuery } from '../../utils/files/loadFile';
+import { loadFileQuery } from '../../files';
 import { pkgJson } from '../../utils/pkgJson';
 import { getConfigTemplate } from './getConfigTemplate';
 
@@ -31,7 +31,7 @@ export const initCommand: InitCommand = {
     );
 
     const bare = argv.bare
-      ?? await loadFileQuery('package.json').then(
+      ?? await loadFileQuery({ search: 'package.json' }).then(
         pkg => !('agrippa' in pkg.devDependencies || 'agrippa' in pkg.dependencies)
       );
 

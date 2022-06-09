@@ -26,6 +26,8 @@ export namespace FileType {
   }
 }
 
+export type FileQuery = { path: string } | { search: string };
+
 /**
  * Loads a file located at the given path, assuming it is of the given type.
  * 
@@ -60,8 +62,8 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
  * @param query the query to search by; this is forwarded to `findUp`.
  * @param type optional file type; see `loadFile()`.
  */
-export async function loadFileQuery<T = any>(query: string | string[], type?: (FileType | string)): Promise<T | null> {
-  const path = await findUp(query);
+export async function loadFileQuery<T = any>(query: FileQuery, type?: (FileType | string)): Promise<T | null> {
+  const path = 'path' in query ? query.path : (await findUp(query.search));
   if(!path) {
     return null;
   }

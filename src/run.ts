@@ -1,5 +1,5 @@
-import { createOptions, InputOptions } from './options';
-import { loadFiles } from './utils/files/loadFiles';
+import { Config, createOptions, InputOptions } from './options';
+import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
 import { Context, defaultStages, Stage, summaryLine } from './stage';
 import { getStackTags } from './utils/getStackTags';
@@ -7,6 +7,7 @@ import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
 import { reportTelemetry } from './utils/reportTelemetry';
 import { indent } from './utils/strings';
+import { loadFileQuery } from './files';
 
 export interface RunOptions {
   envFiles?: Record<string, any>;
@@ -21,16 +22,39 @@ export interface RunOptions {
 export async function run(inputOptions: InputOptions, runOptions: RunOptions = {}) {
 
   // Initialize options, stages, context & logger
+  const pure = !!inputOptions.pure;
+  const debug = !!inputOptions.debug;
+
+  const logger = runOptions.logger ?? (
+    pure
+      ? new Logger(!!debug)
+      : Logger.consoleLogger(!!debug)
+  );
+  logger.debug(`Logger initialized with params pure=${pure}, debug=${debug}`);
+
+
+  logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
+  const config: Config | null = runOptions.envFiles?.agrippaConfig
+    ?? await loadFileQuery({ search: 'agrippa.config.mjs' });
+
+  logger.debug('Resolved Agrippa config: ', config);
 
   const envFiles = {
-    ...(!inputOptions.pure ? await loadFiles() : {}),
+    config,
+    ...(!inputOptions.pure ? await loadFiles(config?.files) : {}),
     ...(runOptions.envFiles ?? {})
   };
 
+  logger.debug('Resolved envFiles: ', envFiles);
+
   const options = createOptions(inputOptions, envFiles);
 
+  logger.debug('Resolved options: ', options);
+
   const defStages = defaultStages(options);
-  const stages = runOptions.stages?.(defStages) ?? defStages;
+  const stages = runOptions.stages? runOptions.stages(defStages) : defStages;
+
+  logger.debug('Resolved stages: ', stages);
 
   let context: Context = {
     options,
@@ -42,21 +66,8 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     }
   };
 
-  const logger = runOptions.logger ?? (
-    options.pure
-      ? new Logger(options.debug)
-      : Logger.consoleLogger(options.debug)
-  );
-
   const updatePromise = options.lookForUpdates ? lookForUpdates(logger) : null;
 
-  logger.debug(
-    `Logger initialized with params pure=${options.pure}, debug=${options.debug}`,
-    'Core data:',
-    'envFiles:', envFiles,
-    'resolved options:', options,
-    'stages:', stages
-  );
 
   // Print header & some critical warnings, if any
 
