@@ -44,7 +44,7 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
   const fileType = (type as FileType) ?? FileType.fromString(extension);
 
   if (!fileType) {
-    throw new Error('A type was not passed, and could not be determined from the file path.');
+    throw new Error(`A type was not passed, and could not be determined from the file path (${path})`);
   }
 
   const resolvedPath = resolve(cwd(), path);

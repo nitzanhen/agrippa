@@ -1,4 +1,4 @@
-import { FileQuery } from '../files';
+import { CustomFileQueries } from '../files';
 import { DeepPartial } from '../utils';
 import { Options } from './Options';
 
@@ -7,7 +7,7 @@ import { Options } from './Options';
  */
 export interface Config {
   options?: DeepPartial<Options>;
-  files?: Record<string, FileQuery>
+  files?: CustomFileQueries
 };
 
 /**

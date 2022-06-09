@@ -6,6 +6,8 @@ const defaultFileQueries: Record<string, FileQuery> = {
   tsconfig: { search: 'tsconfig.json' },
 };
 
+export type CustomFileQueries = Record<string, string | FileQuery | null>
+
 /**
  * Finds and loads files needed for Agrippa's process. 
  * 
@@ -24,7 +26,7 @@ const defaultFileQueries: Record<string, FileQuery> = {
  * paths and contents. 
  * If a file was searched for and not found, it *will* have an entry in the record, with the corresponding value being `null`.
  */
-export async function loadFiles(customFileQueries: Record<string, string | FileQuery | null> = {}) {
+export async function loadFiles(customFileQueries: CustomFileQueries = {}) {
   const fileQueries: Record<string, FileQuery> = pipe({ ...defaultFileQueries, ...customFileQueries })
     (entries)
     (filter(([, f]) => !!f))
