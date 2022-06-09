@@ -1,12 +1,12 @@
-import findUp from 'find-up';
 import { pipe, filter, entries, map, tuple, toObject } from 'rhax';
-import { loadFile } from './loadFile';
+import { FileQuery, loadFileQuery } from './loadFile';
 
-const defaultFileQueries = {
-  packageJson: 'package.json',
-  tsconfig: 'tsconfig.json',
-  agrippaConfig: 'agrippa.config.mjs',
+const defaultFileQueries: Record<string, FileQuery> = {
+  packageJson: { search: 'package.json' },
+  tsconfig: { search: 'tsconfig.json' },
 };
+
+export type CustomFileQueries = Record<string, string | FileQuery | null>
 
 /**
  * Finds and loads files needed for Agrippa's process. 
@@ -14,7 +14,6 @@ const defaultFileQueries = {
  * By default, Agrippa searches for:
  * - "package.json" file (key `packageJson`) 
  * - "tsconfig.json" (key `tsconfig`)
- * - "agrippa.config.mjs" (key `agrippaConfig`)
  * 
  * This can be customized using the `customFileQueries` parameter.
  * 
@@ -27,14 +26,18 @@ const defaultFileQueries = {
  * paths and contents. 
  * If a file was searched for and not found, it *will* have an entry in the record, with the corresponding value being `null`.
  */
-export async function loadFiles(customFileQueries: Record<string, string | string[]> = {}) {
-  const fileQueries: Record<string, string | string[]> = filter.object(({ ...defaultFileQueries, ...customFileQueries }), f => !!f);
+export async function loadFiles(customFileQueries: CustomFileQueries = {}) {
+  const fileQueries: Record<string, FileQuery> = pipe({ ...defaultFileQueries, ...customFileQueries })
+    (entries)
+    (filter(([, f]) => !!f))
+    (map(([k, val]) => tuple(k, typeof val === 'string' ? { path: val } : val!)))
+    (toObject)
+    .go();
 
   const filePromises = pipe(fileQueries)
     (entries)
-    (map(([name, query]) => findUp(query)
-      .then(async path => path ? loadFile(path) : null)
-      .then(f => tuple(name, f))
+    (map(([name, query]) =>
+      loadFileQuery(query).then(f => tuple(name, f))
     ))
     .go();
 

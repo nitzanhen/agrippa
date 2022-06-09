@@ -1,3 +1,4 @@
+import { CustomFileQueries } from '../files';
 import { DeepPartial } from '../utils';
 import { Options } from './Options';
 
@@ -5,7 +6,8 @@ import { Options } from './Options';
  * Defines the structure of the default export of `agrippa.config.mjs`.
  */
 export interface Config {
-  options?: DeepPartial<Options>
+  options?: DeepPartial<Options>;
+  files?: CustomFileQueries
 };
 
 /**
