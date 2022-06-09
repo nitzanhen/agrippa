@@ -32,7 +32,7 @@ export const initCommand: InitCommand = {
 
     const bare = argv.bare
       ?? await loadFileQuery({ search: 'package.json' }).then(
-        pkg => !('agrippa' in pkg.devDependencies || 'agrippa' in pkg.dependencies)
+        ([pkg]) => !('agrippa' in pkg.devDependencies || 'agrippa' in pkg.dependencies)
       );
 
     if (bare) {
