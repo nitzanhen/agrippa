@@ -9,6 +9,7 @@ import { pkgJson } from './utils/pkgJson';
 import { reportTelemetry } from './utils/reportTelemetry';
 import { indent } from './utils/strings';
 import { loadFileQuery } from './files';
+import { assignDefaults } from './utils/object';
 
 export interface RunOptions {
   /** *paths* to envFiles that Agrippa should fetch */
@@ -44,10 +45,13 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   logger.debug('Resolved Agrippa config: ', config);
 
+  // Merge the given input with the resolved config options
+  inputOptions = assignDefaults(config?.options ?? {}, inputOptions);
+
   const envFileQueries = Object.assign({}, config?.files, runOptions?.envFiles);
   const envFiles = Object.assign(
     { config },
-    !inputOptions.pure && await loadFiles(envFileQueries, dirname(configPath ?? ''))
+    !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''))
   );
 
   logger.debug('Resolved envFiles: ', envFiles);
