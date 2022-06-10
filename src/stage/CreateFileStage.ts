@@ -1,35 +1,51 @@
 import { existsSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import { basename } from 'path';
-import { bold, italic, styles } from '../logger';
+import { bold, italic, Logger, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
 import { AgrippaFile } from './AgrippaFile';
-import { Stage, stageResult, StageStatus } from './Stage';
+import { Stage } from './Stage';
+import { Context } from './Context';
+import { StageResult, StageStatus } from './StageResult';
 
-interface CreateFileOptions {
+export interface CreateFileOptions {
   file: AgrippaFile;
+  varKey?: string;
+}
+
+export class CreateFileStage extends Stage {
+
+  protected file: AgrippaFile;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  varKey?: string;
-}
+  protected varKey?: string;
 
-export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
-  return async function fileStage(context, logger) {
+  constructor({
+    file,
+    varKey
+  }: CreateFileOptions) {
+    super();
+
+    this.file = file;
+    this.varKey = varKey;
+  }
+
+  async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = options;
-    const { data, path } = file;
+    const { data, path } = this.file;
 
     const successContext = {
       ...context,
-      createdFiles: [...context.createdFiles, file],
-      variables: varKey ? { ...context.variables, [varKey]: path } : context.variables
+      createdFiles: [...context.createdFiles, this.file],
+      variables: this.varKey ? { ...context.variables, [this.varKey]: path } : context.variables
     };
 
     if (pure) {
-      return stageResult(
+      return new StageResult(
         StageStatus.NA,
         'No file created (pure mode)',
         successContext
@@ -46,7 +62,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
         "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json"
       ));
 
-      return stageResult(StageStatus.ERROR, 'Directory path outside baseDir');
+      return new StageResult(StageStatus.ERROR, 'Directory path outside baseDir');
     }
 
     logger.info(`path: ${styles.path(path)}`);
@@ -54,7 +70,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
     if (existsSync(path)) {
       if (!overwrite) {
         logger.info(`To allow overwriting, pass ${bold('--overwrite')} to the command.`);
-        return stageResult(StageStatus.ERROR, `File ${italic(filename)} already exists.`);
+        return new StageResult(StageStatus.ERROR, `File ${italic(filename)} already exists.`);
       }
 
       // File exists, but --overwrite was passed; log for info and continue.
@@ -64,7 +80,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
     try {
       await writeFile(path, data);
 
-      return stageResult(
+      return new StageResult(
         StageStatus.SUCCESS,
         `File ${italic(filename)} created successfully.`,
         successContext
@@ -73,7 +89,7 @@ export const createFile = ({ file, varKey }: CreateFileOptions): Stage => {
     catch (e) {
       logger.error(e);
 
-      return stageResult(
+      return new StageResult(
         StageStatus.ERROR,
         `Creation of file ${filename} failed.`
       );

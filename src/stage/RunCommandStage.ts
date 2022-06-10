@@ -1,15 +1,32 @@
 import { exec as execCB } from 'child_process';
 import { promisify } from 'util';
 import { reduce } from 'rhax';
-import { Stage, stageResult, StageStatus } from './Stage';
+import { Logger } from '../logger';
+import { Stage } from './Stage';
+import { Context } from './Context';
+import { StageResult, StageStatus } from './StageResult';
 
 const exec = promisify(execCB);
 
+export interface RunCommandOption {
+  rawCommand: string;
+}
 
-export const runCommand = (rawCommand: string): Stage => {
-  return async function runCommand(context, logger) {
+export class RunCommandStage extends Stage {
+
+  protected rawCommand: string;
+
+  constructor({
+    rawCommand
+  }: RunCommandOption) {
+    super();
+
+    this.rawCommand = rawCommand;
+  }
+
+  async execute(context: Context, logger: Logger): Promise<StageResult> {
     logger.debug('runCommand: initiated');
-    logger.debug(`Raw command (before substituting variables): ${rawCommand}`);
+    logger.debug(`Raw command (before substituting variables): ${this.rawCommand}`);
 
     // Create command 
     const { variables } = context;
@@ -17,7 +34,7 @@ export const runCommand = (rawCommand: string): Stage => {
     const command = reduce.object(
       variables,
       (cmd, value, key) => cmd.replace(`<${key}>`, value),
-      rawCommand
+      this.rawCommand
     );
 
     logger.debug(`Command (after substituting variables): ${command}`);
@@ -31,7 +48,7 @@ export const runCommand = (rawCommand: string): Stage => {
 
       logger.info(stdout ? `output: ${stdout}` : 'No output received from command.');
 
-      return stageResult(
+      return new StageResult(
         StageStatus.SUCCESS,
         'Post command successfully executed'
       );
@@ -39,10 +56,10 @@ export const runCommand = (rawCommand: string): Stage => {
     catch (e) {
       logger.error(e);
 
-      return stageResult(
+      return new StageResult(
         StageStatus.ERROR,
         'Post command failed'
       );
     }
-  };
-};
+  }
+}

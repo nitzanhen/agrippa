@@ -4,7 +4,7 @@ import { Environment } from '../../options/Environment';
 import { Styling } from '../../options/Styling';
 import { italic, Logger } from '../../logger';
 import { run } from '../../run';
-import { runCommand } from '../../stage/runCommand';
+import { RunCommandStage } from '../../stage/RunCommandStage';
 
 const cliLogger = Logger.consoleLogger();
 
@@ -40,7 +40,6 @@ const builder = async (yargs: yargs.Argv) =>
         choices: ['interface', 'type'] as const,
         desc: 'For TS components, whether to declare props as an interface or a type',
       },
-
 
       'import-react': {
         alias: 'importReact',
@@ -155,7 +154,9 @@ export const generateCommand: GenerateCommand = {
       pure: false,
     };
 
-    const postCommandStage = (argv.postCommand && runCommand(argv.postCommand)) || undefined;
+    const postCommandStage = argv.postCommand
+      ? new RunCommandStage({ rawCommand: argv.postCommand })
+      : undefined;
 
     await run(
       inputOptions,

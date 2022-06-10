@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
-import { Context, defaultStages, Stage, summaryLine } from './stage';
+import { Context, defaultStages, Stage } from './stage';
 import { getStackTags } from './utils/getStackTags';
 import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
@@ -10,6 +10,7 @@ import { reportTelemetry } from './utils/reportTelemetry';
 import { indent } from './utils/strings';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
+import { summaryLine } from './stage/StageResult';
 
 export interface RunOptions {
   /** *paths* to envFiles that Agrippa should fetch */
@@ -72,7 +73,8 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     variables: {
       'ComponentName': options.name,
       'component-name': options.kebabName
-    }
+    },
+    logger
   };
 
   const updatePromise = options.lookForUpdates ? lookForUpdates(logger) : null;
@@ -101,7 +103,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   for (const stage of stages) {
     const stageLogger = new Logger();
 
-    const result = await stage(context, stageLogger);
+    const result = await stage.execute(context, stageLogger);
     const stageLogs = stageLogger.consume();
 
     if (!stage.silent) {
