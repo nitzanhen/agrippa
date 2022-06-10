@@ -2,9 +2,10 @@ import { join, resolve } from 'path';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Options, Environment } from '../options';
 import { joinLines } from '../utils/strings';
+import { AgrippaDir } from './AgrippaDir';
 import { AgrippaFile } from './AgrippaFile';
-import { createDir } from './createDir';
-import { createFile } from './createFile';
+import { CreateDirStage } from './CreateDirStage';
+import { CreateFileStage } from './CreateFileStage';
 import { Stage } from './Stage';
 
 const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
@@ -75,22 +76,23 @@ export function defaultStages(options: Options): Stage[] {
 
   const stylesFilePath = join(dirPath, stylesFileName);
 
-  return [
-    createDir({
-      path: dirPath,
+  return ([
+    new CreateDirStage({
+      dir: new AgrippaDir(dirPath),
       varKey: 'dirPath'
     }),
-    createFile({
+    new CreateFileStage({
       file: defaultComponentFile(options, createStylesFile ? `./${stylesFileName}` : undefined),
       varKey: 'componentPath'
     }),
-    createStylesFile && createFile({
+    createStylesFile && new CreateFileStage({
       file: new AgrippaFile(stylesFilePath, ''),
       varKey: 'stylesPath'
     }),
-    createFile({
+    new CreateFileStage({
       file: defaultIndexFile(options),
       varKey: 'indexPath'
     })
-  ].filter((f): f is Stage => !!f);
+  ] as (Stage | boolean)[]
+  ).filter((f): f is Stage => !!f);
 }
