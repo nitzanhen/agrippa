@@ -29,11 +29,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const pure = !!inputOptions.pure;
   const debug = !!inputOptions.debug;
 
-  const logger = runOptions.logger ?? (
-    pure
-      ? new Logger(!!debug)
-      : Logger.consoleLogger(!!debug)
-  );
+  const logger = Logger.create(pure, debug);
   logger.debug(`Logger initialized with params pure=${pure}, debug=${debug}`);
 
 
