@@ -29,8 +29,12 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const pure = !!inputOptions.pure;
   const debug = !!inputOptions.debug;
 
-  const logger = Logger.create(pure, debug);
-  logger.debug(`Logger initialized with params pure=${pure}, debug=${debug}`);
+  const logger = runOptions.logger ?? Logger.create(pure, debug);
+  logger.debug(
+    runOptions.logger
+      ? 'Using logger passed in runOptions'
+      : `Logger initialized with params pure=${pure}, debug=${debug}`
+  );
 
 
   logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
