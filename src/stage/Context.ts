@@ -3,6 +3,7 @@ import { Options } from '../options/Options';
 import { Plugin } from '../plugin';
 import { indent } from '../utils';
 import { AsyncEventEmitter } from '../utils/AsyncEventEmitter';
+import { pkgJson } from '../utils/pkgJson';
 import { AgrippaDir } from './AgrippaDir';
 import { AgrippaFile } from './AgrippaFile';
 import { defaultStages } from './defaultStages';
@@ -30,6 +31,8 @@ export type ContextEventMap = {
 }
 
 export class Context extends AsyncEventEmitter<ContextEventMap> {
+  public readonly version = pkgJson.version;
+
   options: Options;
   plugins: Plugin[];
 
@@ -38,7 +41,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   variables: Record<string, any>;
   stages: Stage[];
 
-  logger: Logger;
+  public readonly logger: Logger;
 
   constructor({
     options,

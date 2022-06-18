@@ -4,7 +4,6 @@ import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
 import { Context } from './stage';
 import { getStackTags } from './utils/getStackTags';
-import { pkgJson } from './utils/pkgJson';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
 import { Plugin } from './plugin';
@@ -89,7 +88,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   logger.info(
     '',
-    `Agrippa v${pkgJson.version}`,
+    `Agrippa v${context.version}`,
     '',
     `Generating ${styles.componentName(options.name)}\n`,
     `Stack: ${styles.tag(getStackTags(options).join(' '))}`,
