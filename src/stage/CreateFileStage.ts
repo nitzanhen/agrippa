@@ -33,22 +33,25 @@ export class CreateFileStage extends Stage {
     this.varKey = varKey;
   }
 
+  updateContext(context: Context) {
+    context.addFile(this.file);
+    if (this.varKey) {
+      context.addVariable(this.varKey, this.file.path);
+    }
+  }
+
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = options;
     const { data, path } = this.file;
 
-    const successContext = {
-      ...context,
-      createdFiles: [...context.createdFiles, this.file],
-      variables: this.varKey ? { ...context.variables, [this.varKey]: path } : context.variables
-    };
 
     if (pure) {
+      this.updateContext(context);
+
       return new StageResult(
         StageStatus.NA,
         'No file created (pure mode)',
-        successContext
       );
     }
 
@@ -80,10 +83,11 @@ export class CreateFileStage extends Stage {
     try {
       await writeFile(path, data);
 
+      this.updateContext(context);
+
       return new StageResult(
         StageStatus.SUCCESS,
         `File ${italic(filename)} created successfully.`,
-        successContext
       );
     }
     catch (e) {

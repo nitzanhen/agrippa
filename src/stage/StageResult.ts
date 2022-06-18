@@ -1,11 +1,9 @@
 import { styles } from '../logger';
-import { Context } from './Context';
 
 export class StageResult {
   constructor(
     public readonly status: StageStatus, 
-    public readonly summary: string, 
-    public readonly newContext?: Context
+    public readonly summary: string
   ) {}
 }
 
