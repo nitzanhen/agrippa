@@ -19,10 +19,13 @@ export interface ContextOptions {
   createdDirs?: AgrippaDir[];
   variables?: Record<string, any>;
   logger?: Logger;
+
+  stackTags?: string[];
 }
 
 export type ContextEventMap = {
   'load': () => void;
+  'create-stack-tags': () => void;
   'create-stages': () => void;
   'stage-start': (stage: Stage) => void;
   'stage-end': (stage: Stage) => void;
@@ -41,6 +44,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   variables: Record<string, any>;
   stages: Stage[];
 
+  stackTags: string[];
+
   public readonly logger: Logger;
 
   constructor({
@@ -51,7 +56,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     createdFiles = [],
     createdDirs = [],
     variables = {},
-    logger
+    logger,
+
+    stackTags = []
   }: ContextOptions) {
     super();
 
@@ -64,6 +71,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
     this.logger = logger ?? Logger.create(options.pure, options.debug);
     this.stages = stages ?? defaultStages(options, this.logger);
+
+    this.stackTags = stackTags;
 
     for (const plugin of plugins) {
       plugin._initialize(this);
@@ -103,7 +112,12 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     this.variables[key] = value;
   }
 
+  addStackTag(tag: string): void {
+    this.stackTags.push(tag);
+  }
+
   async execute() {
+    await this.emit('create-stack-tags');
     await this.emit('create-stages');
 
     const logger = this.logger;

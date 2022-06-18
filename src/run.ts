@@ -3,7 +3,6 @@ import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
 import { Context } from './stage';
-import { getStackTags } from './utils/getStackTags';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
 import { Plugin } from './plugin';
@@ -91,7 +90,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     `Agrippa v${context.version}`,
     '',
     `Generating ${styles.componentName(options.name)}\n`,
-    `Stack: ${styles.tag(getStackTags(options).join(' '))}`,
+    `Stack: ${context.stackTags.map(t => styles.tag(t)).join(', ')}`,
     ''
   );
 
