@@ -101,7 +101,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   }
 
   async execute() {
-    this.emit('create-stages');
+    await this.emit('create-stages');
 
     const logger = this.logger;
 

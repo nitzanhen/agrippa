@@ -8,8 +8,6 @@ export interface Plugin {
   context: Context;
 
   onContext?(): MaybePromise<void>;
-  onLoad?(): MaybePromise<void>;
-  /** @todo should this be inside onLoad? */ 
   onCreateStages?(): MaybePromise<void>;
 
   onStageStart?(): MaybePromise<void>;
@@ -26,6 +24,8 @@ export class Plugin {
     this.context = context;
 
     this.onContext?.();
+
+    this.onCreateStages && context.addListener('create-stages', this.onCreateStages.bind(this));
 
     this.onStageStart && context.addListener('stage-start', this.onStageStart.bind(this));
     this.onStageEnd && context.addListener('stage-end', this.onStageEnd.bind(this));
