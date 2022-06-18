@@ -1,8 +1,10 @@
 import axios from 'axios';
-import { diff, gt, lt } from 'semver';
+import semver from 'semver';
 import { bold, italic, styles } from '../logger';
 import { pkgJson } from '../utils/pkgJson';
 import { Plugin } from './Plugin';
+
+const { diff, gt, lt } = semver;
 
 /**
  * A plugin that checks if a newer version of Agrippa exists.
@@ -19,20 +21,20 @@ export class UpdatesPlugin extends Plugin {
   async pingRegistry() {
     const { logger } = this.context;
 
-    logger.debug('lookForUpdates: pinging the npm registry');
+    logger.debug('UpdatesPlugin: pinging the npm registry');
     const sendTime = Date.now();
 
     const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
 
     const endTime = Date.now();
-    logger.debug(`lookForUpdates: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
+    logger.debug(`UpdatesPlugin: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
 
     const latestVersion = res.data.version;
 
     return latestVersion;
   }
 
-  onLoad() {
+  onPipelineStart() {
     this.requestPromise = this.pingRegistry();
   }
 
@@ -42,9 +44,9 @@ export class UpdatesPlugin extends Plugin {
     const currentVersion = this.currentVersion;
     const latestVersion = await this.requestPromise;
 
-    logger.debug(`Current version: ${currentVersion}, Latest version: ${latestVersion}`);
+    logger.debug(`Current version: ${italic(currentVersion)}, Latest version: ${italic(latestVersion)}`);
     if (!currentVersion || !latestVersion) {
-      logger.warn('Error in LookForUpdates plugin: currentVersion or latestVersion are not set.');
+      logger.warn('Error in UpdatesPlugin: currentVersion or latestVersion are not set.');
       return;
     }
 
@@ -56,7 +58,7 @@ export class UpdatesPlugin extends Plugin {
       );
     }
     else if (lt(latestVersion, currentVersion)) {
-      logger.debug(`Current version, ${italic(currentVersion)}, is greater than the latest stable release, ${italic(latestVersion)}`);
+      logger.debug('Current version is greater than the latest stable release');
     }
 
     //nothing to do.
