@@ -1,5 +1,6 @@
 import { join, resolve } from 'path';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { Logger } from '../logger';
 import { Options, Environment } from '../options';
 import { joinLines } from '../utils/strings';
 import { AgrippaDir } from './AgrippaDir';
@@ -10,17 +11,23 @@ import { Stage } from './Stage';
 
 const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
 
-export const getEnvironmentPlugin = (options: Options) => {
+export const getEnvironmentPlugin = (options: Options, logger: Logger) => {
   switch (options.environment) {
     case Environment.REACT: return new ReactPlugin(options);
     case Environment.REACT_NATIVE: return new ReactNativePlugin(options);
     case Environment.SOLIDJS: return new SolidPlugin(options);
     case Environment.PREACT: return new PreactPlugin(options);
-    default: return null;
+    default: {
+      logger.warn(
+        'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
+        ''
+      );
+      return null;
+    };
   }
 };
 
-export function defaultComponentFile(options: Options, styleFilePath?: string): AgrippaFile {
+export function defaultComponentFile(options: Options, logger: Logger, styleFilePath?: string): AgrippaFile {
   const { name, typescript } = options;
 
   const dirPath = getDirPath(options);
@@ -31,7 +38,7 @@ export function defaultComponentFile(options: Options, styleFilePath?: string): 
 
   const composer = new CodeComposer(options);
 
-  const environmentPlugin = getEnvironmentPlugin(options);
+  const environmentPlugin = getEnvironmentPlugin(options, logger);
   if (environmentPlugin) {
     composer.addPlugin(environmentPlugin);
   }
@@ -65,7 +72,7 @@ export function defaultIndexFile(options: Options): AgrippaFile {
   return new AgrippaFile(path, code);
 }
 
-export function defaultStages(options: Options): Stage[] {
+export function defaultStages(options: Options, logger: Logger): Stage[] {
   const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = options;
 
   const dirPath = getDirPath(options);
@@ -82,7 +89,7 @@ export function defaultStages(options: Options): Stage[] {
       varKey: 'dirPath'
     }),
     new CreateFileStage({
-      file: defaultComponentFile(options, createStylesFile ? `./${stylesFileName}` : undefined),
+      file: defaultComponentFile(options, logger, createStylesFile ? `./${stylesFileName}` : undefined),
       varKey: 'componentPath'
     }),
     createStylesFile && new CreateFileStage({

@@ -40,6 +40,11 @@ export class Logger extends EventEmitter {
     return logger;
   }
 
+  static create(isPure: boolean, isDebug: boolean) {
+    return isPure ? new Logger(isDebug) : Logger.consoleLogger(isDebug);
+  }
+
+
   public isDebug;
   protected logs: Logger.Log[] = [];
 
@@ -48,7 +53,7 @@ export class Logger extends EventEmitter {
     this.isDebug = isDebug;
 
     // To prevent Node.js crash on a logged error
-    this.on('error', () => {});
+    this.on('error', () => { });
   }
 
   protected format(args: unknown[], style: (x: unknown) => unknown = x => x) {

@@ -4,7 +4,7 @@ import { Environment } from '../../options/Environment';
 import { Styling } from '../../options/Styling';
 import { italic, Logger } from '../../logger';
 import { run } from '../../run';
-import { RunCommandStage } from '../../stage/RunCommandStage';
+import { PostCommandPlugin } from '../../plugin/PostCommandPlugin';
 
 const cliLogger = Logger.consoleLogger();
 
@@ -154,15 +154,11 @@ export const generateCommand: GenerateCommand = {
       pure: false,
     };
 
-    const postCommandStage = argv.postCommand
-      ? new RunCommandStage({ rawCommand: argv.postCommand })
-      : undefined;
-
     await run(
       inputOptions,
       {
         logger: cliLogger,
-        stages: postCommandStage && (defStages => [...defStages, postCommandStage])
+        plugins: argv.postCommand ? [new PostCommandPlugin(argv.postCommand)] : undefined
       }
     );
   }

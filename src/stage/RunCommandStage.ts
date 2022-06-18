@@ -8,7 +8,7 @@ import { StageResult, StageStatus } from './StageResult';
 
 const exec = promisify(execCB);
 
-export interface RunCommandOption {
+export interface RunCommandOptions {
   rawCommand: string;
 }
 
@@ -18,7 +18,7 @@ export class RunCommandStage extends Stage {
 
   constructor({
     rawCommand
-  }: RunCommandOption) {
+  }: RunCommandOptions) {
     super();
 
     this.rawCommand = rawCommand;

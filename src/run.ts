@@ -2,21 +2,20 @@ import { dirname } from 'path';
 import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
-import { Context, defaultStages, Stage } from './stage';
+import { Context } from './stage';
 import { getStackTags } from './utils/getStackTags';
-import { lookForUpdates } from './utils/lookForUpdates';
 import { pkgJson } from './utils/pkgJson';
-import { reportTelemetry } from './utils/reportTelemetry';
-import { indent } from './utils/strings';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
-import { summaryLine } from './stage/StageResult';
+import { Plugin } from './plugin';
+import { UpdatesPlugin } from './plugin/UpdatesPlugin';
+import { TelemetryPlugin } from './plugin/TelemetryPlugin';
 
 export interface RunOptions {
   /** *paths* to envFiles that Agrippa should fetch */
   envFiles?: Record<string, string>;
-  stages?: ((defaultStages: Stage[]) => Stage[]);
-  logger?: Logger
+  plugins?: Plugin[];
+  logger?: Logger;
 }
 
 /**
@@ -29,12 +28,12 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const pure = !!inputOptions.pure;
   const debug = !!inputOptions.debug;
 
-  const logger = runOptions.logger ?? (
-    pure
-      ? new Logger(!!debug)
-      : Logger.consoleLogger(!!debug)
+  const logger = runOptions.logger ?? Logger.create(pure, debug);
+  logger.debug(
+    runOptions.logger
+      ? 'Using logger passed in runOptions'
+      : `Logger initialized with params pure=${pure}, debug=${debug}`
   );
-  logger.debug(`Logger initialized with params pure=${pure}, debug=${debug}`);
 
 
   logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
@@ -61,26 +60,32 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   logger.debug('Resolved options: ', options);
 
-  const defStages = defaultStages(options);
-  const stages = runOptions.stages ? runOptions.stages(defStages) : defStages;
-
-  logger.debug('Resolved stages: ', stages);
-
-  let context: Context = {
+  const context = new Context({
     options,
-    createdDirs: [],
-    createdFiles: [],
     variables: {
       'ComponentName': options.name,
       'component-name': options.kebabName
     },
     logger
-  };
+  });
 
-  const updatePromise = options.lookForUpdates ? lookForUpdates(logger) : null;
+  runOptions.plugins?.forEach(p => context.addPlugin(p));
+
+  if (options.lookForUpdates) {
+    context.addPlugin(new UpdatesPlugin());
+  }
+  else {
+    logger.debug('`options.lookForUpdates` is `false`, not pinging the npm registry');
+  }
+  if (options.reportTelemetry) {
+    context.addPlugin(new TelemetryPlugin());
+  }
+  else {
+    logger.debug('`options.reportTelemetry` is `false`, not sending usage statistics');
+  }
 
 
-  // Print header & some critical warnings, if any
+  // Print header
 
   logger.info(
     '',
@@ -91,49 +96,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     ''
   );
 
-  if (!options.environment) {
-    logger.warn(
-      'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
-      ''
-    );
-  }
-
-  logger.debug('Executing pipeline: running stages', '');
-
-  for (const stage of stages) {
-    const stageLogger = new Logger();
-
-    const result = await stage.execute(context, stageLogger);
-    const stageLogs = stageLogger.consume();
-
-    if (!stage.silent) {
-      logger.info(summaryLine(result));
-      logger.info(indent(styles.comment(stageLogs), 2, ' ') + '\n');
-    }
-    else {
-      logger.debug(stageLogs);
-    }
-
-
-    context = result.newContext ?? context;
-  }
-
-  logger.debug('Pipeline execution complete.');
-
-  if (options.reportTelemetry) {
-    await reportTelemetry(options, logger);
-  }
-  else {
-    logger.debug('`options.reportTelemetry` is `false`, not sending usage statistics');
-  }
-
-  if (options.lookForUpdates) {
-    // Print an "Update is Available" message, if there's a new version available.
-    (await updatePromise)?.();
-  }
-  else {
-    logger.debug('`options.lookForUpdates` is `false`, not pinging the npm registry');
-  }
+  await context.execute();
 
   return {
     ...context,

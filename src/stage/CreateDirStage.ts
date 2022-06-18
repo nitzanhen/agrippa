@@ -37,6 +37,13 @@ export class CreateDirStage extends Stage {
     this.varKey = varKey;
   }
 
+  updateContext(context: Context) {
+    context.addDir(this.dir);
+    if(this.varKey) {
+      context.addVariable(this.varKey, this.dir.path);
+    }
+  }
+
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
     const { pure, baseDir, allowOutsideBase, overwrite } = options;
@@ -44,17 +51,12 @@ export class CreateDirStage extends Stage {
 
     const dirName = basename(path);
 
-    const successContext = {
-      ...context,
-      createdDirs: [...context.createdDirs, new AgrippaDir(path)],
-      variables: this.varKey ? { ...context.variables, [this.varKey]: path } : context.variables
-    };
-
     if (pure) {
+      this.updateContext(context);
+
       return new StageResult(
         StageStatus.NA,
-        'No directory created (pure mode)',
-        successContext
+        'No directory created (pure mode)'
       );
     }
 
@@ -80,10 +82,11 @@ export class CreateDirStage extends Stage {
     try {
       await mkdir(path, { recursive: this.recursive });
 
+      this.updateContext(context);
+
       return new StageResult(
         StageStatus.SUCCESS,
         `Directory ${italic(dirName)} created successfully.`,
-        successContext
       );
     }
     catch (e) {
