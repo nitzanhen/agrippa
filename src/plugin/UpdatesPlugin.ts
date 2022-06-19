@@ -14,7 +14,8 @@ const { diff, gt, lt } = semver;
  */
 export class UpdatesPlugin extends Plugin {
   private currentVersion: string | undefined = undefined;
-  private requestPromise: Promise<string> | null = null;
+  private requestPromise: Promise<string | undefined> | null = null;
+  private failed = false;
 
   async pingRegistry() {
     const { logger } = this.context;
@@ -22,14 +23,21 @@ export class UpdatesPlugin extends Plugin {
     logger.debug('UpdatesPlugin: pinging the npm registry');
     const sendTime = Date.now();
 
-    const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
+    try {
+      const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
+      const endTime = Date.now();
+      logger.debug(`UpdatesPlugin: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
 
-    const endTime = Date.now();
-    logger.debug(`UpdatesPlugin: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
+      const latestVersion = res.data.version;
 
-    const latestVersion = res.data.version;
-
-    return latestVersion;
+      return latestVersion;
+    }
+    catch (e) {
+      logger.warn('Failure at UpdatesPlugin - pinging the NPM registry failed. Check the debug output for more info.');
+      logger.debug(e);
+      this.failed = true;
+      return;
+    }
   }
 
   onPipelineStart() {
@@ -42,6 +50,10 @@ export class UpdatesPlugin extends Plugin {
 
     const currentVersion = this.currentVersion!;
     const latestVersion = await this.requestPromise;
+
+    if (this.failed) {
+      return;
+    }
 
     logger.debug(`Current version: ${italic(currentVersion)}, Latest version: ${italic(latestVersion)}`);
     if (!currentVersion || !latestVersion) {
