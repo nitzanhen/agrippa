@@ -1,13 +1,13 @@
-import { Logger, styles } from './logger';
-import { Options } from './options/Options';
-import { Plugin , defaultPlugins } from './plugin';
-import { indent } from './utils';
-import { AsyncEventEmitter } from './utils/AsyncEventEmitter';
-import { pkgJson } from './utils/pkgJson';
-import { AgrippaDir } from './stage/AgrippaDir';
-import { AgrippaFile } from './stage/AgrippaFile';
-import { Stage } from './stage/Stage';
-import { summaryLine } from './stage/StageResult';
+import { Logger, styles } from '../logger';
+import { Options } from '../options/Options';
+import { Plugin , defaultPlugins } from '../plugin';
+import { indent } from '../utils';
+import { AsyncEventEmitter } from '../utils/AsyncEventEmitter';
+import { pkgJson } from '../utils/pkgJson';
+import { AgrippaDir } from '../stage/AgrippaDir';
+import { AgrippaFile } from '../stage/AgrippaFile';
+import { Stage } from '../stage/Stage';
+import { summaryLine } from '../stage/StageResult';
 
 export interface ContextOptions {
   options: Options;

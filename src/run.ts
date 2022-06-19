@@ -2,7 +2,7 @@ import { dirname } from 'path';
 import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
-import { Context } from './Context';
+import { Context } from './context';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
 import { Plugin } from './plugin';

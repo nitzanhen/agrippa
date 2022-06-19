@@ -1,4 +1,4 @@
-import { Context } from '../Context';
+import { Context } from '../context';
 import { MaybePromise } from '../utils';
 
 /**

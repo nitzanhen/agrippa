@@ -2,7 +2,7 @@ import { exec as execCB } from 'child_process';
 import { promisify } from 'util';
 import { reduce } from 'rhax';
 import { Logger } from '../logger';
-import { Context } from '../Context';
+import { Context } from '../context';
 import { Stage } from './Stage';
 import { StageResult, StageStatus } from './StageResult';
 

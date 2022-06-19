@@ -4,7 +4,7 @@ import { basename } from 'path';
 import { bold, italic, Logger, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
-import { Context } from '../Context';
+import { Context } from '../context';
 import { Stage } from './Stage';
 import { AgrippaDir } from './AgrippaDir';
 import { StageResult, StageStatus } from './StageResult';
