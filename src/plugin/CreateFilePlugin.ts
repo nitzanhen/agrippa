@@ -1,7 +1,7 @@
 import { AgrippaFile, CreateFileOptions, CreateFileStage } from '../stage';
 import { Plugin } from './Plugin';
 
-export class FilePlugin extends Plugin {
+export class CreateFilePlugin extends Plugin {
   file: AgrippaFile;
   varKey: string | undefined;
 

@@ -1,13 +1,12 @@
 import { join, resolve } from 'path';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Logger } from '../logger';
-import { Options, Environment } from '../options';
-import { joinLines } from '../utils/strings';
-import { AgrippaDir } from './AgrippaDir';
-import { AgrippaFile } from './AgrippaFile';
-import { CreateDirStage } from './CreateDirStage';
-import { CreateFileStage } from './CreateFileStage';
-import { Stage } from './Stage';
+import { Environment, Options } from '../options';
+import { AgrippaDir, AgrippaFile } from '../stage';
+import { joinLines } from '../utils';
+import { CreateDirPlugin } from './CreateDirPlugin';
+import { CreateFilePlugin } from './CreateFilePlugin';
+import { Plugin } from './Plugin';
 
 const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
 
@@ -72,7 +71,7 @@ export function defaultIndexFile(options: Options): AgrippaFile {
   return new AgrippaFile(path, code);
 }
 
-export function defaultStages(options: Options, logger: Logger): Stage[] {
+export function defaultPlugins(options: Options, logger: Logger ): Plugin[] {
   const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = options;
 
   const dirPath = getDirPath(options);
@@ -84,22 +83,22 @@ export function defaultStages(options: Options, logger: Logger): Stage[] {
   const stylesFilePath = join(dirPath, stylesFileName);
 
   return ([
-    new CreateDirStage({
+    new CreateDirPlugin({
       dir: new AgrippaDir(dirPath),
       varKey: 'dirPath'
     }),
-    new CreateFileStage({
+    new CreateFilePlugin({
       file: defaultComponentFile(options, logger, createStylesFile ? `./${stylesFileName}` : undefined),
       varKey: 'componentPath'
     }),
-    createStylesFile && new CreateFileStage({
+    createStylesFile && new CreateFilePlugin({
       file: new AgrippaFile(stylesFilePath, ''),
       varKey: 'stylesPath'
     }),
-    new CreateFileStage({
+    new CreateFilePlugin({
       file: defaultIndexFile(options),
       varKey: 'indexPath'
     })
-  ] as (Stage | boolean)[]
-  ).filter((f): f is Stage => !!f);
+  ] as (Plugin | boolean)[]
+  ).filter((p): p is Plugin => !!p);
 }

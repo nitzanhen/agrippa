@@ -1,12 +1,11 @@
 import { Logger, styles } from '../logger';
 import { Options } from '../options/Options';
-import { Plugin } from '../plugin';
+import { Plugin , defaultPlugins } from '../plugin';
 import { indent } from '../utils';
 import { AsyncEventEmitter } from '../utils/AsyncEventEmitter';
 import { pkgJson } from '../utils/pkgJson';
 import { AgrippaDir } from './AgrippaDir';
 import { AgrippaFile } from './AgrippaFile';
-import { defaultStages } from './defaultStages';
 import { Stage } from './Stage';
 import { summaryLine } from './StageResult';
 
@@ -37,7 +36,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   public readonly version = pkgJson.version;
 
   options: Options;
-  plugins: Plugin[];
+  public readonly plugins: Plugin[];
 
   createdFiles: AgrippaFile[];
   createdDirs: AgrippaDir[];
@@ -50,9 +49,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
   constructor({
     options,
-    plugins = [],
-    stages,
+    plugins,
 
+    stages = [],
     createdFiles = [],
     createdDirs = [],
     variables = {},
@@ -62,19 +61,20 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   }: ContextOptions) {
     super();
 
+    this.logger = logger ?? Logger.create(options.pure, options.debug);
+    this.stages = stages;
+
     this.options = options;
-    this.plugins = plugins;
+    this.plugins = plugins ?? defaultPlugins(options, this.logger);
 
     this.createdFiles = createdFiles;
     this.createdDirs = createdDirs;
     this.variables = variables;
 
-    this.logger = logger ?? Logger.create(options.pure, options.debug);
-    this.stages = stages ?? defaultStages(options, this.logger);
 
     this.stackTags = stackTags;
 
-    for (const plugin of plugins) {
+    for (const plugin of this.plugins) {
       plugin._initialize(this);
     }
   }
