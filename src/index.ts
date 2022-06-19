@@ -3,3 +3,7 @@ export * from './options';
 export * from './composer';
 export * from './logger';
 export * from './stage';
+export * from './context';
+export * from './files';
+export * from './plugin';
+export * from './utils';

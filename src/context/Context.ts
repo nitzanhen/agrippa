@@ -1,6 +1,6 @@
 import { Logger, styles } from '../logger';
 import { Options } from '../options/Options';
-import { Plugin , defaultPlugins } from '../plugin';
+import { Plugin, defaultPlugins } from '../plugin';
 import { indent } from '../utils';
 import { AsyncEventEmitter } from '../utils/AsyncEventEmitter';
 import { pkgJson } from '../utils/pkgJson';
@@ -8,6 +8,7 @@ import { AgrippaDir } from '../stage/AgrippaDir';
 import { AgrippaFile } from '../stage/AgrippaFile';
 import { Stage } from '../stage/Stage';
 import { summaryLine } from '../stage/StageResult';
+import { RunOutput } from './RunOutput';
 
 export interface ContextOptions {
   options: Options;
@@ -116,7 +117,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     this.stackTags.push(tag);
   }
 
-  async execute() {
+  async execute(): Promise<RunOutput> {
     await this.emit('create-stack-tags');
     await this.emit('create-stages');
 
@@ -148,5 +149,19 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     await this.emit('pipeline-end');
 
     logger.debug('Pipeline execution complete.');
+
+    const output: RunOutput = {
+      options: this.options,
+      plugins: this.plugins,
+      stages: this.stages,
+      createdFiles: this.createdFiles,
+      createdDirs: this.createdDirs,
+      variables: this.variables,
+      stackTags: this.stackTags,
+
+      logs: this.logger.consume()
+    };
+
+    return output;
   }
 }
