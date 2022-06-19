@@ -1,5 +1,5 @@
 import { Logger } from '../logger';
-import { Context } from './Context';
+import { Context } from '../Context';
 import { StageResult } from './StageResult';
 
 export abstract class Stage {

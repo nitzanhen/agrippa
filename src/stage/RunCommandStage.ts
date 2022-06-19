@@ -2,8 +2,8 @@ import { exec as execCB } from 'child_process';
 import { promisify } from 'util';
 import { reduce } from 'rhax';
 import { Logger } from '../logger';
+import { Context } from '../Context';
 import { Stage } from './Stage';
-import { Context } from './Context';
 import { StageResult, StageStatus } from './StageResult';
 
 const exec = promisify(execCB);

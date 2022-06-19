@@ -4,9 +4,9 @@ import { basename } from 'path';
 import { bold, italic, Logger, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
+import { Context } from '../Context';
 import { AgrippaFile } from './AgrippaFile';
 import { Stage } from './Stage';
-import { Context } from './Context';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateFileOptions {
