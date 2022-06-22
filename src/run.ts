@@ -75,6 +75,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   });
 
   runOptions.plugins?.forEach(p => context.addPlugin(p));
+  config?.plugins?.forEach(p => context.addPlugin(p));
 
   if (options.lookForUpdates) {
     context.addPlugin(new UpdatesPlugin());
@@ -105,7 +106,6 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   // Execute & return output
 
   const output = await context.execute();
-  logger.debug('output: ', output);
 
   return output;
 }
