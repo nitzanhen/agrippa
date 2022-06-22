@@ -4,9 +4,11 @@ import { Logger } from '../logger';
 import { Environment, Options } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
 import { joinLines } from '../utils';
+import { getStackTags } from '../utils/getStackTags';
 import { CreateDirPlugin } from './CreateDirPlugin';
 import { CreateFilePlugin } from './CreateFilePlugin';
 import { Plugin } from './Plugin';
+import { StackTagPlugin } from './StackTagPlugin';
 
 const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
 
@@ -71,7 +73,7 @@ export function defaultIndexFile(options: Options): AgrippaFile {
   return new AgrippaFile(path, code);
 }
 
-export function defaultPlugins(options: Options, logger: Logger ): Plugin[] {
+export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
   const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = options;
 
   const dirPath = getDirPath(options);
@@ -83,6 +85,10 @@ export function defaultPlugins(options: Options, logger: Logger ): Plugin[] {
   const stylesFilePath = join(dirPath, stylesFileName);
 
   return ([
+    /** @todo find a good way to do this from the plugins, not add a dedicated one */
+    new StackTagPlugin(
+      getStackTags(options)
+    ),
     new CreateDirPlugin({
       dir: new AgrippaDir(dirPath),
       varKey: 'dirPath'

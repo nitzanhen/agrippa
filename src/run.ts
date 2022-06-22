@@ -91,12 +91,14 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   // Print header
 
+  const stackTags = await context.getStackTags();
+
   logger.info(
     '',
     `Agrippa v${context.version}`,
     '',
     `Generating ${styles.componentName(options.name)}\n`,
-    `Stack: ${context.stackTags.map(t => styles.tag(t)).join(', ')}`,
+    `Stack: ${stackTags.map(t => styles.tag(t)).join(', ')}`,
     ''
   );
 

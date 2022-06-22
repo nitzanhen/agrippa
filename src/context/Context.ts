@@ -42,9 +42,12 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   createdFiles: AgrippaFile[];
   createdDirs: AgrippaDir[];
   variables: Record<string, any>;
+
   stages: Stage[];
+  stagesInitialized: boolean;
 
   stackTags: string[];
+  stackTagsInitialized: boolean;;
 
   public readonly logger: Logger;
 
@@ -63,7 +66,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     super();
 
     this.logger = logger ?? Logger.create(options.pure, options.debug);
+
     this.stages = stages;
+    this.stagesInitialized = false;
 
     this.options = options;
     this.plugins = plugins ?? defaultPlugins(options, this.logger);
@@ -72,8 +77,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     this.createdDirs = createdDirs;
     this.variables = variables;
 
-
     this.stackTags = stackTags;
+    this.stackTagsInitialized = false;
 
     for (const plugin of this.plugins) {
       plugin._initialize(this);
@@ -92,6 +97,28 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     /** @todo add error/warning if stage is added too late */
     /** @todo priority list */
     this.stages.push(stage);
+  }
+
+  async getStages(): Promise<Stage[]> {
+    if(!this.stagesInitialized) {
+      await this.emit('create-stages');
+      this.stagesInitialized = true;
+    }
+
+    return this.stages;
+  }
+
+  addStackTag(tag: string): void {
+    this.stackTags.push(tag);
+  }
+
+  async getStackTags(): Promise<string[]> {
+    if(!this.stackTagsInitialized) {
+      await this.emit('create-stack-tags');
+      this.stackTagsInitialized = true;
+    }
+
+    return this.stackTags;
   }
 
   addPlugin(plugin: Plugin): void {
@@ -113,13 +140,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     this.variables[key] = value;
   }
 
-  addStackTag(tag: string): void {
-    this.stackTags.push(tag);
-  }
-
   async execute(): Promise<RunOutput> {
-    await this.emit('create-stack-tags');
-    await this.emit('create-stages');
+    await this.getStages();
+    await this.getStackTags();
 
     const logger = this.logger;
 
