@@ -2,9 +2,7 @@ import { dirname } from 'path';
 import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
-import { Context } from './stage';
-import { getStackTags } from './utils/getStackTags';
-import { pkgJson } from './utils/pkgJson';
+import { Context } from './context';
 import { loadFileQuery } from './files';
 import { assignDefaults } from './utils/object';
 import { Plugin } from './plugin';
@@ -28,6 +26,8 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const pure = !!inputOptions.pure;
   const debug = !!inputOptions.debug;
 
+  // Create Logger
+
   const logger = runOptions.logger ?? Logger.create(pure, debug);
   logger.debug(
     runOptions.logger
@@ -35,6 +35,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
       : `Logger initialized with params pure=${pure}, debug=${debug}`
   );
 
+  // Read Agrippa config
 
   logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
   const [config, configPath] = await loadFileQuery<Config>(
@@ -42,23 +43,27 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
       ? { path: runOptions.envFiles?.agrippaConfig }
       : { search: 'agrippa.config.mjs' }
   );
-
   logger.debug('Resolved Agrippa config: ', config);
 
-  // Merge the given input with the resolved config options
-  inputOptions = assignDefaults(config?.options ?? {}, inputOptions);
+  // Read Env files
 
   const envFileQueries = Object.assign({}, config?.files, runOptions?.envFiles);
   const envFiles = Object.assign(
     { config },
     !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''))
   );
-
   logger.debug('Resolved envFiles: ', envFiles);
 
-  const options = createOptions(inputOptions, envFiles);
+  // Create Options
 
+  // Merge the given input with the resolved config options
+  inputOptions = assignDefaults(config?.options ?? {}, inputOptions);
+
+  const options = createOptions(inputOptions, envFiles);
   logger.debug('Resolved options: ', options);
+
+
+  // Initialize context & add plugins
 
   const context = new Context({
     options,
@@ -70,6 +75,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   });
 
   runOptions.plugins?.forEach(p => context.addPlugin(p));
+  config?.plugins?.forEach(p => context.addPlugin(p));
 
   if (options.lookForUpdates) {
     context.addPlugin(new UpdatesPlugin());
@@ -84,22 +90,22 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     logger.debug('`options.reportTelemetry` is `false`, not sending usage statistics');
   }
 
-
   // Print header
+
+  const stackTags = await context.getStackTags();
 
   logger.info(
     '',
-    `Agrippa v${pkgJson.version}`,
+    `Agrippa v${context.version}`,
     '',
     `Generating ${styles.componentName(options.name)}\n`,
-    `Stack: ${styles.tag(getStackTags(options).join(' '))}`,
+    `Stack: ${stackTags.map(t => styles.tag(t)).join(', ')}`,
     ''
   );
 
-  await context.execute();
+  // Execute & return output
 
-  return {
-    ...context,
-    logs: logger.consume()
-  };
+  const output = await context.execute();
+
+  return output;
 }

@@ -1,13 +1,14 @@
 import { Logger, styles } from '../logger';
 import { Options } from '../options/Options';
-import { Plugin } from '../plugin';
+import { Plugin, defaultPlugins } from '../plugin';
 import { indent } from '../utils';
 import { AsyncEventEmitter } from '../utils/AsyncEventEmitter';
-import { AgrippaDir } from './AgrippaDir';
-import { AgrippaFile } from './AgrippaFile';
-import { defaultStages } from './defaultStages';
-import { Stage } from './Stage';
-import { summaryLine } from './StageResult';
+import { pkgJson } from '../utils/pkgJson';
+import { AgrippaDir } from '../stage/AgrippaDir';
+import { AgrippaFile } from '../stage/AgrippaFile';
+import { Stage } from '../stage/Stage';
+import { summaryLine } from '../stage/StageResult';
+import { RunOutput } from './RunOutput';
 
 export interface ContextOptions {
   options: Options;
@@ -18,10 +19,13 @@ export interface ContextOptions {
   createdDirs?: AgrippaDir[];
   variables?: Record<string, any>;
   logger?: Logger;
+
+  stackTags?: string[];
 }
 
 export type ContextEventMap = {
   'load': () => void;
+  'create-stack-tags': () => void;
   'create-stages': () => void;
   'stage-start': (stage: Stage) => void;
   'stage-end': (stage: Stage) => void;
@@ -30,39 +34,53 @@ export type ContextEventMap = {
 }
 
 export class Context extends AsyncEventEmitter<ContextEventMap> {
+  public readonly version = pkgJson.version;
+
   options: Options;
-  plugins: Plugin[];
+  public readonly plugins: Plugin[];
 
   createdFiles: AgrippaFile[];
   createdDirs: AgrippaDir[];
   variables: Record<string, any>;
-  stages: Stage[];
 
-  logger: Logger;
+  stages: Stage[];
+  stagesInitialized: boolean;
+
+  stackTags: string[];
+  stackTagsInitialized: boolean;;
+
+  public readonly logger: Logger;
 
   constructor({
     options,
-    plugins = [],
-    stages,
+    plugins,
 
+    stages = [],
     createdFiles = [],
     createdDirs = [],
     variables = {},
-    logger
+    logger,
+
+    stackTags = []
   }: ContextOptions) {
     super();
 
+    this.logger = logger ?? Logger.create(options.pure, options.debug);
+
+    this.stages = stages;
+    this.stagesInitialized = false;
+
     this.options = options;
-    this.plugins = plugins;
+    this.plugins = plugins ?? defaultPlugins(options, this.logger);
 
     this.createdFiles = createdFiles;
     this.createdDirs = createdDirs;
     this.variables = variables;
 
-    this.logger = logger ?? Logger.create(options.pure, options.debug);
-    this.stages = stages ?? defaultStages(options, this.logger);
+    this.stackTags = stackTags;
+    this.stackTagsInitialized = false;
 
-    for (const plugin of plugins) {
+    for (const plugin of this.plugins) {
       plugin._initialize(this);
     }
   }
@@ -79,6 +97,28 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     /** @todo add error/warning if stage is added too late */
     /** @todo priority list */
     this.stages.push(stage);
+  }
+
+  async getStages(): Promise<Stage[]> {
+    if(!this.stagesInitialized) {
+      await this.emit('create-stages');
+      this.stagesInitialized = true;
+    }
+
+    return this.stages;
+  }
+
+  addStackTag(tag: string): void {
+    this.stackTags.push(tag);
+  }
+
+  async getStackTags(): Promise<string[]> {
+    if(!this.stackTagsInitialized) {
+      await this.emit('create-stack-tags');
+      this.stackTagsInitialized = true;
+    }
+
+    return this.stackTags;
   }
 
   addPlugin(plugin: Plugin): void {
@@ -100,8 +140,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     this.variables[key] = value;
   }
 
-  async execute() {
-    await this.emit('create-stages');
+  async execute(): Promise<RunOutput> {
+    await this.getStages();
+    await this.getStackTags();
 
     const logger = this.logger;
 
@@ -131,5 +172,19 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     await this.emit('pipeline-end');
 
     logger.debug('Pipeline execution complete.');
+
+    const output: RunOutput = {
+      options: this.options,
+      plugins: this.plugins,
+      stages: this.stages,
+      createdFiles: this.createdFiles,
+      createdDirs: this.createdDirs,
+      variables: this.variables,
+      stackTags: this.stackTags,
+
+      logs: this.logger.consume()
+    };
+
+    return output;
   }
 }

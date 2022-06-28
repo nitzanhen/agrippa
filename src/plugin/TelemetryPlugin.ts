@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { pick } from 'rhax';
-import { pkgJson } from '../utils/pkgJson';
 import { Plugin } from './Plugin';
 
 const TELEMETRY_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/';
@@ -10,38 +9,38 @@ const TELEMETRY_ENDPOINT = 'https://agrippa-report-worker.nitzanhen.workers.dev/
  */
 export class TelemetryPlugin extends Plugin {
   async onPipelineEnd() {
-    const { options, logger } = this.context;
+    const { options, logger, version } = this.context;
 
     const runData = {
       ...pick(options, 'environment', 'typescript', 'styling'),
-      version: pkgJson.version,
+      version,
       /** @todo refactor to process.env.DEV variable */
       dev: options.debug
     };
-  
+
     const sendTime = Date.now();
-  
+
     try {
-      logger.debug('reportUsageStatistics: sending report...');
-  
-      const reqPromise = axios.post(TELEMETRY_ENDPOINT, runData);
-  
-      if (!options.debug) {
-        // If not in debug mode, don't even wait for the resuest to finish
-        reqPromise.catch(() => null);
-        return;
-      }
-  
-      await reqPromise;
-  
+      logger.debug('TelemetryPlugin: sending report...');
+
+      await axios.post(TELEMETRY_ENDPOINT, runData, {
+        // If debug is off, set a very short timeout (0 means no timeout)
+        timeout: options.debug ? 0 : 1
+      }).catch(e => {
+        if(!options.debug && e.code === 'ECONNABORTED') {
+          return;
+        }
+        throw e;
+      });
+
       const endTime = Date.now();
-  
-      logger.debug(`reportUsageStatistics: received response in ${endTime - sendTime}ms.`);
+
+      logger.debug(`TelemetryPlugin: received response in ${endTime - sendTime}ms.`);
     }
     catch (e) {
       const endTime = Date.now();
-  
-      logger.debug(`reportUsageStatistics: request failed after ${endTime - sendTime}ms. Error:`);
+
+      logger.debug(`TelemetryPlugin: request failed after ${endTime - sendTime}ms. Error:`);
       logger.debug(e);
     }
   }

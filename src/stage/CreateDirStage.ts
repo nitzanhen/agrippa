@@ -4,9 +4,9 @@ import { basename } from 'path';
 import { bold, italic, Logger, styles } from '../logger';
 import { isSubDirectory } from '../utils/isSubDirectory';
 import { joinLines } from '../utils';
+import { Context } from '../context';
 import { Stage } from './Stage';
 import { AgrippaDir } from './AgrippaDir';
-import { Context } from './Context';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateDirOptions {
@@ -39,7 +39,7 @@ export class CreateDirStage extends Stage {
 
   updateContext(context: Context) {
     context.addDir(this.dir);
-    if(this.varKey) {
+    if (this.varKey) {
       context.addVariable(this.varKey, this.dir.path);
     }
   }

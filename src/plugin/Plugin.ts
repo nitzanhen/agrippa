@@ -1,4 +1,4 @@
-import { Context } from '../stage';
+import { Context } from '../context';
 import { MaybePromise } from '../utils';
 
 /**
@@ -8,7 +8,9 @@ export interface Plugin {
   context: Context;
 
   onContext?(): MaybePromise<void>;
+  
   onCreateStages?(): MaybePromise<void>;
+  onCreateStackTags?(): MaybePromise<void>;
 
   onStageStart?(): MaybePromise<void>;
   onStageEnd?(): MaybePromise<void>;
@@ -18,13 +20,14 @@ export interface Plugin {
 }
 
 export class Plugin {
-  constructor() {}
+  constructor() { }
 
   _initialize(context: Context) {
     this.context = context;
 
     this.onContext?.();
 
+    this.onCreateStackTags && context.addListener('create-stack-tags', this.onCreateStackTags.bind(this));
     this.onCreateStages && context.addListener('create-stages', this.onCreateStages.bind(this));
 
     this.onStageStart && context.addListener('stage-start', this.onStageStart.bind(this));

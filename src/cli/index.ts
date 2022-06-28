@@ -7,6 +7,7 @@ import { initCommand } from './init';
 yargs(hideBin(process.argv)).command(generateCommand)
   .command(initCommand)
   .recommendCommands()
+  .showHelpOnFail(false)
   .strict()
   .demandCommand(1, 'Please specify a command')
   .parseAsync()

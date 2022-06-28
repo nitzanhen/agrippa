@@ -1,4 +1,5 @@
 import { CustomFileQueries } from '../files';
+import { Plugin } from '../plugin';
 import { DeepPartial } from '../utils';
 import { Options } from './Options';
 
@@ -7,7 +8,8 @@ import { Options } from './Options';
  */
 export interface Config {
   options?: DeepPartial<Options>;
-  files?: CustomFileQueries
+  files?: CustomFileQueries;
+  plugins?: Plugin[]
 };
 
 /**
