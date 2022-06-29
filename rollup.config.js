@@ -20,7 +20,7 @@ const plugins = ({ tsc = false } = {}) => [
   }),
   tsc && ts(),
   json(),
-  esbuild()
+  esbuild({ target: 'es2020' })
 ];
 
 export default defineConfig([
