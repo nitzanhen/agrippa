@@ -101,8 +101,10 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
   async getStages(): Promise<Stage[]> {
     if(!this.stagesInitialized) {
+      this.logger.debug('Initializing stages...');
       await this.emit('create-stages');
       this.stagesInitialized = true;
+      this.logger.debug('Initialized stages:', this.stages);
     }
 
     return this.stages;
@@ -114,8 +116,10 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
   async getStackTags(): Promise<string[]> {
     if(!this.stackTagsInitialized) {
+      this.logger.debug('Initializing stack tags...');
       await this.emit('create-stack-tags');
       this.stackTagsInitialized = true;
+      this.logger.debug('Initialized stack tags: ', this.stackTags);
     }
 
     return this.stackTags;
