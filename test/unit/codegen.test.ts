@@ -1,88 +1,89 @@
+import assert from 'node:assert/strict';
 import { createArrowFunction, createAssignment, createDefaultExport, declareConst, declareFunction, declareInterface, declareType } from '../../src/utils/codegen';
 
 describe('utils/codegen.ts', () => {
-  test('declareConst', () => {
-    expect(declareConst('classes', 'useStyles()')).toBe('const classes = useStyles();');
-    expect(declareConst('computed', 'useMemo(() => 3)')).toBe('const computed = useMemo(() => 3);');
+  it('declareConst', () => {
+    assert.equal(declareConst('classes', 'useStyles()'), 'const classes = useStyles();');
+    assert.equal(declareConst('computed', 'useMemo(() => 3)'), 'const computed = useMemo(() => 3);');
 
-    expect(declareConst('classes', 'useStyles()', true)).toBe('export const classes = useStyles();');
-    expect(declareConst('computed', 'useMemo(() => 3)', true)).toBe('export const computed = useMemo(() => 3);');
+    assert.equal(declareConst('classes', 'useStyles()', true), 'export const classes = useStyles();');
+    assert.equal(declareConst('computed', 'useMemo(() => 3)', true), 'export const computed = useMemo(() => 3);');
 
-    expect(declareConst('classes', 'useStyles()', false, 'Classes')).toBe('const classes: Classes = useStyles();');
-    expect(declareConst('computed', 'useMemo(() => 3)', false, 'number')).toBe('const computed: number = useMemo(() => 3);');
+    assert.equal(declareConst('classes', 'useStyles()', false, 'Classes'), 'const classes: Classes = useStyles();');
+    assert.equal(declareConst('computed', 'useMemo(() => 3)', false, 'number'), 'const computed: number = useMemo(() => 3);');
 
-    expect(declareConst('classes', 'useStyles()', true, 'Classes')).toBe('export const classes: Classes = useStyles();');
-    expect(declareConst('computed', 'useMemo(() => 3)', true, 'number')).toBe('export const computed: number = useMemo(() => 3);');
+    assert.equal(declareConst('classes', 'useStyles()', true, 'Classes'), 'export const classes: Classes = useStyles();');
+    assert.equal(declareConst('computed', 'useMemo(() => 3)', true, 'number'), 'export const computed: number = useMemo(() => 3);');
   });
 
-  test('declareInterface', () => {
-    expect(declareInterface('ButtonProps')).toBe('interface ButtonProps {}');
-    expect(declareInterface('TabProps')).toBe('interface TabProps {}');
+  it('declareInterface', () => {
+    assert.equal(declareInterface('ButtonProps'), 'interface ButtonProps {}');
+    assert.equal(declareInterface('TabProps'), 'interface TabProps {}');
 
-    expect(declareInterface('ButtonProps', true)).toBe('export interface ButtonProps {}');
-    expect(declareInterface('TabProps', true)).toBe('export interface TabProps {}');
-
-  });
-
-  test('declareType', () => {
-    expect(declareType('ButtonProps')).toBe('type ButtonProps = {};');
-    expect(declareType('TabProps')).toBe('type TabProps = {};');
-
-    expect(declareType('ButtonProps', true)).toBe('export type ButtonProps = {};');
-    expect(declareType('TabProps', true)).toBe('export type TabProps = {};');
+    assert.equal(declareInterface('ButtonProps', true), 'export interface ButtonProps {}');
+    assert.equal(declareInterface('TabProps', true), 'export interface TabProps {}');
 
   });
 
-  test('declareFunction', () => {
-    expect(declareFunction('Button')).toBe('function Button() { }');
+  it('declareType', () => {
+    assert.equal(declareType('ButtonProps'), 'type ButtonProps = {};');
+    assert.equal(declareType('TabProps'), 'type TabProps = {};');
 
-    expect(declareFunction('Button', 'props: ButtonProps')).toBe('function Button(props: ButtonProps) { }');
+    assert.equal(declareType('ButtonProps', true), 'export type ButtonProps = {};');
+    assert.equal(declareType('TabProps', true), 'export type TabProps = {};');
 
-    expect(declareFunction(
+  });
+
+  it('declareFunction', () => {
+    assert.equal(declareFunction('Button'), 'function Button() { }');
+
+    assert.equal(declareFunction('Button', 'props: ButtonProps'), 'function Button(props: ButtonProps) { }');
+
+    assert.equal(declareFunction(
       'Button',
       '{ onClick }: ButtonProps',
       'return <button onClick={onClick} />'
-    )).toBe('function Button({ onClick }: ButtonProps) {\n\treturn <button onClick={onClick} />\n}');
+    ), 'function Button({ onClick }: ButtonProps) {\n\treturn <button onClick={onClick} />\n}');
 
-    expect(declareFunction(
+    assert.equal(declareFunction(
       'Button',
       '{ onClick }: ButtonProps',
       'return <button onClick={onClick} />',
       true
-    )).toBe('export function Button({ onClick }: ButtonProps) {\n\treturn <button onClick={onClick} />\n}');
+    ), 'export function Button({ onClick }: ButtonProps) {\n\treturn <button onClick={onClick} />\n}');
 
 
-    expect(declareFunction('Tab')).toBe('function Tab() { }');
+    assert.equal(declareFunction('Tab'), 'function Tab() { }');
 
-    expect(declareFunction('Tab', '{ index }: TabProps')).toBe('function Tab({ index }: TabProps) { }');
+    assert.equal(declareFunction('Tab', '{ index }: TabProps'), 'function Tab({ index }: TabProps) { }');
 
-    expect(declareFunction('Tab', '{ index }: TabProps', 'console.log(index);')).toBe('function Tab({ index }: TabProps) {\n\tconsole.log(index);\n}');
+    assert.equal(declareFunction('Tab', '{ index }: TabProps', 'console.log(index);'), 'function Tab({ index }: TabProps) {\n\tconsole.log(index);\n}');
 
-    expect(declareFunction(
+    assert.equal(declareFunction(
       'Tab',
       '{ index }: TabProps',
       'console.log(index);',
       true
-    )).toBe('export function Tab({ index }: TabProps) {\n\tconsole.log(index);\n}');
+    ), 'export function Tab({ index }: TabProps) {\n\tconsole.log(index);\n}');
 
   });
 
-  test('createArrowFunction', () => {
-    expect(createArrowFunction()).toBe('() => {}');
+  it('createArrowFunction', () => {
+    assert.equal(createArrowFunction(), '() => {}');
 
-    expect(createArrowFunction('param: number')).toBe('(param: number) => {}');
+    assert.equal(createArrowFunction('param: number'), '(param: number) => {}');
 
-    expect(createArrowFunction('param: number', 'console.log(param);')).toBe('(param: number) => {\n\tconsole.log(param);\n}');
-    expect(createArrowFunction('{ cb: () => void }', 'cb();')).toBe('({ cb: () => void }) => {\n\tcb();\n}');
+    assert.equal(createArrowFunction('param: number', 'console.log(param);'), '(param: number) => {\n\tconsole.log(param);\n}');
+    assert.equal(createArrowFunction('{ cb: () => void }', 'cb();'), '({ cb: () => void }) => {\n\tcb();\n}');
   });
 
-  test('createDefaultExport', () => {
-    expect(createDefaultExport('Component')).toBe('export default Component;');
-    expect(createDefaultExport('memo(Component)')).toBe('export default memo(Component);');
+  it('createDefaultExport', () => {
+    assert.equal(createDefaultExport('Component'), 'export default Component;');
+    assert.equal(createDefaultExport('memo(Component)'), 'export default memo(Component);');
   });
 
-  test('createAssignment', () => {
-    expect(createAssignment('obj', 'a', '3')).toBe('obj.a = 3;');
-    expect(createAssignment('Component', 'propTypes', '{}')).toBe('Component.propTypes = {};');
+  it('createAssignment', () => {
+    assert.equal(createAssignment('obj', 'a', '3'), 'obj.a = 3;');
+    assert.equal(createAssignment('Component', 'propTypes', '{}'), 'Component.propTypes = {};');
   });
 });

@@ -1,148 +1,148 @@
-
+import assert from 'node:assert/strict';
 import { capitalize, cstr, indent, isCamelCase, isKebabCase, isLowerCase, isPascalCase, joinLines, kebabCase, ostr, pascalCase } from '../../src/utils/strings';
 
 describe('strings', () => {
 
-  test('ostr', () => {
-    expect(ostr(true, 'abc')).toBe('abc');
-    expect(ostr(false, 'abc')).toBe(null);
+  it('ostr', () => {
+    assert.equal(ostr(true, 'abc'), 'abc');
+    assert.equal(ostr(false, 'abc'), null);
   });
 
-  test('cstr', () => {
-    expect(cstr(true, 'abc')).toBe('abc');
-    expect(cstr(false, 'abc')).toBe('');
+  it('cstr', () => {
+    assert.equal(cstr(true, 'abc'), 'abc');
+    assert.equal(cstr(false, 'abc'), '');
   });
 
-  test('indent', () => {
-    expect(indent('x')).toBe('\tx');
-    expect(indent('x', 2)).toBe('\t\tx');
-    expect(indent('\t')).toBe('\t\t');
-    expect(indent('x\ny\nz')).toBe('\tx\n\ty\n\tz');
-    expect(indent('x\ny\nz', 3)).toBe('\t\t\tx\n\t\t\ty\n\t\t\tz');
+  it('indent', () => {
+    assert.equal(indent('x'), '\tx');
+    assert.equal(indent('x', 2), '\t\tx');
+    assert.equal(indent('\t'), '\t\t');
+    assert.equal(indent('x\ny\nz'), '\tx\n\ty\n\tz');
+    assert.equal(indent('x\ny\nz', 3), '\t\t\tx\n\t\t\ty\n\t\t\tz');
 
-    expect(indent('x', 1, '  ')).toBe('  x');
-    expect(indent('x', 2, '  ')).toBe('    x');
-    expect(indent('\t', 1, '  ')).toBe('  \t');
-    expect(indent('x\ny\nz', 1, '  ')).toBe('  x\n  y\n  z');
-    expect(indent('x\ny\nz', 3, '  ')).toBe('      x\n      y\n      z');
+    assert.equal(indent('x', 1, '  '), '  x');
+    assert.equal(indent('x', 2, '  '), '    x');
+    assert.equal(indent('\t', 1, '  '), '  \t');
+    assert.equal(indent('x\ny\nz', 1, '  '), '  x\n  y\n  z');
+    assert.equal(indent('x\ny\nz', 3, '  '), '      x\n      y\n      z');
   });
 
-  test('joinLines', () => {
-    expect(joinLines('x')).toBe('x');
-    expect(joinLines(false)).toBe('');
+  it('joinLines', () => {
+    assert.equal(joinLines('x'), 'x');
+    assert.equal(joinLines(false), '');
 
-    expect(joinLines('x', 'y')).toBe('x\ny');
-    expect(joinLines('x', false, 'y')).toBe('x\ny');
+    assert.equal(joinLines('x', 'y'), 'x\ny');
+    assert.equal(joinLines('x', false, 'y'), 'x\ny');
 
-    expect(joinLines('x', 'y', 'z', 'xx', 'yy')).toBe('x\ny\nz\nxx\nyy');
-    expect(joinLines('x', 'y', false, 'xx', 0 > 1 && 'z')).toBe('x\ny\nxx');
+    assert.equal(joinLines('x', 'y', 'z', 'xx', 'yy'), 'x\ny\nz\nxx\nyy');
+    assert.equal(joinLines('x', 'y', false, 'xx', 0 > 1 && 'z'), 'x\ny\nxx');
   });
 
-  test('isLowerCase', () => {
-    expect(isLowerCase('')).toBe(true);
-    expect(isLowerCase('abc')).toBe(true);
-    expect(isLowerCase('aBc')).toBe(false);
-    expect(isLowerCase('Ω')).toBe(false);
-    expect(isLowerCase('the Quick brown fox')).toBe(false);
-    expect(isLowerCase('the quick brown fox')).toBe(true);
+  it('isLowerCase', () => {
+    assert.equal(isLowerCase(''), true);
+    assert.equal(isLowerCase('abc'), true);
+    assert.equal(isLowerCase('aBc'), false);
+    assert.equal(isLowerCase('Ω'), false);
+    assert.equal(isLowerCase('the Quick brown fox'), false);
+    assert.equal(isLowerCase('the quick brown fox'), true);
   });
 
-  test('capitalize', () => {
-    expect(capitalize('')).toBe('');
-    expect(capitalize('abc')).toBe('Abc');
-    expect(capitalize('aBc')).toBe('ABc');
-    expect(capitalize('Ω')).toBe('Ω');
-    expect(capitalize('ωΩ')).toBe('ΩΩ');
-    expect(capitalize('the Quick brown fox')).toBe('The Quick brown fox');
+  it('capitalize', () => {
+    assert.equal(capitalize(''), '');
+    assert.equal(capitalize('abc'), 'Abc');
+    assert.equal(capitalize('aBc'), 'ABc');
+    assert.equal(capitalize('Ω'), 'Ω');
+    assert.equal(capitalize('ωΩ'), 'ΩΩ');
+    assert.equal(capitalize('the Quick brown fox'), 'The Quick brown fox');
   });
 
-  test('isKebabCase', () => {
-    expect(isKebabCase('')).toBe(true);
+  it('isKebabCase', () => {
+    assert.equal(isKebabCase(''), true);
 
-    expect(isKebabCase('first-last')).toBe(true);
-    expect(isKebabCase('First-last')).toBe(false);
-    expect(isKebabCase('First-Last')).toBe(false);
+    assert.equal(isKebabCase('first-last'), true);
+    assert.equal(isKebabCase('First-last'), false);
+    assert.equal(isKebabCase('First-Last'), false);
 
-    expect(isKebabCase('firstLast')).toBe(false);
-    expect(isKebabCase('FirstLast')).toBe(false);
+    assert.equal(isKebabCase('firstLast'), false);
+    assert.equal(isKebabCase('FirstLast'), false);
 
-    expect(isKebabCase('First')).toBe(false);
-    expect(isKebabCase('first')).toBe(true);
+    assert.equal(isKebabCase('First'), false);
+    assert.equal(isKebabCase('first'), true);
 
-    expect(isKebabCase('name-2')).toBe(true);
-    expect(isKebabCase('name2')).toBe(true);
-    expect(isKebabCase('Name2')).toBe(false);
+    assert.equal(isKebabCase('name-2'), true);
+    assert.equal(isKebabCase('name2'), true);
+    assert.equal(isKebabCase('Name2'), false);
   });
 
-  test('isCamelCase', () => {
-    expect(isCamelCase('')).toBe(true);
+  it('isCamelCase', () => {
+    assert.equal(isCamelCase(''), true);
 
-    expect(isCamelCase('first-last')).toBe(false);
-    expect(isCamelCase('First-last')).toBe(false);
-    expect(isCamelCase('First-Last')).toBe(false);
+    assert.equal(isCamelCase('first-last'), false);
+    assert.equal(isCamelCase('First-last'), false);
+    assert.equal(isCamelCase('First-Last'), false);
 
-    expect(isCamelCase('firstLast')).toBe(true);
-    expect(isCamelCase('FirstLast')).toBe(false);
+    assert.equal(isCamelCase('firstLast'), true);
+    assert.equal(isCamelCase('FirstLast'), false);
 
-    expect(isCamelCase('First')).toBe(false);
-    expect(isCamelCase('first')).toBe(true);
+    assert.equal(isCamelCase('First'), false);
+    assert.equal(isCamelCase('first'), true);
 
-    expect(isCamelCase('name-2')).toBe(false);
-    expect(isCamelCase('name2')).toBe(true);
-    expect(isCamelCase('Name2')).toBe(false);
+    assert.equal(isCamelCase('name-2'), false);
+    assert.equal(isCamelCase('name2'), true);
+    assert.equal(isCamelCase('Name2'), false);
   });
 
-  test('isPascalCase', () => {
-    expect(isPascalCase('')).toBe(true);
+  it('isPascalCase', () => {
+    assert.equal(isPascalCase(''), true);
 
-    expect(isPascalCase('first-last')).toBe(false);
-    expect(isPascalCase('First-last')).toBe(false);
-    expect(isPascalCase('First-Last')).toBe(false);
+    assert.equal(isPascalCase('first-last'), false);
+    assert.equal(isPascalCase('First-last'), false);
+    assert.equal(isPascalCase('First-Last'), false);
 
-    expect(isPascalCase('firstLast')).toBe(false);
-    expect(isPascalCase('FirstLast')).toBe(true);
+    assert.equal(isPascalCase('firstLast'), false);
+    assert.equal(isPascalCase('FirstLast'), true);
 
-    expect(isPascalCase('First')).toBe(true);
-    expect(isPascalCase('first')).toBe(false);
+    assert.equal(isPascalCase('First'), true);
+    assert.equal(isPascalCase('first'), false);
 
-    expect(isPascalCase('name-2')).toBe(false);
-    expect(isPascalCase('name2')).toBe(false);
-    expect(isPascalCase('Name2')).toBe(true);
+    assert.equal(isPascalCase('name-2'), false);
+    assert.equal(isPascalCase('name2'), false);
+    assert.equal(isPascalCase('Name2'), true);
   });
 
-  test('pascalCase', () => {
-    expect(pascalCase('')).toBe('');
+  it('pascalCase', () => {
+    assert.equal(pascalCase(''), '');
 
-    expect(pascalCase('first-last')).toBe('FirstLast');
-    expect(() => pascalCase('First-last')).toThrow(RangeError);
-    expect(() => pascalCase('First-Last')).toThrow(RangeError);
+    assert.equal(pascalCase('first-last'), 'FirstLast');
+    assert.throws(() => pascalCase('First-last'), RangeError);
+    assert.throws(() => pascalCase('First-Last'), RangeError);
 
-    expect(pascalCase('firstLast')).toBe('FirstLast');
-    expect(pascalCase('FirstLast')).toBe('FirstLast');
+    assert.equal(pascalCase('firstLast'), 'FirstLast');
+    assert.equal(pascalCase('FirstLast'), 'FirstLast');
 
-    expect(pascalCase('First')).toBe('First');
-    expect(pascalCase('first')).toBe('First');
+    assert.equal(pascalCase('First'), 'First');
+    assert.equal(pascalCase('first'), 'First');
 
-    expect(pascalCase('name-2')).toBe('Name2');
-    expect(pascalCase('name2')).toBe('Name2');
-    expect(pascalCase('Name2')).toBe('Name2');
+    assert.equal(pascalCase('name-2'), 'Name2');
+    assert.equal(pascalCase('name2'), 'Name2');
+    assert.equal(pascalCase('Name2'), 'Name2');
   });
 
-  test('kebabCase', () => {
-    expect(kebabCase('')).toBe('');
+  it('kebabCase', () => {
+    assert.equal(kebabCase(''), '');
 
-    expect(kebabCase('first-last')).toBe('first-last');
-    expect(() => kebabCase('First-last')).toThrow(RangeError);
-    expect(() => kebabCase('First-Last')).toThrow(RangeError);
+    assert.equal(kebabCase('first-last'), 'first-last');
+    assert.throws(() => kebabCase('First-last'), RangeError);
+    assert.throws(() => kebabCase('First-Last'), RangeError);
 
-    expect(kebabCase('firstLast')).toBe('first-last');
-    expect(kebabCase('FirstLast')).toBe('first-last');
+    assert.equal(kebabCase('firstLast'), 'first-last');
+    assert.equal(kebabCase('FirstLast'), 'first-last');
 
-    expect(kebabCase('First')).toBe('first');
-    expect(kebabCase('first')).toBe('first');
+    assert.equal(kebabCase('First'), 'first');
+    assert.equal(kebabCase('first'), 'first');
 
-    expect(kebabCase('name-2')).toBe('name-2');
-    expect(kebabCase('name2')).toBe('name2');
-    expect(kebabCase('Name2')).toBe('name2');
+    assert.equal(kebabCase('name-2'), 'name-2');
+    assert.equal(kebabCase('name2'), 'name2');
+    assert.equal(kebabCase('Name2'), 'name2');
   });
 });
