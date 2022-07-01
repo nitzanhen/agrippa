@@ -20,8 +20,8 @@ export const getEnvironmentPlugin = (options: Options, logger: Logger) => {
     case Environment.PREACT: return new PreactPlugin(options);
     default: {
       logger.warn(
+        '',
         'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
-        ''
       );
       return null;
     };

@@ -3,14 +3,20 @@ import { hideBin } from 'yargs/helpers';
 import { generateCommand } from './generate';
 import { initCommand } from './init';
 
-// Init yargs
-yargs(hideBin(process.argv)).command(generateCommand)
-  .command(initCommand)
-  .recommendCommands()
+const y = yargs(hideBin(process.argv));
+
+y.command(generateCommand);
+y.command(initCommand);
+y.command({
+  command: ['$0'],
+  handler: () => void y.showHelp()
+});
+
+y.recommendCommands()
   .showHelpOnFail(false)
-  .strict()
-  .demandCommand(1, 'Please specify a command')
-  .parseAsync()
+  .strict();
+
+y.parseAsync()
   .catch(console.error);
 
 
