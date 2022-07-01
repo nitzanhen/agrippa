@@ -12,8 +12,6 @@ const thisPath = typeof import.meta !== 'undefined'
 
 const pkgJsonPath = findUp.sync('package.json', { cwd: thisPath })!;
 
-console.log(thisPath, pkgJsonPath);
-
 /**
  * This is *Agrippa's* package.json.
  */
