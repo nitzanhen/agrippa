@@ -107,5 +107,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   const output = await context.execute();
 
+  logger.info('Generation successful. Cheers!');
+
   return output;
 }
