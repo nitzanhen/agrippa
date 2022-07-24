@@ -1,16 +1,8 @@
 import { join } from 'path';
 import { execSync } from 'child_process';
+import { strict as assert } from 'assert';
 import { mkdirSync, readdirSync, readFileSync } from 'fs';
-import { sync as fgSync } from 'fast-glob';
-
-const safeTry = <T>(fn: () => T): { ok: true, data: T } | { ok: false, err: Error } => {
-  try {
-    return { ok: true, data: fn() };
-  }
-  catch (e) {
-    return { ok: false, err: e };
-  }
-};
+import { sync as globSync } from 'fast-glob';
 
 /** Simple representation of a file found in an integration test case */
 interface TestFile {
@@ -46,26 +38,29 @@ const isTestFile = (ent: TestFile | TestDir): ent is TestFile => 'data' in ent;
  * Scans the directory resolved from the given path.
  * Returns all files and folders in that directory, as a `ScannedDir` object.
  */
-const scanDir = (dirPath: string): ScannedDir =>
-  fgSync('**/*', {
+const scanDir = (dirPath: string): ScannedDir => {
+  const paths = globSync('**/*', {
     cwd: dirPath,
     onlyFiles: false,
     markDirectories: true,
-  })
-    .map(path =>
-      path.endsWith('/')
-        ? { path }
-        : {
-          path,
-          data: readFileSync(join(dirPath, path), 'utf-8')
-        }
-    )
-    .reduce(({ files, dirs }, ent) =>
-      isTestFile(ent)
-        ? { files: [...files, ent], dirs }
-        : { files, dirs: [...dirs, ent] },
-      { files: [] as TestFile[], dirs: [] as TestDir[] }
+  });
+
+  const entities: (TestFile | TestDir)[] =
+    paths.map(path => path.endsWith('/')
+      ? { path }
+      : { path, data: readFileSync(join(dirPath, path), 'utf-8') }
     );
+
+  const grouped = entities.reduce(({ files, dirs }, ent) =>
+    isTestFile(ent)
+      ? { files: [...files, ent], dirs }
+      : { files, dirs: [...dirs, ent] },
+    { files: [] as TestFile[], dirs: [] as TestDir[] }
+  );
+
+  return grouped;
+};
+
 
 /** 
  * Runs a test case, specified by its name. 
@@ -82,17 +77,17 @@ const runCase = (caseName: string): TestCase => {
   const solutionDir = join(casePath, 'solution');
   const solution = scanDir(solutionDir);
 
-  const testInfo = safeTry(() =>
-    JSON.parse(
+  let testInfo: TestInfo;
+  try {
+    testInfo = JSON.parse(
       readFileSync(join(casePath, 'testinfo.json'), 'utf-8')
-    ) as TestInfo
-  );
-
-  if (!testInfo.ok) {
+    );
+  }
+  catch (e) {
     throw new Error(`Reading testinfo.json failed for case ${caseName}. Please make sure the file exists.`);
   }
 
-  const { name, command } = testInfo.data;
+  const { name, command } = testInfo;
 
   // Run Agrippa & scan output files
 
@@ -100,19 +95,18 @@ const runCase = (caseName: string): TestCase => {
   try {
     mkdirSync(outputDir);
   }
-  catch(e) {
-    if(e.code !== 'EEXIST') {
+  catch (e) {
+    if (e.code !== 'EEXIST') {
       console.warn(`output directory for case ${caseName} already exists.`);
       throw e;
     }
   }
 
-  const logs = safeTry(() => execSync(command, { cwd: outputDir }));
-  if (logs.ok) {
-    console.log(logs.data.toString());
+  try {
+    execSync(command, { cwd: outputDir, encoding: 'utf-8', stdio: 'inherit' });
   }
-  else {
-    console.error((logs as any).err);
+  catch (e) {
+    console.error(e);
   }
 
   const output = scanDir(outputDir);
@@ -122,30 +116,51 @@ const runCase = (caseName: string): TestCase => {
 
 const caseNames = readdirSync(__dirname, { withFileTypes: true })
   .filter(dirent => dirent.isDirectory())
-  .map(dirent => dirent.name);
+  .map(dirent => dirent.name)
+  .slice(0, 1);
 
-describe.each(caseNames)('Case $#: %s', (name) => {
-  const { solution, output } = runCase(name);
+const testCases: TestCase[] = caseNames.map(caseName => runCase(caseName));
 
-  // Compare solution & output
+describe('End-to-end tests', () => {
 
-  test('Solution and output have the same number of directories', () => {
-    expect(output.dirs.length).toBe(solution.dirs.length);
-  });
+  for (let i = 0; i < caseNames.length; i++) {
+    const caseName = caseNames[i];
+    describe(`Case ${i}: ${caseName}`, () => {
 
-  test('Solution and output have the same number of files', () => {
-    expect(output.files.length).toBe(solution.files.length);
-  });
+      const { solution, output } = testCases[i];
 
-  const outputDirPaths = output.dirs.map(d => d.path);
-  solution.dirs.length && test.each(solution.dirs)('Dir $path generated', ({ path }) => {
-    expect(outputDirPaths).toContain(path);
-  });
+      // Compare solution & output
 
-  solution.files.length && test.each(solution.files)('File $path generated', ({ path, data }) => {
-    const outputFile = output.files.find(f => f.path === path);
+      it('Solution and output have the same number of directories', () => {
+        assert.equal(output.dirs.length, solution.dirs.length);
+      });
 
-    expect(outputFile).toBeTruthy();
-    expect(outputFile?.data).toBe(data);
-  });
+      it('Solution and output have the same number of files', () => {
+        assert.equal(output.files.length, solution.files.length);
+      });
+
+
+      const outputDirPaths = output.dirs.map(d => d.path);
+      for (const dir of solution.dirs) {
+        const { path } = dir;
+
+        it(`Dir ${path} generated`, () => {
+          assert.ok(outputDirPaths.includes(path));
+        });
+      }
+
+      for (const file of solution.files) {
+        const { path, data } = file;
+
+        const outputFile = output.files.find(f => f.path === path);
+
+        it(`File ${path} matches solution`, () => {
+          assert.ok(outputFile);
+          assert.equal(outputFile?.data, data);
+        });
+      }
+    });
+    i++;
+  }
+
 });
