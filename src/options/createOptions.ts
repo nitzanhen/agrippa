@@ -38,10 +38,6 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
 
   const framework = input.framework ?? defaultFramework(packageJson);
 
-  const importReact = tsconfig?.compilerOptions?.jsx
-    ? !/^react-jsx/.test(tsconfig.compilerOptions.jsx)
-    : true;
-
   const createStylesFile = ([Styling.CSS, Styling.SCSS, Styling.STYLED_COMPONENTS] as any[]).includes(styling);
   const stylesFileExtension = (() => {
     switch (styling) {
@@ -62,7 +58,7 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
 
     framework: framework,
     reactOptions: framework === Framework.REACT || framework === Framework.REACT_NATIVE ? {
-      importReact,
+      importReact: false,
       propTypes: false
     } : undefined,
     solidjsOptions: framework === Framework.SOLIDJS ? {} : undefined,
