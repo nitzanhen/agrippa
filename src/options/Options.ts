@@ -1,4 +1,4 @@
-import { Environment } from './Environment';
+import { Framework } from './Framework';
 import { Styling } from './Styling';
 
 /** 
@@ -15,7 +15,7 @@ export interface Options {
     declaration: 'const' | 'function';
   }
 
-  environment: Environment | string;
+  framework: Framework | string;
   reactOptions?: {
     importReact: boolean;
     propTypes: boolean;

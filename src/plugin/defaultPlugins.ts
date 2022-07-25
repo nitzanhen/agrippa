@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
 import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Logger } from '../logger';
-import { Environment, Options } from '../options';
+import { Framework, Options } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
 import { joinLines } from '../utils';
 import { getStackTags } from '../utils/getStackTags';
@@ -12,16 +12,16 @@ import { StackTagPlugin } from './StackTagPlugin';
 
 const getDirPath = ({ baseDir, destination, name }: Options) => resolve(baseDir ?? process.cwd(), destination, name);
 
-export const getEnvironmentPlugin = (options: Options, logger: Logger) => {
-  switch (options.environment) {
-    case Environment.REACT: return new ReactPlugin(options);
-    case Environment.REACT_NATIVE: return new ReactNativePlugin(options);
-    case Environment.SOLIDJS: return new SolidPlugin(options);
-    case Environment.PREACT: return new PreactPlugin(options);
+export const getFrameworkPlugin = (options: Options, logger: Logger) => {
+  switch (options.framework) {
+    case Framework.REACT: return new ReactPlugin(options);
+    case Framework.REACT_NATIVE: return new ReactNativePlugin(options);
+    case Framework.SOLIDJS: return new SolidPlugin(options);
+    case Framework.PREACT: return new PreactPlugin(options);
     default: {
       logger.warn(
         '',
-        'No environment flag was received, and Agrippa was unable to detect the environment automatically. Please check your configuration.',
+        'No framework flag was received, and Agrippa was unable to detect the framework automatically. Please check your configuration.',
       );
       return null;
     };
@@ -39,9 +39,9 @@ export function defaultComponentFile(options: Options, logger: Logger, styleFile
 
   const composer = new CodeComposer(options);
 
-  const environmentPlugin = getEnvironmentPlugin(options, logger);
-  if (environmentPlugin) {
-    composer.addPlugin(environmentPlugin);
+  const frameworkPlugin = getFrameworkPlugin(options, logger);
+  if (frameworkPlugin) {
+    composer.addPlugin(frameworkPlugin);
   }
   if (styleFilePath) {
     composer.addPlugin(new ImportPlugin({

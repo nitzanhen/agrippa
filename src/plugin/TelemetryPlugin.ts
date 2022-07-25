@@ -12,7 +12,7 @@ export class TelemetryPlugin extends Plugin {
     const { options, logger, version } = this.context;
 
     const runData = {
-      ...pick(options, 'environment', 'typescript', 'styling'),
+      ...pick(options, 'framework', 'typescript', 'styling'),
       version,
       /** @todo refactor to process.env.DEV variable */
       dev: options.debug

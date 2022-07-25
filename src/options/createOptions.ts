@@ -1,7 +1,7 @@
 import { DeepPartial, kebabCase, pascalCase } from '../utils';
 import { assignDefaults } from '../utils/object';
 import { Options } from './Options';
-import { Environment } from './Environment';
+import { Framework } from './Framework';
 import { Styling } from './Styling';
 
 export interface InputOptions extends DeepPartial<Options> {
@@ -9,20 +9,20 @@ export interface InputOptions extends DeepPartial<Options> {
 }
 
 
-export const defaultEnvironment = (packageJson: any): Options['environment'] => {
+export const defaultFramework = (packageJson: any): Options['framework'] => {
   const dependencies: Record<string, string> = packageJson?.dependencies ?? {};
 
   if ('react-native' in dependencies) {
-    return Environment.REACT_NATIVE;
+    return Framework.REACT_NATIVE;
   }
   else if ('preact' in dependencies) {
-    return Environment.PREACT;
+    return Framework.PREACT;
   }
   else if ('solid-js' in dependencies) {
-    return Environment.SOLIDJS;
+    return Framework.SOLIDJS;
   }
   else if ('react' in dependencies) {
-    return Environment.REACT;
+    return Framework.REACT;
   }
 
   return '';
@@ -36,7 +36,7 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
   const name = pascalCase(input.name);
   input.name = name;
 
-  const environment = input.environment ?? defaultEnvironment(packageJson);
+  const framework = input.framework ?? defaultFramework(packageJson);
 
   const importReact = tsconfig?.compilerOptions?.jsx
     ? !/^react-jsx/.test(tsconfig.compilerOptions.jsx)
@@ -60,14 +60,14 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
       declaration: 'const'
     },
 
-    environment,
-    reactOptions: environment === Environment.REACT || environment === Environment.REACT_NATIVE ? {
+    framework: framework,
+    reactOptions: framework === Framework.REACT || framework === Framework.REACT_NATIVE ? {
       importReact,
       propTypes: false
     } : undefined,
-    solidjsOptions: environment === Environment.SOLIDJS ? {} : undefined,
-    preactOptions: environment === Environment.PREACT ? {} : undefined,
-    reactNativeOptions: environment === Environment.REACT_NATIVE ? {} : undefined,
+    solidjsOptions: framework === Framework.SOLIDJS ? {} : undefined,
+    preactOptions: framework === Framework.PREACT ? {} : undefined,
+    reactNativeOptions: framework === Framework.REACT_NATIVE ? {} : undefined,
 
     typescript: !!tsconfig,
     typescriptOptions: (!!tsconfig || input.typescript) ? {

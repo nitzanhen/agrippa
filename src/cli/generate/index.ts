@@ -1,6 +1,6 @@
 import yargs, { BuilderCallback, CommandModule } from 'yargs';
 import { InputOptions } from '../../options';
-import { Environment } from '../../options/Environment';
+import { Framework } from '../../options/Framework';
 import { Styling } from '../../options/Styling';
 import { italic, Logger } from '../../logger';
 import { run } from '../../run';
@@ -15,10 +15,10 @@ const builder = async (yargs: yargs.Argv) =>
     demandOption: true
   })
     .options({
-      environment: {
+      framework: {
         type: 'string',
-        alias: 'env',
-        desc: 'Which environment to generate the components for'
+        alias: 'fw',
+        desc: 'Which framework to generate the components for'
       },
       styling: {
         type: 'string',
@@ -29,7 +29,6 @@ const builder = async (yargs: yargs.Argv) =>
         type: 'boolean',
         desc: 'Whether to generate a scoped `module` stylesheet. Relevant only for `css` or `scss` styling options.'
       },
-
       typescript: {
         type: 'boolean',
         alias: 'ts',
@@ -44,7 +43,7 @@ const builder = async (yargs: yargs.Argv) =>
       'import-react': {
         alias: 'importReact',
         type: 'boolean',
-        desc: 'Whether to import React. Relevant only for `react` or `react-native` environments.'
+        desc: 'Whether to import React. Relevant only for `react` or `react-native`.'
       },
       overwrite: {
         type: 'boolean'
@@ -113,15 +112,15 @@ export const generateCommand: GenerateCommand = {
   describe: 'Generate a component',
   builder,
   handler: async argv => {
-    const environment = Environment.fromString(argv.environment!) ?? argv.environment;
+    const framework = Framework.fromString(argv.framework!) ?? argv.framework;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
 
-    cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(argv.name)} in environment ${italic(environment)}`);
+    cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(argv.name)} with framework ${italic(framework)}`);
     cliLogger.debug('argv:', argv);
 
     const inputOptions: InputOptions = {
       name: argv.name,
-      environment,
+      framework,
 
       typescript: argv.typescript,
       typescriptOptions: {
