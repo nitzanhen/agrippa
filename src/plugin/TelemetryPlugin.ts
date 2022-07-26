@@ -25,6 +25,7 @@ export class TelemetryPlugin extends Plugin {
 
       await axios.post(TELEMETRY_ENDPOINT, runData, {
         // If debug is off, set a very short timeout (0 means no timeout)
+        // so that the process doesn't hang
         timeout: options.debug ? 0 : 1
       }).catch(e => {
         if(!options.debug && e.code === 'ECONNABORTED') {
