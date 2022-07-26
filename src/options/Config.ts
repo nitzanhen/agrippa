@@ -8,8 +8,8 @@ import { Options } from './Options';
  */
 export interface Config {
   options?: DeepPartial<Options>;
+  plugins?: Plugin[];
   files?: CustomFileQueries;
-  plugins?: Plugin[]
 };
 
 /**
