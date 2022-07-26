@@ -3,11 +3,13 @@ import { Plugin } from '../plugin';
 import { DeepPartial } from '../utils';
 import { Options } from './Options';
 
+type ConfigOptions = DeepPartial<Omit<Options, 'name'>>;
+
 /**
  * Defines the structure of the default export of `agrippa.config.mjs`.
  */
 export interface Config {
-  options?: DeepPartial<Options>;
+  options?: ConfigOptions;
   plugins?: Plugin[];
   files?: CustomFileQueries;
 };
