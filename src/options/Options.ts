@@ -7,8 +7,6 @@ import { Styling } from './Styling';
 export interface Options {
   /** Component's name, *in pascal case* */
   name: string,
-  /** Component's name in kebab case */
-  kebabName: string  
 
   componentOptions: {
     exportType: 'named' | 'default';

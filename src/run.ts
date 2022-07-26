@@ -8,6 +8,7 @@ import { assignDefaults } from './utils/object';
 import { Plugin } from './plugin';
 import { UpdatesPlugin } from './plugin/UpdatesPlugin';
 import { TelemetryPlugin } from './plugin/TelemetryPlugin';
+import { kebabCase } from './utils';
 
 export interface RunOptions {
   /** *paths* to envFiles that Agrippa should fetch */
@@ -69,7 +70,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
     options,
     variables: {
       'ComponentName': options.name,
-      'component-name': options.kebabName
+      'component-name': kebabCase(options.name)
     },
     logger
   });

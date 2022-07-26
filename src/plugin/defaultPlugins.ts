@@ -3,7 +3,7 @@ import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativeP
 import { Logger } from '../logger';
 import { Framework, Options } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
-import { joinLines } from '../utils';
+import { joinLines, kebabCase } from '../utils';
 import { getStackTags } from '../utils/getStackTags';
 import { CreateDirPlugin } from './CreateDirPlugin';
 import { CreateFilePlugin } from './CreateFilePlugin';
@@ -74,13 +74,13 @@ export function defaultIndexFile(options: Options): AgrippaFile {
 }
 
 export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
-  const { name, kebabName, typescript, styling, styleFileOptions, createStylesFile } = options;
+  const { name, typescript, styling, styleFileOptions, createStylesFile } = options;
 
   const dirPath = getDirPath(options);
 
   const stylesFileName = styling === 'styled-components'
     ? `${name}.styles.${typescript ? 'ts' : 'js'}`
-    : `${kebabName}${styleFileOptions?.module ? '.module' : ''}.${styling}`;
+    : `${kebabCase(name)}${styleFileOptions?.module ? '.module' : ''}.${styling}`;
 
   const stylesFilePath = join(dirPath, stylesFileName);
 

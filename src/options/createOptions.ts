@@ -1,4 +1,4 @@
-import { DeepPartial, kebabCase, pascalCase } from '../utils';
+import { DeepPartial, pascalCase } from '../utils';
 import { assignDefaults } from '../utils/object';
 import { Options } from './Options';
 import { Framework } from './Framework';
@@ -50,7 +50,6 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
 
   const defaults: Options = {
     name,
-    kebabName: kebabCase(name),
     componentOptions: {
       exportType: 'named',
       declaration: 'const'
