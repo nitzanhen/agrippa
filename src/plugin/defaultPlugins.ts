@@ -1,7 +1,7 @@
 import { join, resolve } from 'path';
-import { CodeComposer, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { CodeComposer, Import, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Logger } from '../logger';
-import { Framework, Options } from '../options';
+import { Framework, Options, Styling } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
 import { joinLines, kebabCase } from '../utils';
 import { getStackTags } from '../utils/getStackTags';
@@ -28,7 +28,27 @@ export const getFrameworkPlugin = (options: Options, logger: Logger) => {
   }
 };
 
-export function defaultComponentFile(options: Options, logger: Logger, styleFilePath?: string): AgrippaFile {
+export function defaultStyleFileImport(options: Options, logger: Logger, styleFileName: string): Import | undefined {
+  const { styling, name, styleFileOptions } = options;
+
+  if (styling === Styling.CSS || styling === Styling.SCSS) {
+    return {
+      module: `./${styleFileName}`,
+      defaultImport: styleFileOptions?.module ? 'classes' : undefined
+    };
+  }
+  if (styling === Styling.STYLED_COMPONENTS) {
+    return {
+      module: `${name}.styles`,
+      namedImports: ['Root']
+    };
+  }
+
+  logger.debug(`defaultStyleFileImport called for unknown styling option, ${styling}`);
+  return undefined;
+}
+
+export function defaultComponentFile(options: Options, logger: Logger, additionalImports?: Import[]): AgrippaFile {
   const { name, typescript } = options;
 
   const dirPath = getDirPath(options);
@@ -43,12 +63,9 @@ export function defaultComponentFile(options: Options, logger: Logger, styleFile
   if (frameworkPlugin) {
     composer.addPlugin(frameworkPlugin);
   }
-  if (styleFilePath) {
-    composer.addPlugin(new ImportPlugin({
-      module: styleFilePath,
-      defaultImport: options.styleFileOptions?.module ? 'classes' : undefined
-    }));
-  }
+  additionalImports?.map(i => {
+    composer.addPlugin(new ImportPlugin(i));
+  });
 
   if (options.reactOptions?.propTypes) {
     composer.addPlugin(new PropTypesPlugin());
@@ -84,6 +101,10 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
 
   const stylesFilePath = join(dirPath, stylesFileName);
 
+  const styleFileImport = createStylesFile
+    ? defaultStyleFileImport(options, logger, stylesFileName)
+    : undefined;
+
   return ([
     /** @todo find a good way to do this from the plugins, not add a dedicated one */
     new StackTagPlugin(
@@ -94,7 +115,7 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
       varKey: 'dirPath'
     }),
     new CreateFilePlugin({
-      file: defaultComponentFile(options, logger, createStylesFile ? `./${stylesFileName}` : undefined),
+      file: defaultComponentFile(options, logger, styleFileImport && [styleFileImport]),
       varKey: 'componentPath'
     }),
     createStylesFile && new CreateFilePlugin({
