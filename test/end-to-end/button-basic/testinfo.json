@@ -1,5 +1,5 @@
 {
   "name": "button-basic",
   "description": "A bare test - no config, no options, just plain generation.",
-  "command": "agrippa gen button --env react"
+  "command": "agrippa gen button --fw react"
 }
