@@ -5,6 +5,8 @@ import { initCommand } from './init';
 
 const y = yargs(hideBin(process.argv));
 
+y.scriptName('agrippa');
+
 y.command(generateCommand);
 y.command(initCommand);
 y.command({
