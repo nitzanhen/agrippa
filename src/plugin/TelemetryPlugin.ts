@@ -14,8 +14,6 @@ export class TelemetryPlugin extends Plugin {
     const runData = {
       ...pick(options, 'framework', 'typescript', 'styling'),
       version,
-      /** @todo refactor to process.env.DEV variable */
-      dev: options.debug
     };
 
     const sendTime = Date.now();
