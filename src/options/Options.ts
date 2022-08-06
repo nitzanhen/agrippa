@@ -16,7 +16,6 @@ export interface Options {
   framework: Framework | string;
   reactOptions?: {
     importReact: boolean;
-    propTypes: boolean;
   },
   solidjsOptions?: {},
   preactOptions?: {},

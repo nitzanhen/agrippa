@@ -1,5 +1,5 @@
 import { join, resolve } from 'path';
-import { CodeComposer, Import, ImportPlugin, PreactPlugin, PropTypesPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
+import { CodeComposer, Import, ImportPlugin, PreactPlugin, ReactNativePlugin, ReactPlugin, SolidPlugin } from '../composer';
 import { Logger } from '../logger';
 import { Framework, Options, Styling } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
@@ -67,10 +67,6 @@ export function defaultComponentFile(options: Options, logger: Logger, additiona
   additionalImports?.map(i => {
     composer.addPlugin(new ImportPlugin(i));
   });
-
-  if (options.reactOptions?.propTypes) {
-    composer.addPlugin(new PropTypesPlugin());
-  }
 
   return new AgrippaFile(componentFilePath, composer.compose());
 }

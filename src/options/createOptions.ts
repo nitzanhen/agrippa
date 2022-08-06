@@ -58,7 +58,6 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
     framework: framework,
     reactOptions: framework === Framework.REACT || framework === Framework.REACT_NATIVE ? {
       importReact: false,
-      propTypes: false
     } : undefined,
     solidjsOptions: framework === Framework.SOLIDJS ? {} : undefined,
     preactOptions: framework === Framework.PREACT ? {} : undefined,

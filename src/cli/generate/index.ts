@@ -72,11 +72,6 @@ const builder = async (yargs: yargs.Argv) =>
         choices: ['const', 'function'] as const,
         desc: 'Whether to declare the component as a const with an arrow function or a function declaration.',
       },
-      'prop-types': {
-        type: 'boolean',
-        alias: 'propTypes',
-        desc: 'Whether to include a propTypes declaration for the component (for React or React Native projects).'
-      },
       'post-command': {
         alias: 'postCommand',
         type: 'string',
@@ -133,8 +128,7 @@ export const generateCommand: GenerateCommand = {
       },
 
       reactOptions: {
-        importReact: argv.importReact,
-        propTypes: argv.propTypes
+        importReact: argv.importReact
       },
 
       styling,
