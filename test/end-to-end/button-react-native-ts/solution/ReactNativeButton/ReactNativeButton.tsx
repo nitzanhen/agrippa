@@ -1,9 +1,8 @@
-import React from 'react';
 import { View } from 'react-native';
 
 export interface ReactNativeButtonProps {}
 
-export const ReactNativeButton: React.VFC<ReactNativeButtonProps> = () => {
+export const ReactNativeButton = (props: ReactNativeButtonProps) => {
 	
 	return (
 		<View></View>

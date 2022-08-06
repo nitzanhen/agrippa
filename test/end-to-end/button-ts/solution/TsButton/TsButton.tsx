@@ -1,8 +1,8 @@
-import React from 'react';
+
 
 export interface TsButtonProps {}
 
-export const TsButton: React.VFC<TsButtonProps> = () => {
+export const TsButton = (props: TsButtonProps) => {
 	
 	return (
 		<div></div>

@@ -4,6 +4,7 @@ import { Logger } from '../logger';
 import { Framework, Options, Styling } from '../options';
 import { AgrippaDir, AgrippaFile } from '../stage';
 import { joinLines, kebabCase } from '../utils';
+import { declareConst } from '../utils/codegen';
 import { getStackTags } from '../utils/getStackTags';
 import { CreateDirPlugin } from './CreateDirPlugin';
 import { CreateFilePlugin } from './CreateFilePlugin';
@@ -39,7 +40,7 @@ export function defaultStyleFileImport(options: Options, logger: Logger, styleFi
   }
   if (styling === Styling.STYLED_COMPONENTS) {
     return {
-      module: `${name}.styles`,
+      module: `./${name}.styles`,
       namedImports: ['Root']
     };
   }
@@ -99,6 +100,13 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
     ? `${name}.styles.${typescript ? 'ts' : 'js'}`
     : `${kebabCase(name)}${styleFileOptions?.module ? '.module' : ''}.${styling}`;
 
+  const styleFileContent = styling === 'styled-components'
+    ? joinLines(
+      Import.stringify({ module: 'styled-components', defaultImport: 'styled' }),
+      declareConst('Root', 'styled.div``', true)
+    )
+    : '';
+
   const stylesFilePath = join(dirPath, stylesFileName);
 
   const styleFileImport = createStylesFile
@@ -119,7 +127,7 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
       varKey: 'componentPath'
     }),
     createStylesFile && new CreateFilePlugin({
-      file: new AgrippaFile(stylesFilePath, ''),
+      file: new AgrippaFile(stylesFilePath, styleFileContent),
       varKey: 'stylesPath'
     }),
     new CreateFilePlugin({

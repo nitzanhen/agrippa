@@ -1,8 +1,8 @@
-import React from 'react';
+
 
 export interface DefExpButtonProps {}
 
-const DefExpButton: React.VFC<DefExpButtonProps> = () => {
+const DefExpButton = (props: DefExpButtonProps) => {
 	
 	return (
 		<div></div>

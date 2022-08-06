@@ -1,7 +1,6 @@
-import React from 'react';
 import { View } from 'react-native';
 
-export const ReactNativeButton = () => {
+export const ReactNativeButton = (props) => {
 	
 	return (
 		<View></View>

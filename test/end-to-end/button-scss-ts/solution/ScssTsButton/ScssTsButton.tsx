@@ -1,9 +1,8 @@
-import React from 'react';
 import classes from './scss-ts-button.module.scss';
 
 export interface ScssTsButtonProps {}
 
-export const ScssTsButton: React.VFC<ScssTsButtonProps> = () => {
+export const ScssTsButton = (props: ScssTsButtonProps) => {
 	
 	return (
 		<div></div>

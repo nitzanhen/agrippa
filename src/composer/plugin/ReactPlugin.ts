@@ -1,4 +1,4 @@
-import { Options } from '../../options';
+import { Options, Styling } from '../../options';
 import { Imports } from '../Imports';
 import { JSXPlugin } from './JSXPlugin';
 
@@ -13,6 +13,10 @@ export class ReactPlugin extends JSXPlugin {
 
   constructor(protected options: Options) {
     super(options);
+
+    if (options.styling === Styling.STYLED_COMPONENTS) {
+      this.rootTag = 'Root';
+    }
 
     const { reactOptions } = options;
     if (!reactOptions) {

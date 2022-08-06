@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from './css-ts-button.module.css';
 
 export interface CssTsButtonProps {}

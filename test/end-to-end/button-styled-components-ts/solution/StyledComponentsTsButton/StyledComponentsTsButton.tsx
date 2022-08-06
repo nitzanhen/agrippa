@@ -1,9 +1,8 @@
-import React from 'react';
 import { Root } from './StyledComponentsTsButton.styles';
 
 export interface StyledComponentsTsButtonProps {}
 
-export const StyledComponentsTsButton: React.VFC<StyledComponentsTsButtonProps> = () => {
+export const StyledComponentsTsButton = (props: StyledComponentsTsButtonProps) => {
 	
 	return (
 		<Root></Root>
