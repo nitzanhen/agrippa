@@ -65,7 +65,7 @@ export class CreateDirStage extends Stage {
         `The resolved path for the directory ${italic(dirName)} falls outside the base directory.`,
         `Base directory: ${italic(baseDir)}`,
         `Resolved directory: ${italic(path)}`,
-        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in .agripparc.json"
+        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in agrippa.config.mjs"
       ));
 
       return new StageResult(StageStatus.ERROR, 'Directory path outside baseDir');
