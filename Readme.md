@@ -37,14 +37,7 @@ Alternatively, if you're already familiar with Agrippa, check out our [Set up Ag
 
 ## See it in action
 
-<div align="center">
-  <video controls loop autoplay muted align="center" width="95%">
-    <source src="https://www.agrippa.dev/showcase.mp4" type="video/mp4">
-  </video>
-</div>
-<br/>
-
-<br/>
+https://user-images.githubusercontent.com/58311807/188754758-1a5ea10b-6227-4c45-9976-bd115a8729c8.mp4
 
 ## Community
 
