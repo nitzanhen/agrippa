@@ -5,11 +5,12 @@
     </td>
     <td align="center" width="400px">
         <h1 display="inline">Agrippa</h1>
-        <p align="center"> | 
-        <a href="https://www.agrippa.dev/">Docs</a> | 
-        <a href="https://github.com/NitzanHen/agrippa">GitHub</a> | 
-        <a href="https://www.npmjs.com/package/agrippa">npm</a> 
-        | 
+        <p align="center">
+        <a href="https://www.agrippa.dev/">Docs</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://github.com/NitzanHen/agrippa">GitHub</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a href="https://www.npmjs.com/package/agrippa">npm</a>
       </p>
     </td>
   </tr>
