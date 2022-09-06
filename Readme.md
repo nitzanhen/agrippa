@@ -1,8 +1,16 @@
-<p align="center">
-  <img src="agrippa.svg" width="150px" alt="Agrippa logo" />
-  <h1 align="center">Agrippa</h1>
-  <p align="center"> | Docs | GitHub | NPM | </p>
-</p>
+<table align="center">
+  <tr>
+    <td>
+      <img src="agrippa.svg" align="center" width="150px" alt="Agrippa logo" />
+    </td>
+    <td width="70%" align="center">
+        <h1 display="inline">Agrippa</h1>
+        <p align="center"> | Docs | GitHub | NPM | </p>
+    </td>
+  </tr>
+</table>
+
+
 
 Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilerplate.
 It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different environments. 
