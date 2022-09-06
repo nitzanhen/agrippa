@@ -1,6 +1,8 @@
-# Agrippa
-[![npm](https://img.shields.io/npm/v/agrippa?logo=npm&color=CB3837)](https://www.npmjs.com/package/agrippa)
-[![license](https://img.shields.io/github/license/nitzanhen/agrippa?color=yellow)](https://choosealicense.com/licenses/mit/)
+<p align="center">
+  <img src="agrippa.svg" width="150px" alt="Agrippa logo" />
+  <h1 align="center">Agrippa</h1>
+  <p align="center"> | Docs | GitHub | NPM | </p>
+</p>
 
 Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilerplate.
 It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different environments. 
