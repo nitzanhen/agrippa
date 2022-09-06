@@ -1,9 +1,9 @@
 <table align="center">
   <tr>
     <td>
-      <img src="agrippa.svg" align="center" width="200px" alt="Agrippa logo" />
+      <img src="agrippa.svg" align="center" width="150px" alt="Agrippa logo" />
     </td>
-    <td align="center" width="300px">
+    <td align="center" width="400px">
         <h1 display="inline">Agrippa</h1>
         <p align="center"> | 
         <a href="https://www.agrippa.dev/">Docs</a> | 
