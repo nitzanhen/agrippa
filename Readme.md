@@ -6,13 +6,13 @@
 Agrippa is a CLI that helps frontend developers generate new components without the boilerplate: in a single command, it can create all the folders and files you need in a full component, with starting code tailored to your stack.
 
 <hr/>
-  <h2 align="center">
+  <h3 align="center">
     <strong>
       <a href="https://github.com/NitzanHen/agrippa">Getting Started</a>
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
       <a href="https://github.com/NitzanHen/agrippa">Documentation</a>
     </strong>
-  </h2>
+  </h3>
 <hr/>
 
 <br/>
@@ -38,6 +38,8 @@ Alternatively, if you're already familiar with Agrippa, check out our [Set up Ag
 ## See it in action
 
 https://user-images.githubusercontent.com/58311807/188754758-1a5ea10b-6227-4c45-9976-bd115a8729c8.mp4
+
+<br/>
 
 ## Community
 
