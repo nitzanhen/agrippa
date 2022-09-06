@@ -1,11 +1,16 @@
 <table align="center">
   <tr>
     <td>
-      <img src="agrippa.svg" align="center" width="150px" alt="Agrippa logo" />
+      <img src="agrippa.svg" align="center" width="200px" alt="Agrippa logo" />
     </td>
-    <td width="70%" align="center">
+    <td align="center" width="300px">
         <h1 display="inline">Agrippa</h1>
-        <p align="center"> | Docs | GitHub | NPM | </p>
+        <p align="center"> | 
+        <a href="https://www.agrippa.dev/">Docs</a> | 
+        <a href="https://github.com/NitzanHen/agrippa">GitHub</a> | 
+        <a href="https://www.npmjs.com/package/agrippa">npm</a> 
+        | 
+      </p>
     </td>
   </tr>
 </table>
