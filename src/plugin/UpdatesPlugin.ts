@@ -37,13 +37,12 @@ export class UpdatesPlugin extends Plugin {
       return latestVersion;
     }
     catch (e) {
-      if(e.code === 'ECONNABORTED') {
-        logger.debug('UpdatesPlugin - pinging the NPM registry timed out.');
-      }
-      else {
-        logger.warn('Failure at UpdatesPlugin - pinging the NPM registry failed. Check the debug output for more info.');
-      }
-      
+      logger.debug(`UpdatesPlugin - ${e.code === 'ECONNABORTED'
+        ? 'pinging the NPM registry timed out.'
+        : 'pinging the NPM registry failed.'
+        }`
+      );
+
       this.failed = true;
       logger.debug(e);
       return;
