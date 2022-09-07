@@ -5,6 +5,8 @@ import { Plugin } from './Plugin';
 
 const { diff, gt, lt } = semver;
 
+const AGRIPPA_NPM_ENDPOINT = 'https://registry.npmjs.org/agrippa/latest';
+
 /**
  * A plugin that checks if a newer version of Agrippa exists.
  * Pings the npm registry and compares the latest version there to the version of this running instance.
@@ -24,7 +26,9 @@ export class UpdatesPlugin extends Plugin {
     const sendTime = Date.now();
 
     try {
-      const res = await axios.get<{ version: string }>('https://registry.npmjs.org/agrippa/latest');
+      const res = await axios.get<{ version: string }>(AGRIPPA_NPM_ENDPOINT, {
+        timeout: 5_000
+      });
       const endTime = Date.now();
       logger.debug(`UpdatesPlugin: request resolved with status ${res.status}, took ${endTime - sendTime}ms`);
 
@@ -33,9 +37,15 @@ export class UpdatesPlugin extends Plugin {
       return latestVersion;
     }
     catch (e) {
-      logger.warn('Failure at UpdatesPlugin - pinging the NPM registry failed. Check the debug output for more info.');
-      logger.debug(e);
+      if(e.code === 'ECONNABORTED') {
+        logger.debug('UpdatesPlugin - pinging the NPM registry timed out.');
+      }
+      else {
+        logger.warn('Failure at UpdatesPlugin - pinging the NPM registry failed. Check the debug output for more info.');
+      }
+      
       this.failed = true;
+      logger.debug(e);
       return;
     }
   }

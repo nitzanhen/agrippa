@@ -34,8 +34,9 @@ export class CodeComposer {
       plugin.onCompose(blocks, imports, this.options);
     }
 
-    blocks.add(imports.getBlock());
-    
+    if(imports.size > 0) {
+      blocks.add(imports.getBlock());
+    }
 
     return blocks.join();
   }

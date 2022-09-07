@@ -25,6 +25,10 @@ export class Imports {
     this.imports.set(module, i);
   }
 
+  public get size() {
+    return this.imports.size;
+  }
+
   getBlock(): Block {
     const data = [...this.imports.values()].map(Import.stringify).join('\n') + '\n';
 

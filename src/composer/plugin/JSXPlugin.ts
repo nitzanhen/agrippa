@@ -109,11 +109,14 @@ export abstract class JSXPlugin implements ComposerPlugin {
     this.declareImports(imports);
 
     if (typescript) {
-      blocks.add({
-        key: TS_PROPS_BLOCK_KEY,
-        precedence: TS_PROPS_BLOCK_PRECEDENCE,
-        data: this.getTSPropsDeclaration()!
-      });
+      const propsDeclaration = this.getTSPropsDeclaration();
+      if (propsDeclaration) {
+        blocks.add({
+          key: TS_PROPS_BLOCK_KEY,
+          precedence: TS_PROPS_BLOCK_PRECEDENCE,
+          data: propsDeclaration
+        });
+      }
     }
 
     blocks.add({
