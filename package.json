@@ -1,6 +1,6 @@
 {
   "name": "agrippa",
-  "description": "The CLI for component generation",
+  "description": "The CLI for frontend component generation",
   "version": "2.0.0",
   "author": {
     "name": "Nitzan Hen",
@@ -42,7 +42,7 @@
   "bugs": {
     "url": "https://github.com/NitzanHen/agrippa/issues"
   },
-  "homepage": "https://github.com/NitzanHen/agrippa/#readme",
+  "homepage": "https://www.agrippa.dev",
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-eslint": "^8.0.1",
@@ -81,8 +81,11 @@
   },
   "keywords": [
     "react",
+    "react native",
+    "preact",
+    "solid-js",
     "cli",
-    "component",
-    "typescript"
+    "typescript",
+    "productivity"
   ]
 }
