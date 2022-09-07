@@ -30,7 +30,7 @@ npx agrippa init
 npx agrippa gen my-first-component
 ```
 
-For a complete introduction, take the short [Tutorial](https://www.agrippa.dev/getting-started/)! <br/>
+For a complete introduction, take the short [Getting Started](https://www.agrippa.dev/getting-started/) tutorial! <br/>
 Alternatively, if you're already familiar with Agrippa, check out our [Set up Agrippa in a project](https://www.agrippa.dev/guides/setup-agrippa-in-a-project/) guide.
 
 <br/>
@@ -40,6 +40,14 @@ Alternatively, if you're already familiar with Agrippa, check out our [Set up Ag
 https://user-images.githubusercontent.com/58311807/188754758-1a5ea10b-6227-4c45-9976-bd115a8729c8.mp4
 
 <br/>
+
+## Migrating from v1
+
+Agrippa 2.0 introduces some API changes - the config is now a JS file and is structured a bit differently, and some options have been changed - but at large the functionality and usage is the same as v1.
+
+To get a feel for the new version and see what's new, we recommend taking the new [Getting Started](https://www.agrippa.dev/getting-started/) tutorial, or the concise [Set up Agrippa in a project](https://www.agrippa.dev/guides/setup-agrippa-in-a-project/) guide.
+
+Lastly, our new docs site, [agrippa.dev](https://www.agrippa.dev), contains reference pages regarding the options and config in v2, which you may find useful.
 
 ## Community
 
