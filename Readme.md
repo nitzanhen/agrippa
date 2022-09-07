@@ -21,7 +21,7 @@ Agrippa is a CLI that helps frontend developers generate new components without 
 
 ```bash
 # 1. Install as dev dep
-npm add -D agrippa@beta
+npm add -D agrippa
  
 # 2. Create a config
 npx agrippa init
