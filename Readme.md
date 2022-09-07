@@ -1,85 +1,59 @@
-# Agrippa
-[![npm](https://img.shields.io/npm/v/agrippa?logo=npm&color=CB3837)](https://www.npmjs.com/package/agrippa)
-[![license](https://img.shields.io/github/license/nitzanhen/agrippa?color=yellow)](https://choosealicense.com/licenses/mit/)
+<p align="center">
+  <img src="https://www.agrippa.dev/agrippa.svg" align="center" width="150px" alt="Agrippa logo" />
+  <h1 display="inline" align="center"><strong>Agrippa</strong></h1>
+</p>
 
-Agrippa is a humble CLI, whose purpose is to assist React developers in creating components without the boilerplate.
-It can easily generate templates for React components of different compositions (styling solutions, prop validations, etc.) and in different environments. 
+Agrippa is a CLI that helps frontend developers generate new components without the boilerplate: in a single command, it can create all the folders and files you need in a full component, with starting code tailored to your stack.
 
-[docs](https://github.com/NitzanHen/agrippa/wiki)
+<hr/>
+  <h3 align="center">
+    <strong>
+      <a href="https://www.agrippa.dev/getting-started/">Getting Started</a>
+      &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+      <a href="https://www.agrippa.dev/">Documentation</a>
+    </strong>
+  </h3>
+<hr/>
 
-## Features
-🚀 **Extremely easy to pick up** and use in both new and existing projects.<br/>
-🐙 **Flexible** - agrippa strives to be useful in many different circumstances.<br/>
-🧠 **Smart defaults** - agrippa can detect and set defaults based on your environment's configuration, with no extra steps. <br/>
-⚙️ **Configurable** - by using a plain old JSON file.
+<br/>
 
-## v1.4.0
-
-**Agrippa v1.4.0 is officially out!** <br/>
-
-The new version introduces some cool new features:
-- ***Agrippa's terminal UI has been revamped**!* hopefully you'll agree the new look is a lot more ✨*aesthetic*✨<br/><br/>
-- **tsPropsDeclaration**: TS users can now select between `interface`s and `type`s for component props declarations.<br/>For more info, see [the docs on `tsPropsDeclaration`](https://github.com/NitzanHen/agrippa/wiki/The-complete-list-of-generation-options).<br/><br/>
-- **Styled-components**: Agrippa now supports styling with `styled-components`! This is actually the second issue opened for Agrippa, and it's been open for quite a while now. t's truly nice to see it finally implemented. <br/>To check it out, use the value `styled-components` for the `styling` flag.<br/><br/>
-- **New post-command variables**: two new variables, `<ComponentName>` and `<component-name>`, can now be used with post commands.<br/>The first is the generated component's name in pascal case (e.g. `NiceButton`), while the second is in kebab case (e.g. `nice-button`).<br/><br/>
-- **Dependency cleanup**: two packages that Agrippa has been using up to now but didn't really need to were removed, and Agrippa should now be a little lighter.
-
-Also, more tests were added, which is always nice.
-
->  To update, call `npm i -g agrippa`. <br/>
->  Please reach out with any bugs or feedback!
-
-## Docs 
-
-This page contains useful information to get started with using Agrippa. 
-All other documentation & guides can be found [on our wiki](https://github.com/NitzanHen/agrippa/wiki).
-
-Examples can be found among our [integration tests](https://github.com/NitzanHen/agrippa/tree/main/test/integration).
-
-## Installation
+## Quickstart
 
 ```bash
-npm install -g agrippa
-# Or:
-yarn global add agrippa
+# 1. Install as dev dep
+npm add -D agrippa
+ 
+# 2. Create a config
+npx agrippa init
+
+# 3. Generate a component 🚀
+npx agrippa gen my-first-component
 ```
 
-Alterntively, use:
-```bash
-npx agrippa [...]
-# e.g.
-npx agrippa gen top-bar 
-```
-using `npx`, the latest version is always used.
+For a complete introduction, take the short [Getting Started](https://www.agrippa.dev/getting-started/) tutorial! <br/>
+Alternatively, if you're already familiar with Agrippa, check out our [Set up Agrippa in a project](https://www.agrippa.dev/guides/setup-agrippa-in-a-project/) guide.
 
-## Usage
+<br/>
 
-Agrippa consists of two commands: `generate` (or `gen`) and `init`:
+## See it in action
 
-### Generate
-`agrippa gen <name> [options]` is the core of the CLI - this command generates a new React component, based on the `name` and `options` passed to it.
+https://user-images.githubusercontent.com/58311807/188754758-1a5ea10b-6227-4c45-9976-bd115a8729c8.mp4
 
-`agrippa generate` is an alias of `agrippa gen`.
+<br/>
 
-The options that `agrippa gen` accepts are listed in [The Complete List of Generation Options](https://github.com/NitzanHen/agrippa/wiki/The-Complete-List-of-Generation-Options), on our [wiki](https://github.com/NitzanHen/agrippa/wiki).
+## Migrating from v1
 
-### Init
-`agrippa init` generates a basic `.agripparc.json` file, with some default values for options that agrippa accepts.  
+Agrippa 2.0 introduces some API changes - the config is now a JS file and is structured a bit differently, and some options have been changed - but at large the functionality and usage is the same as v1.
 
-## Using a config
-In most projects, some options repeat themselves on most, if not all, components of the app. For example, if the codebase uses CSS modules as a styling solution, then the majority of component would be generated with `--styling css`. 
+To get a feel for the new version and see what's new, we recommend taking the new [Getting Started](https://www.agrippa.dev/getting-started/) tutorial, or the concise [Set up Agrippa in a project](https://www.agrippa.dev/guides/setup-agrippa-in-a-project/) guide.
 
-To avoid this unnecessary boilerplate, an `.agripparc.json` config file can be used. It's dead simple to set up! simply call `agrippa init` at the root of your project, or create a basic `.agripparc.json` file, and edit its contents to match the desired defaults. <br/>
-The config file's options are the same as the CLI's. The latter's options take precedence over the former's, which is useful for overriding the project's defaults when needed.
-
-> Note: many options - including *Typescript* & *React Native* - can be determined automatically by Agrippa, so they don't need to be specified in the config or at the command line.
+Lastly, our new docs site, [agrippa.dev](https://www.agrippa.dev), contains reference pages regarding the options and config in v2, which you may find useful.
 
 ## Community
 
-My ambition is that Agrippa would become a tool that makes the lives of React developers easier, but perhaps more importantly one that they enjoy using. The tool's ease-of-use at the practical level is one aspect of that, but just as important is the cultivation of an active, positive community around it that developers feel welcome in.
+If you encounter any bugs or errors, or have any feature suggestions, please [open an issue](https://github.com/NitzanHen/agrippa/issues)!
 
-Therefore, your thoughts, suggestions and collaboration are *most welcome!* <br/>
-If you like Agrippa and want to see it grow, please spread its word! (and give it a ⭐)
+Also, I'm not actively posting too much on Twitter, but I'd be more than happy to hear your toughts on Agrippa and discuss it with you! Find me [@nitzanhen](https://twitter.com/nitzanhen).
 
-## License
-[MIT](https://choosealicense.com/licenses/mit/)
+Lastly, thank you for being part of the community. <br/>
+If you like Agrippa and want to see it grow, please spread its word!
