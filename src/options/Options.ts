@@ -29,7 +29,6 @@ export interface Options {
   styling?: Styling | string;
   createStylesFile: boolean,
   styleFileOptions?: {
-    extension: string;
     module: boolean;
   }
 

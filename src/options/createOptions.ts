@@ -39,14 +39,6 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
   const framework = input.framework ?? defaultFramework(packageJson);
 
   const createStylesFile = ([Styling.CSS, Styling.SCSS, Styling.STYLED_COMPONENTS] as any[]).includes(styling);
-  const stylesFileExtension = (() => {
-    switch (styling) {
-      case 'css': return 'css';
-      case 'scss': return 'scss';
-      case 'styled-components': return 'ts';
-      default: return '';
-    }
-  })();
 
   const defaults: Options = {
     name,
@@ -71,7 +63,6 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
     styling,
     createStylesFile,
     styleFileOptions: createStylesFile ? {
-      extension: stylesFileExtension,
       module: true,
     } : undefined,
 
