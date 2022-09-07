@@ -8,9 +8,9 @@ Agrippa is a CLI that helps frontend developers generate new components without 
 <hr/>
   <h3 align="center">
     <strong>
-      <a href="https://github.com/NitzanHen/agrippa">Getting Started</a>
+      <a href="https://www.agrippa.dev/getting-started/">Getting Started</a>
       &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-      <a href="https://github.com/NitzanHen/agrippa">Documentation</a>
+      <a href="https://www.agrippa.dev/">Documentation</a>
     </strong>
   </h3>
 <hr/>
