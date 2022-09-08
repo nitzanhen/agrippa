@@ -7,7 +7,7 @@ import { pkgJson } from '../utils/pkgJson';
 import { AgrippaDir } from '../stage/AgrippaDir';
 import { AgrippaFile } from '../stage/AgrippaFile';
 import { Stage } from '../stage/Stage';
-import { summaryLine } from '../stage/StageResult';
+import { StageResult, StageStatus, summaryLine } from '../stage/StageResult';
 import { RunOutput } from './RunOutput';
 
 export interface ContextOptions {
@@ -46,6 +46,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   stages: Stage[];
   stagesInitialized: boolean;
 
+  stageResults: StageResult[];
+
   stackTags: string[];
   stackTagsInitialized: boolean;;
 
@@ -69,6 +71,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
     this.stages = stages;
     this.stagesInitialized = false;
+    this.stageResults = [];
 
     this.options = options;
     this.plugins = plugins ?? defaultPlugins(options, this.logger);
@@ -160,6 +163,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
       const stageLogger = new Logger();
 
       const result = await stage.execute(this, stageLogger);
+      this.stageResults.push(result);
       const stageLogs = stageLogger.consume();
 
       if (!stage.silent) {
@@ -190,5 +194,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     };
 
     return output;
+  }
+
+  get hasFailedStages() {
+    return this.stageResults.some(res => res.status === StageStatus.ERROR);
   }
 }
