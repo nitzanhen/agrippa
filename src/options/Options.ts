@@ -38,7 +38,7 @@ export interface Options {
 
   overwrite: boolean;
   pure: boolean;
-  reportTelemetry: boolean;
+  reportTelemetry: boolean | 'dev';
   lookForUpdates: boolean;
   debug: boolean;
 }
