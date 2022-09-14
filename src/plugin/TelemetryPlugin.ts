@@ -22,9 +22,7 @@ export class TelemetryPlugin extends Plugin {
       logger.debug('TelemetryPlugin: sending report...');
 
       await axios.post(TELEMETRY_ENDPOINT, runData, {
-        // If debug is off, set a very short timeout (0 means no timeout)
-        // so that the process doesn't hang
-        timeout: options.debug ? 0 : 1
+        timeout: options.debug ? 0 : 5_000
       }).catch(e => {
         if(!options.debug && e.code === 'ECONNABORTED') {
           return;
