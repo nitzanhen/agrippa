@@ -71,7 +71,7 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
     allowOutsideBase: false,
 
     overwrite: false,
-    pure: false,
+    dryRun: false,
     reportTelemetry: true,
     lookForUpdates: true,
     debug: false

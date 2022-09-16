@@ -11,7 +11,7 @@ const AGRIPPA_NPM_ENDPOINT = 'https://registry.npmjs.org/agrippa/latest';
  * A plugin that checks if a newer version of Agrippa exists.
  * Pings the npm registry and compares the latest version there to the version of this running instance.
  * 
- * This plugin runs assuming updates are meant to be looked for; if that's not desired (in pure mode or if
+ * This plugin runs assuming updates are meant to be looked for; if that's not desired (in dry run mode or if
  * the user disables it) the plugin shouldn't be registered.
  */
 export class UpdatesPlugin extends Plugin {

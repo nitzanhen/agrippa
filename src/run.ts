@@ -24,16 +24,16 @@ export interface RunOptions {
 export async function run(inputOptions: InputOptions, runOptions: RunOptions = {}) {
 
   // Initialize options, stages, context & logger
-  const pure = !!inputOptions.pure;
+  
   const debug = !!inputOptions.debug;
 
   // Create Logger
 
-  const logger = runOptions.logger ?? Logger.create(pure, debug);
+  const logger = runOptions.logger ?? Logger.consoleLogger(debug);
   logger.debug(
     runOptions.logger
       ? 'Using logger passed in runOptions'
-      : `Logger initialized with params pure=${pure}, debug=${debug}`
+      : `Logger initialized with debug=${debug}`
   );
 
   // Read Agrippa config
@@ -51,7 +51,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const envFileQueries = Object.assign({}, config?.files, runOptions?.envFiles);
   const envFiles = Object.assign(
     { config },
-    !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''))
+    await loadFiles(envFileQueries, dirname(configPath ?? ''))
   );
   logger.debug('Resolved envFiles: ', envFiles);
 

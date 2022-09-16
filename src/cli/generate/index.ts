@@ -88,6 +88,11 @@ const builder = async (yargs: yargs.Argv) =>
         choices: ['true', 'false', 'dev'],
         alias: 'reportTelemetry',
         desc: 'Whether to report (anonymous!) telemetry or not.'
+      },
+      'dry-run': {
+        type: 'boolean',
+        alias: 'dryRun',
+        desc: 'If true, Agrippa will not create any actual files'
       }
     })
     .middleware(({ debug = false }) => {
@@ -151,7 +156,7 @@ export const generateCommand: GenerateCommand = {
       overwrite: argv.overwrite,
       reportTelemetry,
       lookForUpdates: argv.lookForUpdates,
-      pure: false,
+      dryRun: argv.dryRun,
     };
 
     await run(

@@ -46,17 +46,17 @@ export class CreateDirStage extends Stage {
 
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = options;
+    const { dryRun, baseDir, allowOutsideBase, overwrite } = options;
     const { path } = this.dir;
 
     const dirName = basename(path);
 
-    if (pure) {
+    if (dryRun) {
       this.updateContext(context);
 
       return new StageResult(
         StageStatus.NA,
-        'No directory created (pure mode)'
+        'No directory created (dry run)'
       );
     }
 

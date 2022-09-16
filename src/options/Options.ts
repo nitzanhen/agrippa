@@ -37,7 +37,7 @@ export interface Options {
   allowOutsideBase: boolean;
 
   overwrite: boolean;
-  pure: boolean;
+  dryRun: boolean;
   reportTelemetry: boolean | 'dev';
   lookForUpdates: boolean;
   debug: boolean;

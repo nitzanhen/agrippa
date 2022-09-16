@@ -4,7 +4,7 @@ This directory contains Agrippa's testing modules. These divide into three group
 
 - Unit tests: test a single function or operation, just like traditional unit tests. They can be found under the `unit` directory.
 
-- Integration tests: test Agrippa's `run` function - the main entry point to the JS API. Integration tests can be found under the `integration` directory. These test a run of Agrippa's core, *in pure mode*, often with a focus on a single option/feature or a combination of those. 
+- Integration tests: test Agrippa's `run` function - the main entry point to the JS API. Integration tests can be found under the `integration` directory. These test a run of Agrippa's core, *in dry run mode*, often with a focus on a single option/feature or a combination of those. 
 
 - End-To-End tests: test a full run of Agrippa - from its CLI, through `run` and the JS API and down into the output logic. These can be found under the `end-to-end` directory. Tests for correct file loading & correct creation of files belogs here.
 

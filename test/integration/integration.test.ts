@@ -6,7 +6,7 @@ import testCases from './test-cases';
  * Option overrides for integration tests.
  */
 const configOverrides: Partial<InputOptions> = {
-  pure: true,
+  dryRun: true,
   lookForUpdates: false,
   reportTelemetry: false
 };

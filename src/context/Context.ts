@@ -67,7 +67,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   }: ContextOptions) {
     super();
 
-    this.logger = logger ?? Logger.create(options.pure, options.debug);
+    this.logger = logger ?? Logger.consoleLogger(options.debug);
 
     this.stages = stages;
     this.stagesInitialized = false;
@@ -88,8 +88,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     }
   }
 
-  get pure() {
-    return this.options.pure;
+  get dryRun() {
+    return this.options.dryRun;
   }
   get debug() {
     return this.options.debug;
