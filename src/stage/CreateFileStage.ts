@@ -42,16 +42,16 @@ export class CreateFileStage extends Stage {
 
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = options;
+    const { dryRun, baseDir, allowOutsideBase, overwrite } = options;
     const { data, path } = this.file;
 
 
-    if (pure) {
+    if (dryRun) {
       this.updateContext(context);
 
       return new StageResult(
         StageStatus.NA,
-        'No file created (pure mode)',
+        'No file created (dry run)',
       );
     }
 
