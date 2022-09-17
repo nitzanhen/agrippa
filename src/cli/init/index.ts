@@ -13,6 +13,11 @@ const builder = (yargs: Argv) => yargs.options({
   bare: {
     type: 'boolean',
     desc: 'If passed, Agrippa will generate a config that does not import agrippa. This is used for global installations.',
+  },
+  typescript: {
+    type: 'boolean',
+    alias: 'ts',
+    desc: 'If true, Agrippa will create a Typescript config instead of an mjs'
   }
 });
 
@@ -46,10 +51,16 @@ export const initCommand: InitCommand = {
       );
     }
 
-    const path = join(cwd(), 'agrippa.config.mjs');
+    const typescript = argv.typescript!
+      ?? await loadFileQuery({ search: 'tsconfig.json' }).then(
+        ([, path]) => !!path
+      );
+
+    const configName = `agrippa.config.${typescript ? 'ts' : 'mjs'}`;
+    const path = join(cwd(), configName);
     cliLogger.info(`Generating a fresh Agrippa config at ${styles.path(path)}...\n`);
 
-    const fileContents = getConfigTemplate(bare!);
+    const fileContents = getConfigTemplate(bare!, typescript);
 
     try {
 
@@ -59,7 +70,7 @@ export const initCommand: InitCommand = {
     }
     catch (e) {
       if (e.code === 'EEXIST') {
-        cliLogger.error('An Agrippa config file `agrippa.config.mjs` already exists at the current working directory.\n');
+        cliLogger.error(`An Agrippa config file \`${configName}\` already exists at the current working directory.\n`);
       }
       else {
         throw e;
