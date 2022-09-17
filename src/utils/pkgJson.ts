@@ -10,7 +10,7 @@ const thisPath = typeof import.meta !== 'undefined'
   ? dirname(fileURLToPath(import.meta.url))
   : __dirname;
 
-const pkgJsonPath = findUp.sync('package.json', { cwd: thisPath })!;
+export const pkgJsonPath = findUp.sync('package.json', { cwd: thisPath })!;
 
 /**
  * This is *Agrippa's* package.json.

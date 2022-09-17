@@ -10,7 +10,12 @@ import pkgJson from './package.json';
 const src = join(__dirname, 'src');
 const dist = join(__dirname, 'dist');
 
-const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.dependencies)];
+const externals = [
+  'yargs/helpers',
+  'fs/promises',
+  ...Object.keys(pkgJson.dependencies),
+  ...Object.keys(pkgJson.devDependencies)
+];
 
 const plugins = ({ tsc = false } = {}) => [
   nodeResolve(),

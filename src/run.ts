@@ -38,11 +38,11 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   // Read Agrippa config
 
-  logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
+  logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa config...');
   const [config, configPath] = await loadFileQuery<Config>(
     runOptions.envFiles?.agrippaConfig
       ? { path: runOptions.envFiles?.agrippaConfig }
-      : { search: 'agrippa.config.mjs' }
+      : { search: ['agrippa.config.mjs', 'agrippa.config.ts'] }
   );
   logger.debug('Resolved Agrippa config: ', config);
 
