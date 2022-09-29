@@ -134,8 +134,16 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     plugin._initialize(this);
   }
 
+  getFile(key: string): AgrippaFile | undefined {
+    return this.createdFiles[key];
+  }
+
   addFile(key: string, file: AgrippaFile): void {
     this.createdFiles[key] = file;
+  }
+
+  getDir(key: string): AgrippaDir | undefined {
+    return this.createdDirs[key];
   }
 
   addDir(key: string, dir: AgrippaDir): void {
@@ -164,7 +172,7 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
 
       const result = await stage.execute(this, stageLogger);
       this.stageResults.push(result);
-      
+
       await this.emit('stage-end', stage, stageLogger);
 
       const stageLogs = stageLogger.consume();
