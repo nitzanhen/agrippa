@@ -10,31 +10,36 @@ import { Stage } from './Stage';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateFileOptions {
+  key: string;
   file: AgrippaFile;
   varKey?: string;
 }
 
 export class CreateFileStage extends Stage {
+  /** Unique key of the created file. Used to refer to it from other plugins/stages. */
+  public key: string;
 
-  protected file: AgrippaFile;
+  public file: AgrippaFile;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
+    key,
     file,
     varKey
   }: CreateFileOptions) {
     super();
 
+    this.key = key;
     this.file = file;
     this.varKey = varKey;
   }
 
   updateContext(context: Context) {
-    context.addFile(this.file);
+    context.addFile(this.key, this.file);
     if (this.varKey) {
       context.addVariable(this.varKey, this.file.path);
     }

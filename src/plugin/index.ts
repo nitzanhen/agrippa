@@ -6,3 +6,4 @@ export * from './CreateFilePlugin';
 export * from './PostCommandPlugin';
 export * from './StackTagPlugin';
 export * from './defaultPlugins';
+export * from './ReplacePlugin';

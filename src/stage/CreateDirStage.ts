@@ -10,35 +10,41 @@ import { AgrippaDir } from './AgrippaDir';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateDirOptions {
+  key: string;
   dir: AgrippaDir;
   recursive?: boolean;
   varKey?: string;
 }
 
 export class CreateDirStage extends Stage {
-  protected dir: AgrippaDir;
+  /** Unique key of the created dir. Used to refer to it from other plugins/stages. */
+  public key: string;
+
+  public dir: AgrippaDir;
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
-  protected recursive: boolean;
+  public recursive: boolean;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
+    key,
     dir,
     recursive = true,
     varKey,
   }: CreateDirOptions) {
     super();
 
+    this.key = key;
     this.dir = dir;
     this.recursive = recursive;
     this.varKey = varKey;
   }
 
   updateContext(context: Context) {
-    context.addDir(this.dir);
+    context.addDir(this.key, this.dir);
     if (this.varKey) {
       context.addVariable(this.varKey, this.dir.path);
     }
