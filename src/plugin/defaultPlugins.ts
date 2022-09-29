@@ -115,18 +115,22 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
       getStackTags(options)
     ),
     new CreateDirPlugin({
+      key: 'dir',
       dir: new AgrippaDir(dirPath),
       varKey: 'dirPath'
     }),
     new CreateFilePlugin({
+      key: 'declaration',
       file: defaultComponentFile(options, logger, styleFileImport && [styleFileImport]),
       varKey: 'componentPath'
     }),
     createStylesFile && new CreateFilePlugin({
+      key: 'styles',
       file: new AgrippaFile(stylesFilePath, styleFileContent),
       varKey: 'stylesPath'
     }),
     new CreateFilePlugin({
+      key: 'index',
       file: defaultIndexFile(options),
       varKey: 'indexPath'
     })

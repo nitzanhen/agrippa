@@ -15,8 +15,8 @@ export interface ContextOptions {
   plugins?: Plugin[];
   stages?: Stage[];
 
-  createdFiles?: AgrippaFile[];
-  createdDirs?: AgrippaDir[];
+  createdFiles?: Record<string, AgrippaFile>;
+  createdDirs?: Record<string, AgrippaDir>;
   variables?: Record<string, any>;
   logger?: Logger;
 
@@ -39,8 +39,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   options: Options;
   public readonly plugins: Plugin[];
 
-  createdFiles: AgrippaFile[];
-  createdDirs: AgrippaDir[];
+  createdFiles: Record<string, AgrippaFile>;
+  createdDirs: Record<string, AgrippaDir>;
   variables: Record<string, any>;
 
   stages: Stage[];
@@ -58,9 +58,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     plugins,
 
     stages = [],
-    createdFiles = [],
-    createdDirs = [],
-    variables = {},
+    createdFiles = Object.create(null),
+    createdDirs = Object.create(null),
+    variables = Object.create(null),
     logger,
 
     stackTags = []
@@ -134,12 +134,12 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     plugin._initialize(this);
   }
 
-  addFile(file: AgrippaFile): void {
-    this.createdFiles.push(file);
+  addFile(key: string, file: AgrippaFile): void {
+    this.createdFiles[key] = file;
   }
 
-  addDir(dir: AgrippaDir): void {
-    this.createdDirs.push(dir);
+  addDir(key: string, dir: AgrippaDir): void {
+    this.createdDirs[key] = dir;
   }
 
   addVariable(key: string, value: any): void {
