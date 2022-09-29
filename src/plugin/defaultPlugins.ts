@@ -120,7 +120,7 @@ export function defaultPlugins(options: Options, logger: Logger): Plugin[] {
       varKey: 'dirPath'
     }),
     new CreateFilePlugin({
-      key: 'declaration',
+      key: 'component',
       file: defaultComponentFile(options, logger, styleFileImport && [styleFileImport]),
       varKey: 'componentPath'
     }),
