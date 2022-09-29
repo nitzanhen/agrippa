@@ -28,8 +28,8 @@ export class ReplacePlugin extends Plugin {
   }
 
   onStageStart(stage: Stage, stageLogger: Logger) {
-    if((stage instanceof CreateFileStage) && stage.key === this.fileKey) {
-      stageLogger.info('ReplacePlugin: file matches passed key. Replacing...');
+    if(CreateFileStage.isInstance(stage) && stage.key === this.fileKey) {
+      stageLogger.info('ReplacePlugin: file matches given fileKey, replacing data.');
       // @ts-expect-error same issue as https://github.com/microsoft/TypeScript/issues/50488
       stage.file.data = stage.file.data.replaceAll(this.searchValue, this.replaceValue);
     }

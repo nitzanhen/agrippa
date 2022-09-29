@@ -17,6 +17,11 @@ export interface CreateDirOptions {
 }
 
 export class CreateDirStage extends Stage {
+  /** Needed because TS `instanceof` seems to be broken. */
+  public static isInstance(stage: Stage): stage is CreateDirStage {
+    return stage.constructor.name === 'CreateDirStage';
+  }
+
   /** Unique key of the created dir. Used to refer to it from other plugins/stages. */
   public key: string;
 

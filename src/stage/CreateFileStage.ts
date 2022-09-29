@@ -16,6 +16,11 @@ export interface CreateFileOptions {
 }
 
 export class CreateFileStage extends Stage {
+  /** Needed because TS `instanceof` seems to be broken. */
+  public static isInstance(stage: Stage): stage is CreateFileStage {
+    return stage.constructor.name === 'CreateFileStage';
+  }
+  
   /** Unique key of the created file. Used to refer to it from other plugins/stages. */
   public key: string;
 
