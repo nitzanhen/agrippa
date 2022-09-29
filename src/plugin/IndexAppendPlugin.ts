@@ -1,4 +1,4 @@
-import { IndexAppendStage, IndexAppenStageOptions } from '../stage/IndexAppendStage';
+import { IndexAppendStage, IndexAppenStageOptions } from '../stage';
 import { MaybePromise } from '../utils';
 import { Plugin } from './Plugin';
 
