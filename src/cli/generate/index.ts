@@ -93,6 +93,10 @@ const builder = async (yargs: yargs.Argv) =>
         type: 'boolean',
         alias: 'dryRun',
         desc: 'If true, Agrippa will not create any actual files'
+      },
+      'config': {
+        type: 'string',
+        desc: 'Path to an Agrippa config file'
       }
     })
     .middleware(({ debug = false }) => {
@@ -163,8 +167,11 @@ export const generateCommand: GenerateCommand = {
       inputOptions,
       {
         logger: cliLogger,
-        plugins: argv.postCommand ? [new PostCommandPlugin(argv.postCommand)] : undefined
-      }
+        plugins: argv.postCommand ? [new PostCommandPlugin(argv.postCommand)] : undefined,
+        envFiles: argv.config
+          ? { agrippaConfig: argv.config }
+          : undefined
+      },
     );
   }
 };
