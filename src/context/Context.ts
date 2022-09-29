@@ -27,8 +27,8 @@ export type ContextEventMap = {
   'load': () => void;
   'create-stack-tags': () => void;
   'create-stages': () => void;
-  'stage-start': (stage: Stage) => void;
-  'stage-end': (stage: Stage) => void;
+  'stage-start': (stage: Stage, stageLogger: Logger) => void;
+  'stage-end': (stage: Stage, stageLogger: Logger) => void;
   'pipeline-start': () => void;
   'pipeline-end': () => void;
 }
@@ -158,12 +158,15 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     await this.emit('pipeline-start');
 
     for (const stage of this.stages) {
-      await this.emit('stage-start', stage);
-
       const stageLogger = new Logger();
+
+      await this.emit('stage-start', stage, stageLogger);
 
       const result = await stage.execute(this, stageLogger);
       this.stageResults.push(result);
+      
+      await this.emit('stage-end', stage, stageLogger);
+
       const stageLogs = stageLogger.consume();
 
       if (!stage.silent) {
@@ -173,8 +176,6 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
       else {
         logger.debug(stageLogs);
       }
-
-      await this.emit('stage-end', stage);
     }
 
     await this.emit('pipeline-end');

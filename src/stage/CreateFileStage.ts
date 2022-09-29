@@ -17,14 +17,14 @@ export interface CreateFileOptions {
 
 export class CreateFileStage extends Stage {
   /** Unique key of the created file. Used to refer to it from other plugins/stages. */
-  protected key: string;
+  public key: string;
 
-  protected file: AgrippaFile;
+  public file: AgrippaFile;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
     key,

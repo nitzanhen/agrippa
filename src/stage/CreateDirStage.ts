@@ -18,16 +18,16 @@ export interface CreateDirOptions {
 
 export class CreateDirStage extends Stage {
   /** Unique key of the created dir. Used to refer to it from other plugins/stages. */
-  protected key: string;
+  public key: string;
 
-  protected dir: AgrippaDir;
+  public dir: AgrippaDir;
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
-  protected recursive: boolean;
+  public recursive: boolean;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
     key,

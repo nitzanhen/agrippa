@@ -2,8 +2,8 @@ import { basename, dirname, extname } from 'path';
 
 export class AgrippaFile {
   constructor(
-    public readonly path: string,
-    public readonly data: string
+    public path: string,
+    public data: string
   ) { }
 
   get directory() {

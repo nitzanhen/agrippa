@@ -1,4 +1,6 @@
 import { Context } from '../context';
+import { Logger } from '../logger';
+import { Stage } from '../stage';
 import { MaybePromise } from '../utils';
 
 /**
@@ -12,8 +14,8 @@ export interface Plugin {
   onCreateStages?(): MaybePromise<void>;
   onCreateStackTags?(): MaybePromise<void>;
 
-  onStageStart?(): MaybePromise<void>;
-  onStageEnd?(): MaybePromise<void>;
+  onStageStart?(stage: Stage, stageLogger: Logger): MaybePromise<void>;
+  onStageEnd?(stage: Stage, stageLogger: Logger): MaybePromise<void>;
 
   onPipelineStart?(): MaybePromise<void>;
   onPipelineEnd?(): MaybePromise<void>;
