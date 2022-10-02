@@ -57,6 +57,14 @@ export class IndexAppendStage extends Stage {
   
       const exportStr = `export * from './${relative(indexPath, dir.path)}';\n`;
       
+      const exportRegex = new RegExp(`^export \* from ['"]\.\/${relative(indexPath, dir.path)}['"];?$`, 'gm');
+      if(exportRegex.test(data)) {
+        return new StageResult(
+          StageStatus.NA,
+          'Component export already exists'
+        );
+      }
+
       const newData = data + (data.endsWith('\n') ? '' : '\n') + exportStr;
   
       logger.debug('IndexAppendStage: Writing new data to indexPath: ', newData);
