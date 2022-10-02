@@ -15,14 +15,29 @@ const parseJson = JSON5.parse;
  */
 export enum FileType {
   JSON = 'json',
+
   JS = 'js',
+  CJS = 'cjs',
   MJS = 'mjs',
-  TS = 'ts'
+
+  TS = 'ts',
+  MTS = 'mts',
+  CTS = 'cts',
 }
 
 export namespace FileType {
 
-  export const values: FileType[] = [FileType.JSON, FileType.JS, FileType.MJS, FileType.TS];
+  export const values: FileType[] = [
+    FileType.JSON, 
+
+    FileType.JS, 
+    FileType.MJS,
+    FileType.CJS, 
+
+    FileType.TS,
+    FileType.MTS,
+    FileType.CTS,
+  ];
 
   export function fromString(str: string): FileType | null {
     return values.find(type => type === str) ?? null;
@@ -44,9 +59,7 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
     throw new Error(`Unsupported file type: ${type}. loadFiles supports only the following file types: ${FileType.values.join(', ')}`);
   }
 
-
   const fileType = (type as FileType) ?? FileType.fromString(extension);
-
 
   if (!fileType) {
     throw new Error(`A type was not passed, and could not be determined from the file path (${path})`);
@@ -56,9 +69,14 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
 
   switch (fileType) {
     case FileType.JSON: return parseJson(await readFile(resolvedPath, 'utf8'));
-    case FileType.JS: return (await import(pathToFileURL(resolvedPath).toString())).default;
-    case FileType.MJS: return (await import(pathToFileURL(resolvedPath).toString())).default;
-    case FileType.TS: {
+
+    case FileType.JS:
+    case FileType.MJS: 
+    case FileType.CJS: return (await import(pathToFileURL(resolvedPath).toString())).default;
+    
+    case FileType.TS:
+    case FileType.MTS:
+    case FileType.CTS: {
       const transpiledCode = ts.transpile(await readFile(resolvedPath, 'utf8'), {
         module: ts.ModuleKind.ESNext,
         target: ts.ScriptTarget.ESNext
