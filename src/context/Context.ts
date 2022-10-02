@@ -7,7 +7,7 @@ import { pkgJson } from '../utils/pkgJson';
 import { AgrippaDir } from '../stage/AgrippaDir';
 import { AgrippaFile } from '../stage/AgrippaFile';
 import { Stage } from '../stage/Stage';
-import { summaryLine } from '../stage/StageResult';
+import { StageResult, StageStatus, summaryLine } from '../stage/StageResult';
 import { RunOutput } from './RunOutput';
 
 export interface ContextOptions {
@@ -15,8 +15,8 @@ export interface ContextOptions {
   plugins?: Plugin[];
   stages?: Stage[];
 
-  createdFiles?: AgrippaFile[];
-  createdDirs?: AgrippaDir[];
+  createdFiles?: Record<string, AgrippaFile>;
+  createdDirs?: Record<string, AgrippaDir>;
   variables?: Record<string, any>;
   logger?: Logger;
 
@@ -27,8 +27,8 @@ export type ContextEventMap = {
   'load': () => void;
   'create-stack-tags': () => void;
   'create-stages': () => void;
-  'stage-start': (stage: Stage) => void;
-  'stage-end': (stage: Stage) => void;
+  'stage-start': (stage: Stage, stageLogger: Logger) => void;
+  'stage-end': (stage: Stage, stageLogger: Logger) => void;
   'pipeline-start': () => void;
   'pipeline-end': () => void;
 }
@@ -39,12 +39,14 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
   options: Options;
   public readonly plugins: Plugin[];
 
-  createdFiles: AgrippaFile[];
-  createdDirs: AgrippaDir[];
+  createdFiles: Record<string, AgrippaFile>;
+  createdDirs: Record<string, AgrippaDir>;
   variables: Record<string, any>;
 
   stages: Stage[];
   stagesInitialized: boolean;
+
+  stageResults: StageResult[];
 
   stackTags: string[];
   stackTagsInitialized: boolean;;
@@ -56,19 +58,20 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     plugins,
 
     stages = [],
-    createdFiles = [],
-    createdDirs = [],
-    variables = {},
+    createdFiles = Object.create(null),
+    createdDirs = Object.create(null),
+    variables = Object.create(null),
     logger,
 
     stackTags = []
   }: ContextOptions) {
     super();
 
-    this.logger = logger ?? Logger.create(options.pure, options.debug);
+    this.logger = logger ?? Logger.consoleLogger(options.debug);
 
     this.stages = stages;
     this.stagesInitialized = false;
+    this.stageResults = [];
 
     this.options = options;
     this.plugins = plugins ?? defaultPlugins(options, this.logger);
@@ -85,8 +88,8 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     }
   }
 
-  get pure() {
-    return this.options.pure;
+  get dryRun() {
+    return this.options.dryRun;
   }
   get debug() {
     return this.options.debug;
@@ -131,12 +134,20 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     plugin._initialize(this);
   }
 
-  addFile(file: AgrippaFile): void {
-    this.createdFiles.push(file);
+  getFile(key: string): AgrippaFile | undefined {
+    return this.createdFiles[key];
   }
 
-  addDir(dir: AgrippaDir): void {
-    this.createdDirs.push(dir);
+  addFile(key: string, file: AgrippaFile): void {
+    this.createdFiles[key] = file;
+  }
+
+  getDir(key: string): AgrippaDir | undefined {
+    return this.createdDirs[key];
+  }
+
+  addDir(key: string, dir: AgrippaDir): void {
+    this.createdDirs[key] = dir;
   }
 
   addVariable(key: string, value: any): void {
@@ -155,11 +166,15 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     await this.emit('pipeline-start');
 
     for (const stage of this.stages) {
-      await this.emit('stage-start', stage);
-
       const stageLogger = new Logger();
 
+      await this.emit('stage-start', stage, stageLogger);
+
       const result = await stage.execute(this, stageLogger);
+      this.stageResults.push(result);
+
+      await this.emit('stage-end', stage, stageLogger);
+
       const stageLogs = stageLogger.consume();
 
       if (!stage.silent) {
@@ -169,8 +184,6 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
       else {
         logger.debug(stageLogs);
       }
-
-      await this.emit('stage-end', stage);
     }
 
     await this.emit('pipeline-end');
@@ -190,5 +203,9 @@ export class Context extends AsyncEventEmitter<ContextEventMap> {
     };
 
     return output;
+  }
+
+  get hasFailedStages() {
+    return this.stageResults.some(res => res.status === StageStatus.ERROR);
   }
 }

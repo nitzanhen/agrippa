@@ -85,9 +85,18 @@ const builder = async (yargs: yargs.Argv) =>
         desc: 'Whether to look for updates when running Agrippa or not.'
       },
       'report-telemetry': {
-        type: 'boolean',
+        choices: ['true', 'false', 'dev'],
         alias: 'reportTelemetry',
         desc: 'Whether to report (anonymous!) telemetry or not.'
+      },
+      'dry-run': {
+        type: 'boolean',
+        alias: 'dryRun',
+        desc: 'If true, Agrippa will not create any actual files'
+      },
+      'config': {
+        type: 'string',
+        desc: 'Path to an Agrippa config file'
       }
     })
     .middleware(({ debug = false }) => {
@@ -109,6 +118,13 @@ export const generateCommand: GenerateCommand = {
   handler: async argv => {
     const framework = Framework.fromString(argv.framework!) ?? argv.framework;
     const styling = Styling.fromString(argv.styling!) ?? argv.styling;
+    const reportTelemetry = (() => {
+      switch (argv['report-telemetry']) {
+        case 'dev': return 'dev';
+        case 'true': return true;
+        case 'false': return false;
+      }
+    })();
 
     cliLogger.debug(`Agrippa CLI: received a 'generate' command for component ${italic(argv.name)} with framework ${italic(framework)}`);
     cliLogger.debug('argv:', argv);
@@ -142,17 +158,20 @@ export const generateCommand: GenerateCommand = {
 
       debug: argv.debug,
       overwrite: argv.overwrite,
-      reportTelemetry: argv.reportTelemetry,
+      reportTelemetry,
       lookForUpdates: argv.lookForUpdates,
-      pure: false,
+      dryRun: argv.dryRun,
     };
 
     await run(
       inputOptions,
       {
         logger: cliLogger,
-        plugins: argv.postCommand ? [new PostCommandPlugin(argv.postCommand)] : undefined
-      }
+        plugins: argv.postCommand ? [new PostCommandPlugin(argv.postCommand)] : undefined,
+        envFiles: argv.config
+          ? { agrippaConfig: argv.config }
+          : undefined
+      },
     );
   }
 };

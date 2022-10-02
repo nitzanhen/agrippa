@@ -1,9 +1,12 @@
-import { readFile } from 'fs/promises';
-import { extname, resolve } from 'path';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+import { dirname, extname, join, resolve } from 'path';
 import { cwd } from 'process';
 import { pathToFileURL } from 'url';
 import JSON5 from 'json5';
 import findUp from 'find-up';
+import ts from 'typescript';
+import { pkgJsonPath } from '../utils/pkgJson';
+
 
 const parseJson = JSON5.parse;
 
@@ -12,21 +15,36 @@ const parseJson = JSON5.parse;
  */
 export enum FileType {
   JSON = 'json',
+
   JS = 'js',
-  MJS = 'mjs'
-  //TS = 'ts'
+  CJS = 'cjs',
+  MJS = 'mjs',
+
+  TS = 'ts',
+  MTS = 'mts',
+  CTS = 'cts',
 }
 
 export namespace FileType {
 
-  export const values: FileType[] = [FileType.JSON, FileType.JS, FileType.MJS];
+  export const values: FileType[] = [
+    FileType.JSON, 
+
+    FileType.JS, 
+    FileType.MJS,
+    FileType.CJS, 
+
+    FileType.TS,
+    FileType.MTS,
+    FileType.CTS,
+  ];
 
   export function fromString(str: string): FileType | null {
     return values.find(type => type === str) ?? null;
   }
 }
 
-export type FileQuery = { path: string } | { search: string };
+export type FileQuery = { path: string } | { search: string | string[] };
 
 /**
  * Loads a file located at the given path, assuming it is of the given type.
@@ -51,8 +69,29 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
 
   switch (fileType) {
     case FileType.JSON: return parseJson(await readFile(resolvedPath, 'utf8'));
-    case FileType.JS: return (await import(pathToFileURL(resolvedPath).toString())).default;
-    case FileType.MJS: return (await import(pathToFileURL(resolvedPath).toString())).default;
+
+    case FileType.JS:
+    case FileType.MJS: 
+    case FileType.CJS: return (await import(pathToFileURL(resolvedPath).toString())).default;
+    
+    case FileType.TS:
+    case FileType.MTS:
+    case FileType.CTS: {
+      const transpiledCode = ts.transpile(await readFile(resolvedPath, 'utf8'), {
+        module: ts.ModuleKind.ESNext,
+        target: ts.ScriptTarget.ESNext
+      });
+
+      // Create temp dir, if it does not exists
+      const agrippaRoot = dirname(pkgJsonPath);
+      const tempDir = join(agrippaRoot, 'temp');
+      await mkdir(tempDir, { recursive: true });
+
+      // Write transpiled config to file and import it dynamically
+      const transpiledPath = join(tempDir, './agrippa.config.mjs');
+      await writeFile(transpiledPath, transpiledCode, 'utf8');
+      return (await import(pathToFileURL(transpiledPath).toString())).default;
+    }
   }
 }
 
@@ -64,7 +103,7 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
  */
 export async function loadFileQuery<T = any>(query: FileQuery, type?: (FileType | string)): Promise<[data: T | null, path: string | null]> {
   const path = 'path' in query ? query.path : (await findUp(query.search));
-  if(!path) {
+  if (!path) {
     return [null, null];
   }
 

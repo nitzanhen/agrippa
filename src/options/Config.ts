@@ -6,7 +6,7 @@ import { Options } from './Options';
 type ConfigOptions = DeepPartial<Omit<Options, 'name' | 'createStyleFile' | 'destination'>>;
 
 /**
- * Defines the structure of the default export of `agrippa.config.mjs`.
+ * Defines the structure of the default export of a config file.
  */
 export interface Config {
   options?: ConfigOptions;
@@ -15,7 +15,7 @@ export interface Config {
 };
 
 /**
- * `defineConfig` is used in `agrippa.config.mjs` files, 
+ * `defineConfig` is used in config files, 
  * for better typing intellisense.
  */
 export function defineConfig(config: Config): Config {

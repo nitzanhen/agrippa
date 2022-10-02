@@ -10,35 +10,46 @@ import { AgrippaDir } from './AgrippaDir';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateDirOptions {
+  key: string;
   dir: AgrippaDir;
   recursive?: boolean;
   varKey?: string;
 }
 
 export class CreateDirStage extends Stage {
-  protected dir: AgrippaDir;
+  /** Needed because TS `instanceof` seems to be broken. */
+  public static isInstance(stage: Stage): stage is CreateDirStage {
+    return stage.constructor.name === 'CreateDirStage';
+  }
+
+  /** Unique key of the created dir. Used to refer to it from other plugins/stages. */
+  public key: string;
+
+  public dir: AgrippaDir;
   /** Whether to recursively create this dir's parent directories, if necessary. Passed to `mkdir` */
-  protected recursive: boolean;
+  public recursive: boolean;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
+    key,
     dir,
     recursive = true,
     varKey,
   }: CreateDirOptions) {
     super();
 
+    this.key = key;
     this.dir = dir;
     this.recursive = recursive;
     this.varKey = varKey;
   }
 
   updateContext(context: Context) {
-    context.addDir(this.dir);
+    context.addDir(this.key, this.dir);
     if (this.varKey) {
       context.addVariable(this.varKey, this.dir.path);
     }
@@ -46,17 +57,17 @@ export class CreateDirStage extends Stage {
 
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = options;
+    const { dryRun, baseDir, allowOutsideBase, overwrite } = options;
     const { path } = this.dir;
 
     const dirName = basename(path);
 
-    if (pure) {
+    if (dryRun) {
       this.updateContext(context);
 
       return new StageResult(
         StageStatus.NA,
-        'No directory created (pure mode)'
+        'No directory created (dry run)'
       );
     }
 
@@ -65,7 +76,7 @@ export class CreateDirStage extends Stage {
         `The resolved path for the directory ${italic(dirName)} falls outside the base directory.`,
         `Base directory: ${italic(baseDir)}`,
         `Resolved directory: ${italic(path)}`,
-        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in agrippa.config.mjs"
+        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in the config"
       ));
 
       return new StageResult(StageStatus.ERROR, 'Directory path outside baseDir');

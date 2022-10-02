@@ -10,23 +10,41 @@ const exec = promisify(execCB);
 
 export interface RunCommandOptions {
   rawCommand: string;
+  runOnFail?: boolean
 }
 
 export class RunCommandStage extends Stage {
 
   protected rawCommand: string;
+  protected runOnFail: boolean;
 
   constructor({
-    rawCommand
+    rawCommand,
+    runOnFail = false
   }: RunCommandOptions) {
     super();
 
     this.rawCommand = rawCommand;
+    this.runOnFail = runOnFail;
   }
 
   async execute(context: Context, logger: Logger): Promise<StageResult> {
-    logger.debug('runCommand: initiated');
-    logger.debug(`Raw command (before substituting variables): ${this.rawCommand}`);
+    logger.debug(
+      'runCommand: initiated',
+      `Raw command (before substituting variables): ${this.rawCommand}`,
+      `context.hasFailedStages is ${context.hasFailedStages} and runOnFail is ${this.runOnFail}`
+    );
+
+    if (context.hasFailedStages && !this.runOnFail) {
+      logger.debug('Skipping...');
+
+      logger.info('Post command is skipped because an earlier stage failed.');
+      
+      return new StageResult(
+        StageStatus.NA,
+        'Post command skipped'
+      );
+    }
 
     // Create command 
     const { variables } = context;

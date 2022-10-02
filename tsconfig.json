@@ -2,13 +2,12 @@
   "compilerOptions": {
     "target": "es6",
     "lib": [
-      "ESNext",
-      "dom"
+      "ESNext"
     ],
     "declaration": true,
     "declarationMap": true,
     "outDir": "dist",
-    "module": "esnext",
+    "module": "NodeNext",
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,

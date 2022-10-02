@@ -40,10 +40,6 @@ export class Logger extends EventEmitter {
     return logger;
   }
 
-  static create(isPure: boolean, isDebug: boolean) {
-    return isPure ? new Logger(isDebug) : Logger.consoleLogger(isDebug);
-  }
-
 
   public isDebug;
   protected logs: Logger.Log[] = [];

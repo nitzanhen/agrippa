@@ -10,31 +10,41 @@ import { Stage } from './Stage';
 import { StageResult, StageStatus } from './StageResult';
 
 export interface CreateFileOptions {
+  key: string;
   file: AgrippaFile;
   varKey?: string;
 }
 
 export class CreateFileStage extends Stage {
+  /** Needed because TS `instanceof` seems to be broken. */
+  public static isInstance(stage: Stage): stage is CreateFileStage {
+    return stage.constructor.name === 'CreateFileStage';
+  }
+  
+  /** Unique key of the created file. Used to refer to it from other plugins/stages. */
+  public key: string;
 
-  protected file: AgrippaFile;
+  public file: AgrippaFile;
   /** 
    * If passed, stores the new directory's path under the context's `variables` 
    * record with the passed value as key. Only stores the value if the stage succeeds.
    */
-  protected varKey?: string;
+  public varKey?: string;
 
   constructor({
+    key,
     file,
     varKey
   }: CreateFileOptions) {
     super();
 
+    this.key = key;
     this.file = file;
     this.varKey = varKey;
   }
 
   updateContext(context: Context) {
-    context.addFile(this.file);
+    context.addFile(this.key, this.file);
     if (this.varKey) {
       context.addVariable(this.varKey, this.file.path);
     }
@@ -42,16 +52,16 @@ export class CreateFileStage extends Stage {
 
   async execute(context: Context, logger: Logger): Promise<StageResult> {
     const { options } = context;
-    const { pure, baseDir, allowOutsideBase, overwrite } = options;
+    const { dryRun, baseDir, allowOutsideBase, overwrite } = options;
     const { data, path } = this.file;
 
 
-    if (pure) {
+    if (dryRun) {
       this.updateContext(context);
 
       return new StageResult(
         StageStatus.NA,
-        'No file created (pure mode)',
+        'No file created (dry run)',
       );
     }
 
@@ -62,7 +72,7 @@ export class CreateFileStage extends Stage {
         `The resolved path for the directory ${italic(filename)} falls outside the base directory.`,
         `Base directory: ${italic(baseDir)}`,
         `Resolved directory: ${italic(path)}`,
-        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in agrippa.config.mjs"
+        "To allow this behaviour, pass the '--allow-outside-base' flag or set 'allowOutsideBase: true' in the config"
       ));
 
       return new StageResult(StageStatus.ERROR, 'Directory path outside baseDir');
