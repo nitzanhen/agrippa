@@ -1,4 +1,4 @@
-import { pipe } from 'rhax';
+import { pipe } from 'pips';
 
 /**
  * An object representing a code comment. 
@@ -32,11 +32,11 @@ export namespace Comment {
       case 'block': return pipe(c.content)
         (data => data.split('\n').map(ln => ' * ' + ln).join('\n'))
         (body => `/*\n${body}\n */`)
-        .go();
+        ();
       case 'jsdoc': return pipe(c.content)
       (data => data.split('\n').map(ln => ' * ' + ln).join('\n'))
       (body => `/**\n${body}\n */`)
-      .go();
+      ();
     }
   }
 }
