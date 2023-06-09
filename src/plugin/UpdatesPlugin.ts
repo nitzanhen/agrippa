@@ -1,6 +1,6 @@
 import axios from 'axios';
 import semver from 'semver';
-import { bold, italic, styles } from '../logger';
+import { bold, italic } from '../logger';
 import { Plugin } from './Plugin';
 
 const { diff, gt, lt } = semver;
@@ -73,8 +73,8 @@ export class UpdatesPlugin extends Plugin {
     if (gt(latestVersion, currentVersion)) {
       const df = diff(latestVersion, currentVersion);
       logger.info(
-        bold(`New ${df} version available: ${latestVersion}!`),
-        bold(`please update now by typing ${styles.command('npm i -g agrippa')} into the terminal`),
+        bold(`New ${df} version is available: ${latestVersion}!`),
+        // bold(`please update now by typing ${styles.command('npm i -g agrippa')} into the terminal`),
       );
     }
     else if (lt(latestVersion, currentVersion)) {
