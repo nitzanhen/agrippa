@@ -1,5 +1,6 @@
 import { resolve } from 'path';
-import { pipe, filter, entries, map, tuple, toObject } from 'rhax';
+import { filter, entries, map, tuple, toObject } from 'rhax';
+import { pipe } from 'pips';
 import { FileQuery, loadFileQuery } from './loadFile';
 
 const defaultFileQueries: Record<string, FileQuery> = {
@@ -38,14 +39,14 @@ export async function loadFiles(customFileQueries: CustomFileQueries = {}, baseP
     (map(([k, val]) => tuple(k, typeof val === 'string' ? { path: val } : val!)))
     (map(([k, val]) => tuple(k, 'path' in val ? { path: resolve(basePath, val.path) } : val)))
     (toObject)
-    .go();
+    ();
 
   const filePromises = pipe(fileQueries)
     (entries)
     (map(([name, query]) =>
       loadFileQuery(query).then(([f]) => tuple(name, f))
     ))
-    .go();
+    ();
 
   const files = toObject(
     await Promise.all(filePromises)
