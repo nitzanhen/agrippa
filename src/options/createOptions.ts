@@ -72,7 +72,7 @@ export function createOptions(input: InputOptions, envFiles: Record<string, any>
 
     overwrite: false,
     pure: false,
-    reportTelemetry: true,
+    reportTelemetry: false,
     lookForUpdates: true,
     debug: false
   };
