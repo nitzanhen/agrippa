@@ -62,9 +62,9 @@ export async function loadFile<T = any>(path: string, type?: (FileType | string)
  * @param query the query to search by; this is forwarded to `findUp`.
  * @param type optional file type; see `loadFile()`.
  */
-export async function loadFileQuery<T = any>(query: FileQuery, type?: (FileType | string)): Promise<[data: T | null, path: string | null]> {
-  const path = 'path' in query ? query.path : (await findUp(query.search));
-  if(!path) {
+export async function loadFileQuery<T = any>(query: FileQuery, basePath: string, type?: (FileType | string)): Promise<[data: T | null, path: string | null]> {
+  const path = 'path' in query ? query.path : (await findUp(query.search, { cwd: basePath }));
+  if (!path) {
     return [null, null];
   }
 

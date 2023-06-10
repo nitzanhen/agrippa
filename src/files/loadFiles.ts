@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import { filter, entries, map, tuple, toObject } from 'rhax';
 import { pipe } from 'pips';
+import { Logger } from '../logger';
 import { FileQuery, loadFileQuery } from './loadFile';
 
 const defaultFileQueries: Record<string, FileQuery> = {
@@ -30,9 +31,9 @@ export type CustomFileQueries = Record<string, string | FileQuery | null>
  * paths and contents. 
  * If a file was searched for and not found, it *will* have an entry in the record, with the corresponding value being `null`.
  */
-export async function loadFiles(): Promise<Record<string, any>>;
-export async function loadFiles(customFileQueries: CustomFileQueries, basePath: string): Promise<Record<string, any>>;
-export async function loadFiles(customFileQueries: CustomFileQueries = {}, basePath: string = '.') {
+//export async function loadFiles(): Promise<Record<string, any>>;
+//export async function loadFiles(customFileQueries: CustomFileQueries, basePath: string): Promise<Record<string, any>>;
+export async function loadFiles(customFileQueries: CustomFileQueries, basePath: string, logger: Logger): Promise<Record<string, any>> {
   const fileQueries: Record<string, FileQuery> = pipe({ ...defaultFileQueries, ...customFileQueries })
     (entries)
     (filter(([, f]) => !!f))
@@ -41,10 +42,12 @@ export async function loadFiles(customFileQueries: CustomFileQueries = {}, baseP
     (toObject)
     ();
 
+  logger.debug('Resolved file queries: ', fileQueries, basePath);
+
   const filePromises = pipe(fileQueries)
     (entries)
     (map(([name, query]) =>
-      loadFileQuery(query).then(([f]) => tuple(name, f))
+      loadFileQuery(query, basePath).then(([f]) => tuple(name, f))
     ))
     ();
 

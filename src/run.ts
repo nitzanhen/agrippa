@@ -42,7 +42,8 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const [config, configPath] = await loadFileQuery<Config>(
     runOptions.envFiles?.agrippaConfig
       ? { path: runOptions.envFiles?.agrippaConfig }
-      : { search: 'agrippa.config.mjs' }
+      : { search: 'agrippa.config.mjs' },
+    ''
   );
   logger.debug('Resolved Agrippa config: ', config);
 
@@ -51,7 +52,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const envFileQueries = Object.assign({}, config?.files, runOptions?.envFiles);
   const envFiles = Object.assign(
     { config },
-    !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''))
+    !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''), logger)
   );
   logger.debug('Resolved envFiles: ', envFiles);
 
