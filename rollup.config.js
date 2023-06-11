@@ -12,16 +12,8 @@ const dist = join(__dirname, 'dist');
 
 const externals = ['yargs/helpers', 'fs/promises', ...Object.keys(pkgJson.dependencies)];
 
-/** Needed so that `rollup` preserves dynamic imports in cjs output, instead of turning them to `require()` */
-const preserveDynamicImports = () => ({
-  renderDynamicImport() {
-    return { left: 'import(', right: ')' };
-  }
-});
-
-const plugins = ({ tsc = false, cjs = false } = {}) => [
+const plugins = ({ tsc = false } = {}) => [
   nodeResolve(),
-  cjs && preserveDynamicImports(),
   eslint({
     throwOnError: true,
     include: 'src'
@@ -46,7 +38,7 @@ export default defineConfig([
     // cjs step
     input: join(src, 'index.ts'),
     external: externals,
-    plugins: plugins({ cjs: true }),
+    plugins: plugins(),
     output: {
       file: join(dist, 'index.cjs'),
       format: 'cjs',

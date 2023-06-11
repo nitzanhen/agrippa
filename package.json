@@ -44,10 +44,8 @@
   },
   "homepage": "https://github.com/NitzanHen/agrippa/#readme",
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^22.0.0",
     "@rollup/plugin-eslint": "^8.0.1",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.2.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.31",
     "@types/semver": "^7.3.8",
@@ -63,7 +61,6 @@
     "fast-glob": "^3.2.7",
     "jest": "^27.2.4",
     "rimraf": "^3.0.2",
-    "rollup": "^2.66.1",
     "rollup-plugin-esbuild": "^4.8.2",
     "rollup-plugin-ts": "^3.0.2",
     "ts-jest": "^27.0.5",
@@ -78,7 +75,10 @@
     "pips": "^1.0.0-rc.3",
     "rhax": "^2.0.1",
     "semver": "^7.3.5",
-    "yargs": "^17.0.1"
+    "yargs": "^17.0.1",
+    "rollup": "^2.66.1",
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.2.1"
   },
   "keywords": [
     "react",

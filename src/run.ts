@@ -1,4 +1,3 @@
-import { dirname } from 'path';
 import { Config, createOptions, InputOptions } from './options';
 import { loadFiles } from './files/loadFiles';
 import { Logger, styles } from './logger';
@@ -15,6 +14,7 @@ export interface RunOptions {
   envFiles?: Record<string, string>;
   plugins?: Plugin[];
   logger?: Logger;
+  basePath?: string;
 }
 
 /**
@@ -26,6 +26,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   // Initialize options, stages, context & logger
   const pure = !!inputOptions.pure;
   const debug = !!inputOptions.debug;
+  const basePath = runOptions.basePath ?? process.cwd();
 
   // Create Logger
 
@@ -38,13 +39,16 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
 
   // Read Agrippa config
 
+  logger.debug(inputOptions, runOptions);
+
   logger.debug(runOptions.envFiles?.agrippaConfig ? 'Agrippa config passed through runOptions' : 'Searching for agrippa.config.mjs...');
-  const [config, configPath] = await loadFileQuery<Config>(
+  const [config] = await loadFileQuery<Config>(
     runOptions.envFiles?.agrippaConfig
       ? { path: runOptions.envFiles?.agrippaConfig }
       : { search: 'agrippa.config.mjs' },
-    ''
+    basePath
   );
+
   logger.debug('Resolved Agrippa config: ', config);
 
   // Read Env files
@@ -52,7 +56,7 @@ export async function run(inputOptions: InputOptions, runOptions: RunOptions = {
   const envFileQueries = Object.assign({}, config?.files, runOptions?.envFiles);
   const envFiles = Object.assign(
     { config },
-    !pure && await loadFiles(envFileQueries, dirname(configPath ?? ''), logger)
+    !pure && await loadFiles(envFileQueries, basePath, logger)
   );
   logger.debug('Resolved envFiles: ', envFiles);
 
