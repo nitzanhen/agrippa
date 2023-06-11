@@ -1,7 +1,7 @@
 {
   "name": "agrippa",
   "description": "The CLI for component generation",
-  "version": "2.0.3",
+  "version": "2.0.4-beta.2",
   "author": {
     "name": "Nitzan Hen",
     "email": "code@nitzanhen.net",
@@ -68,17 +68,17 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@rollup/plugin-commonjs": "^22.0.0",
+    "@rollup/plugin-node-resolve": "^13.2.1",
     "axios": "^0.24.0",
     "chalk": "^4.1.2",
     "find-up": "^5.0.0",
     "json5": "^2.2.0",
     "pips": "^1.0.0-rc.3",
     "rhax": "^2.0.1",
-    "semver": "^7.3.5",
-    "yargs": "^17.0.1",
     "rollup": "^2.66.1",
-    "@rollup/plugin-commonjs": "^22.0.0",
-    "@rollup/plugin-node-resolve": "^13.2.1"
+    "semver": "^7.3.5",
+    "yargs": "^17.0.1"
   },
   "keywords": [
     "react",
