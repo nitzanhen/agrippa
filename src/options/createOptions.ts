@@ -11,17 +11,18 @@ export interface InputOptions extends DeepPartial<Options> {
 
 export const defaultFramework = (packageJson: any): Options['framework'] => {
   const dependencies: Record<string, string> = packageJson?.dependencies ?? {};
+  const devDependencies: Record<string, string> = packageJson?.devDependencies ?? {};
 
-  if ('react-native' in dependencies) {
+  if ('react-native' in dependencies || 'react-native' in devDependencies) {
     return Framework.REACT_NATIVE;
   }
-  else if ('preact' in dependencies) {
+  else if ('preact' in dependencies || 'preact' in devDependencies) {
     return Framework.PREACT;
   }
-  else if ('solid-js' in dependencies) {
+  else if ('solid-js' in dependencies || 'solid-js' in devDependencies) {
     return Framework.SOLIDJS;
   }
-  else if ('react' in dependencies) {
+  else if ('react' in dependencies || 'react' in devDependencies) {
     return Framework.REACT;
   }
 
