@@ -55,7 +55,7 @@ const compileWithRollup = async (path: string) => {
   });
   console.log(result);
 
-  const data = require(outPath);
+  const data = await import(outPath);
   await unlink(outPath);
 
   return data;
