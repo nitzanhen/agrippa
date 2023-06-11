@@ -1,5 +1,6 @@
 import { mkdir, readFile, unlink } from 'fs/promises';
 import { dirname, extname, join, resolve } from 'path';
+import { pathToFileURL } from 'url';
 import JSON5 from 'json5';
 import findUp from 'find-up';
 import { rollup } from 'rollup';
@@ -48,14 +49,16 @@ const compileWithRollup = async (path: string) => {
     ],
     external: /node_modules/,
   });
-  const result = await bundle.write({
+  await bundle.write({
     format: 'cjs',
     file: outPath,
     exports: 'default',
   });
-  console.log(result);
 
-  const data = await import(outPath);
+
+  const data = typeof import.meta !== 'undefined'
+    ? (await import(pathToFileURL(outPath).toString())).default
+    : await import(outPath);
   await unlink(outPath);
 
   return data;
@@ -82,16 +85,11 @@ export async function loadFile<T = any>(path: string, basePath: string, type?: (
   }
 
   const resolvedPath = resolve(basePath, path);
-  console.log(basePath, path, resolvedPath);
 
   switch (fileType) {
     case FileType.JSON: return parseJson(await readFile(resolvedPath, 'utf8'));
     case FileType.JS:
-    case FileType.MJS: {
-      console.log(await compileWithRollup(resolvedPath));
-
-      return await compileWithRollup(resolvedPath);
-    }
+    case FileType.MJS: return await compileWithRollup(resolvedPath);
   }
 }
 
