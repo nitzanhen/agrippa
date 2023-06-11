@@ -56,7 +56,7 @@ const compileWithRollup = async (path: string) => {
   });
 
 
-  const data = typeof import.meta !== 'undefined'
+  const data = typeof require === 'undefined'
     ? (await import(pathToFileURL(outPath).toString())).default
     : await import(outPath);
   await unlink(outPath);
