@@ -37,7 +37,8 @@ const compileWithRollup = async (path: string) => {
   const tempDir = join(agrippaRoot, 'temp');
   await mkdir(tempDir, { recursive: true });
 
-  const outPath = join(tempDir, 'agrippa.config.js');
+  const random = Math.floor(Math.random() * 1_000_000);
+  const outPath = join(tempDir, `temp-${random}.js`);
 
   const bundle = await rollup({
     input: path,
