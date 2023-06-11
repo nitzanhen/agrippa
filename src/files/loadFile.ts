@@ -1,4 +1,4 @@
-import { mkdir, readFile } from 'fs/promises';
+import { mkdir, readFile, unlink } from 'fs/promises';
 import { dirname, extname, join, resolve } from 'path';
 import JSON5 from 'json5';
 import findUp from 'find-up';
@@ -32,7 +32,7 @@ export type FileQuery = { path: string } | { search: string };
 
 // Compiles the file at the given path with rollup, then loads it as a commonjs module.
 const compileWithRollup = async (path: string) => {
-  // Create temp dir, if it does not exists
+  // Create temp dir
   const agrippaRoot = dirname(pkgJsonPath);
   const tempDir = join(agrippaRoot, 'temp');
   await mkdir(tempDir, { recursive: true });
@@ -54,8 +54,10 @@ const compileWithRollup = async (path: string) => {
   });
   console.log(result);
 
+  const data = require(outPath);
+  await unlink(outPath);
 
-  return require(outPath);
+  return data;
 };
 
 
